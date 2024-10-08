@@ -1,0 +1,274 @@
+\subsection{Encoding $\mathbb{N}$ in $\lambda$ (Church numerals)}
+
+
+
+\begin{definition}[$\BN$]
+The booleans $\BN$ are defined in $\lambda$-calculus as
+\begin{align*}
+    \top \coloneqq \lambda x \lambda y.x = \lambda x y. x  \quad \text{and} \quad  \bot \coloneqq \lambda x \lambda y.y = \lambda x y. y.
+\end{align*}
+Moreover, if is defined as $\lif \coloneqq \lambda b x y. bxy$.
+    
+\end{definition}
+
+
+\begin{example}
+The expression $\lif \top  s  t$ reduces as follows.
+\begin{align*}
+\lif \top  s  t  = \quad  &(\lambda bxy.bxy)(\lambda xy.x)st \to (\lambda xy.(\lambda xy.x)xy)st \to (\lambda y.(\lambda xy.x)sy)t \to \\
+&(\lambda xy.x)st \to (\lambda y. s)t \to s 
+\end{align*}
+We can derive $t$ from $if$ $\bot st$ similarly.
+\end{example} 
+
+
+
+\begin{definition}[$\NN$]
+The natural numbers $\NN$ are defined in $\lambda$-calculus as
+\begin{align*}
+    \underline{0} \coloneqq \lambda fx.x ,\;  
+    \underline{1} \coloneqq \lambda fx.fx \; , 
+    \underline{2} \coloneqq \lambda fx.f(fx) \;, 
+    \underline{n} \coloneqq \lambda fx.\underbrace{f(\dots f }_{{n \text{times}}}x)
+\end{align*}
+The successor function is defined as $S \coloneqq \lambda nfx. f(nfx)$.
+\end{definition}
+
+
+\begin{example}
+The expression $\lif \top  s  t$ reduces as follows.
+\begin{align*}
+    S\underline{n} =\quad & (\lambda nfx. f(nfx))(\lambda fx .f^nx) \to \lambda fx. f((\lambda fx. f^nx)fx) \to \lambda fx.f((\lambda x. f^n x)x) \to \\
+    &\lambda fx. f(f^n x) \to \lambda fx. f^{n+1}x \to n+1 
+\end{align*}
+\end{example}
+
+
+\begin{definition}[Fixed point operator]
+    The expression $Y = \lambda f.(\lambda x. f(xx))(\lambda x. f(xx))$ is a fixed point operator.
+\end{definition}
+
+
+
+\begin{theorem}
+	$Yt =_{\beta} t(Yt)$  are $\beta$ equivalence. That is, 
+there exists $t'$ that both $Yt$ and $t(Yt)$ can be $\beta$-reduced to $t'$.
+\end{theorem}
+\begin{proof}
+    First the left side
+    \begin{align*}
+        Yt= \quad & (\lambda f.(\lambda x.f(xx))(\lambda x. f(xx)))t \to (\lambda x. t(xx))(\lambda x. t(xx)) \to t((\lambda x. t(xx))(\lambda x. t(xx))).
+    \end{align*}
+    Second the right side 
+	\begin{align*}
+        t(Yt)= \quad &  t((\lambda f.(\lambda x.f(xx))(\lambda x. f(xx)))t) \to t((\lambda x. t(xx))(\lambda x. t(xx))).
+    \end{align*}
+\end{proof}
+
+\begin{example}
+	$\mathrm{fact}\; = \lambda fn. \lif \;(\mathrm{iszero } \;n) 1 \mathrm{ else} \;(\mathrm{mult }\; n(f (\mathrm{pred }\; n)))$
+\end{example}
+
+
+\subsection{Combinatory logic}
+
+
+\begin{definition}[Combinatory logic]
+    In combinatory logic is defined with the following combinators
+    \begin{align*}
+        I \coloneqq \lambda x.x \quad  S \coloneqq \lambda xyz. (xz)(yz) \quad K = \lambda xy.x
+    \end{align*}
+\end{definition}
+
+
+\begin{theorem}
+Every $\lambda$ term can be built from $I$, $S$, and $K$.
+\end{theorem}
+
+\begin{example}
+    \begin{align*}
+        K((SI)I) =\quad & (\lambda xy.x)(((\lambda xyz. (xz)(yz))(\lambda x.x))(\lambda x.x))\to  \\
+        &\lambda y. (((\lambda xyz. (xz)(yz))(\lambda x.x))(\lambda x.x))
+        \to \\
+        &\lambda y. ((\lambda yz.((\lambda x.x)z)(yz))(\lambda x.x))\to  \\
+       & \lambda y \lambda z ((\lambda x.x)z)((\lambda x.x)z) \to \\
+       &\lambda yz. zz
+    \end{align*}
+\end{example}
+
+
+\begin{exercise}
+	This exercise is threefold. (i) Define the $\lambda$-terms of functions $\mathrm{iszero}$, $\mathrm{mult}$, and $\mathrm{pred}$. 
+ (ii) Evaluate $\mathrm{fact}(3)$ ($\rightarrow_\beta^\star 6$).
+ (iii) Write $\mathrm{fact}$ in terms of $I$, $S$, and $K$.
+\end{exercise}
+
+\subsection{Simply typed $\lambda$}
+
+
+
+\begin{definition}[Simply typed $\lambda$-calculus]
+    To define simply typed $\lambda$-calculus we define:  types, context, terms, typing judgments, and typing rules.
+    \begin{itemize}
+        \item The \emph{Types} are defined by the grammar
+    \begin{align*}
+        A \Coloneqq X \; | \; A\to A
+    \end{align*}
+    with $A \to B$ being a right associates function from $A$ to $B$ (,e.g., $A \to B \to C = A \to (B \to C)$).
+    \item  The \emph{context} $\Gamma\coloneqq \{x_1\colon A_1, \dots x_n\colon A_n \}$ provides a type $A_i$ to each $\lambda$-variable $x_i$ e.g. $\Gamma(x_i) = A_i$. Note that $\mathrm{domain}(\Gamma) = \{x_1, ..., x_n\}$.
+    \item The terms are defined by the following grammar
+    \begin{align*}
+       t \Coloneqq x \; | \; t_1t_2 \; | \; \lambda x\colon A.t
+    \end{align*}
+    \item The \emph{typing judgments} are of the form $\Gamma \proofs t\colon  A$.
+    \item There are \emph{typing rules} three typing rules, axiom (ax), application (ap), and abstraction (ab)
+    \begin{center}
+        \AxiomC{}
+        \RightLabel{\small(ax)}
+        \UnaryInfC{$\Gamma \proofs x \colon \Gamma(x)$}
+        \DisplayProof
+        \AxiomC{$\Gamma \proofs s\colon A$}
+        \AxiomC{$\Gamma \proofs t\colon A \to B$}
+        \RightLabel{\small(ap)}
+        \BinaryInfC{$\Gamma \proofs ts\colon  B$}
+        \DisplayProof 
+    \end{center}
+        \begin{center}
+        \AxiomC{$\Gamma [x \mapsto A] \proofs t\colon B$}
+        \RightLabel{\small(ab)}
+        \UnaryInfC{$\Gamma \proofs (\lambda x\colon A.t)\colon A \to B$}
+        \DisplayProof
+    \end{center}
+    \end{itemize}
+    
+   
+\end{definition}
+
+\begin{remark}
+   
+\end{remark}
+
+\begin{example}
+	$(\lambda f\colon  A \to A. \lambda x\colon A. f(fx))\colon  (A \to A) \to A \to A$
+\end{example}
+\begin{proof}
+The proof tree has the following shape
+\begin{center}
+\small
+\begin{prooftree}
+        \AxiomC{$\true$}
+         \RightLabel{\small(ax)}
+        \UnaryInfC{$\{f\colon  A \to A, x\colon A\} \proofs f\colon A \to A$}
+    \AxiomC{$\true$}
+    \UnaryInfC{$\{f\colon  A \to A, x\colon A\} \proofs f\colon A \to A$}
+    \AxiomC{$\true$}
+    \UnaryInfC{$\{f\colon  A \to A, x\colon A\} \proofs x\colon A $}
+    \BinaryInfC{$\{f\colon  A \to A, x\colon A\} \proofs fx\colon A$}
+    \RightLabel{\small(ap)}
+    \BinaryInfC{$\{f\colon  A \to A, x\colon A\} \proofs (f(fx))\colon A$}
+    \RightLabel{\small(ab)}
+    \UnaryInfC{$\{f\colon  A \to A\} \proofs (\lambda x\colon A. f(fx))\colon A \to A$}
+    \RightLabel{\small(ab)}
+    \UnaryInfC{$\proofs (\lambda f\colon  A \to A. \lambda x\colon A. f(fx))\colon (A \to A) \to A \to A$}
+\end{prooftree}
+\end{center}
+
+% \begin{prooftree}
+%     \AxiomC{True}
+%     \AxiomC{True}
+%     \RightLabel{\small(ab)}
+%     \UnaryInfC{$\{f\colon A \to A, x\colon A\} \proofs f\colon A \to A$}
+%     \RightLabel{\small(var)}
+%     \UnaryInfC{$\{f\colon A \to A, x\colon A\} \proofs x\colon A$}
+%     \RightLabel{\small(app)}
+%     \BinaryInfC{$\{f\colon A \to A, x\colon A\} \proofs (fx)\colon A$}
+%     \RightLabel{\small(app)}
+%     \UnaryInfC{$\{f\colon A \to A, x\colon A\} \proofs (f(fx))\colon A$}
+%     \RightLabel{\small(ab)}
+%     \UnaryInfC{$\{f\colon A \to A\} \proofs (\lambda x\colon A. f(fx))\colon A \to A$}
+%     \RightLabel{\small(ab)}
+%     \UnaryInfC{$\proofs (\lambda f\colon A \to A. \lambda x\colon A. f(fx))\colon (A \to A) \to A \to A$}
+% \end{prooftree}
+% \end{center}
+% 	  \[ \infer*
+% 	{ \infer*
+% 		{ \infer*
+% 			{ \infer*
+% 				{\infer* {True\\ True}
+% 				{True \\ \{f\colon  A \to A, x\colon A\} \proofs f\colon A \to A \\ \{f\colon  A \to A, x\colon A\} \proofs x\colon      A}}
+% 			{\{f\colon  A \to A, x\colon A\} \proofs f\colon A \to A \\ \{f\colon  A \to A, x\colon A\} \proofs (fx)\colon A}
+% 			}{\{f\colon  A \to A, x\colon A\} \proofs (f(fx)      )\colon A}
+% 		}{\{f\colon  A \to A\} \proofs (\lambda x\colon A. f(fx))\colon A \to A}
+% 	}{\proofs (\lambda f\colon  A \to A. \lambda x\colon A. f(fx))\colon       (A \to A) \to A \to A}
+% 	\]
+\end{proof}
+
+\begin{definition}[Problems]
+    The main problems are: (i) \emph{type checking}, i.e., given $\Gamma$, $t$, $A$, is $\Gamma \proofs t\colon A$?
+    (ii) \emph{type inference}, i.e.,  given $\Gamma$, $t$, is $t$ "typable" and if so, find $A$ such that $\Gamma \proofs t\colon A$?
+\end{definition}
+
+\begin{theorem}
+    In simply typed $\lambda$, type inference is $O(|t|)$ i.e. linear time.
+\end{theorem}
+
+\begin{theorem}[Curry-Howard isomorphism]
+    The Curry-Howard isomorphism (also known as correspondence, propositions as types, and proofs as programs) expresses that there is a one to one correspondence between type derivations of $\Gamma \proofs t\colon A$ and proof derivations of $\Gamma \proofs_{\nj} A $. 
+\end{theorem}
+
+
+
+\begin{definition}[$\beta$-reduction]
+    The $\beta$-reduction in simply typed $\lambda$-calculus is the same as for the untyped $\lambda$-calculus, i.e.,
+    \begin{align*}
+     (\lambda x\colon A.t)s \to_{\beta} t[x\mapsto s]
+    \end{align*}
+    $(\lambda x\colon A.t)s$ is typable if $\exists B.(t\colon G \land s\colon A)$ (also ($\lambda x\colon A.t\colon  A \to B$))
+\end{definition}
+
+
+
+\begin{theorem}[Subject reduction theorem]
+	If $\Gamma \proofs t\colon A$ and $t \rightarrow_\beta t', then \Gamma \proofs t'\colon A$.
+\end{theorem}
+
+\begin{remark}
+   Same as cut-elimination in $\nj$, i.e., cut-free proofs is equivalent to typable terms in normal form. 
+   \begin{center}
+    \AxiomC{$\vdots$}
+    \UnaryInfC{$\Gamma, A \proofs B$}
+    \UnaryInfC{$\Gamma \proofs A \simplies B$}
+    \AxiomC{$\vdots$}
+    \UnaryInfC{$\Gamma \proofs A$}
+    \BinaryInfC{$\Gamma \proofs B$}
+    \DisplayProof
+    $\quad \rightsquigarrow \quad $
+    \AxiomC{$\vdots$}
+    \UnaryInfC{$\Gamma \proofs B$}
+    \DisplayProof
+\end{center}
+\end{remark}
+
+
+% \[ \infer*
+% { \infer*
+% 	{ \infer*
+% 		{...}{\Gamma, A \proofs B}
+% 	}{\Gamma \proofs A \Rightarrow B \\ \Gamma \proofs A}
+% }{\Gamma \proofs B}
+% \]
+
+\begin{remark}
+    Untyped $\lambda$-calculus is confluent and undecidable, i.e., all partial recursive functions are expressible. 
+    Simply typed $\lambda$-calculus is confluent and satisfies subject reduction.
+    Regarding the expressiveness of simply typed $\lambda$ over church numerals, every typable term corresponds to an extended polynomial function.
+\end{remark}
+
+\begin{theorem}
+	Every typable term is strongly normalizable.
+\end{theorem}
+
+\begin{corollary}
+    (i) $Y$ is not typable and  (ii) $=_\beta$ is decidable.
+\end{corollary}
+

@@ -1,83 +1,86 @@
-{{%Localize command definitions
 
-\chapter{Class 1}
+% \section{Tools}
+% \begin{itemize}
+%   \item Lean or Coq 
+%   \item CVC5 or Z3 
+%   \item possibly a model checker 
+%   \item professional version of ChatGPT
+% \end{itemize}
 
-\newcommand{\Reals}{\mathbb{R}}
+% \section{Syllabus}
+% \begin{enumerate}
+%   \item MATH (``Informalism'')
+%   \begin{itemize}
+%     \item proofs (natural deduction)
+%     \item fixpoints (induction, coinduction)
+%   \end{itemize}
+%   \item DECLARATIVE LOGIC
+%   \begin{itemize}
+%     \item syntax (rules) vs. semantics (models)
+%     \item propositional, predicate, modal logic 
+%     \item decision procedures (SAT, SMT)
+%   \end{itemize}
+%   \item FUNCTIONS
+%   \begin{itemize}
+%     \item $\lambda$ calculus, typed $\lambda$
+%     \item SOS (structured operational semantics), rewriting
+%     \item ``propositions-as-types'' (connection to logic)
+%   \end{itemize}
+%   \item PROCESSES (CONCURRENT)* 
+%   \begin{itemize}
+%     \item CCS, Petri nets
+%     \item (bi-) simulation
+%   \end{itemize}
+%   \item CIRCUITS*
+%   \begin{itemize}
+%     \item boolean, sequential, dataflow (Kahn nets)
+%     \item interfaces
+%   \end{itemize}
+%   \item STATE TRANSITION SYSTEMS*
+%   \begin{itemize}
+%     \item ($\omega$-) automata, games, timed, probabilistic, pushdown
+%     \item programs, Turing machines 
+%     \item grammars (Chomsky hierarchy)
+%   \end{itemize} 
+%   \item DECLARATIVE SPECIFICATION
+%   \begin{itemize}
+%     \item Hoare logics, separation logic 
+%     \item temporal logics (LTL, CTL, ATL)
+%     \item partial correctness vs. termination, safety vs. liveness 
+%   \end{itemize}
+% \end{enumerate}
 
-\section{Tools}
-\begin{itemize}
-  \item Lean or Coq 
-  \item CVC5 or Z3 
-  \item possibly a model checker 
-  \item professional version of ChatGPT
-\end{itemize}
-
-\section{Syllabus}
-\begin{enumerate}
-  \item MATH (``Informalism'')
-  \begin{itemize}
-    \item proofs (natural deduction)
-    \item fixpoints (induction, coinduction)
-  \end{itemize}
-  \item DECLARATIVE LOGIC
-  \begin{itemize}
-    \item syntax (rules) vs. semantics (models)
-    \item propositional, predicate, modal logic 
-    \item decision procedures (SAT, SMT)
-  \end{itemize}
-  \item FUNCTIONS
-  \begin{itemize}
-    \item $\lambda$ calculus, typed $\lambda$
-    \item SOS (structured operational semantics), rewriting
-    \item ``propositions-as-types'' (connection to logic)
-  \end{itemize}
-  \item PROCESSES (CONCURRENT)* 
-  \begin{itemize}
-    \item CCS, Petri nets
-    \item (bi-) simulation
-  \end{itemize}
-  \item CIRCUITS*
-  \begin{itemize}
-    \item boolean, sequential, dataflow (Kahn nets)
-    \item interfaces
-  \end{itemize}
-  \item STATE TRANSITION SYSTEMS*
-  \begin{itemize}
-    \item ($\omega$-) automata, games, timed, probabilistic, pushdown
-    \item programs, Turing machines 
-    \item grammars (Chomsky hierarchy)
-  \end{itemize} 
-  \item DECLARATIVE SPECIFICATION
-  \begin{itemize}
-    \item Hoare logics, separation logic 
-    \item temporal logics (LTL, CTL, ATL)
-    \item partial correctness vs. termination, safety vs. liveness 
-  \end{itemize}
-\end{enumerate}
-
-*: Operational.
+% *: Operational.
 
 \section{Math}
+
+
+
+\subsection{Function and Sets}
+We introduce basic properties of functions and how they are used to evaluate the sizes of sets. 
+
 \begin{definition}
-  A real $b$ is a \underline{bound} of a 
-  function $f$ from $\Reals$ to $\Reals$ if for all $x$ in 
-  $\Reals$, we have $f(x) \leq b$. 
+  A real number $b \in \RN$ is a \emph{bound} of a 
+  function $f\colon \RN\to \RN$ from $\RN$ to $\RN$, if for all $x$ in 
+  $\RN$, we have $f(x) \leq b$. 
 \end{definition}
 
+
 \begin{definition}
-  Given two functions $f$ and $g$ from $\Reals$ to 
-  $\Reals$, their \underline{sum} is the function $f + g$ such 
-  that for all $x$ in $\Reals$, we have $(f+g) (x) = f(x) + g(x)$.
+  Given two functions $f\colon  \RN\to \RN$ and $g\colon  \RN\to \RN$ from $\RN$ to $\RN$, their \emph{sum} is the function $f + g$ such 
+  that for all $x$ in $\RN$, we have $(f+g) (x) = f(x) + g(x)$.
 \end{definition} 
 
+
 \begin{theorem}
-  For all functions $f$ and $g$ from $\Reals$ to $\Reals$, if $f$ and
+  For all functions $f\colon  \RN\to \RN$ and $g\colon  \RN\to \RN$, if $f$ and
   $g$ are bounded, then $f+g$ is bounded. 
 \end{theorem}
 \begin{proof}
+This prove is explicitly presented step by step.
   \begin{enumerate}
     \item Consider arbitrary functions $\hat{f}$ and $\hat{g}$ from 
-    $\Reals$ to $\Reals$.
+    $\RN$ to $\RN$.
     \item Assume $\hat{f}$ and $\hat{g}$ are bounded. 
     \item Show that $\hat{f} + \hat{g}$ is bounded.
     \item (2 $\rightarrow$) Let $\hat{a}$ be a bound for $\hat{f}$, 
@@ -94,53 +97,89 @@
   \end{enumerate}
 \end{proof}
 
-\noindent \textbf{Homework.} Prove the Schr\"{o}der-Bernstein theorem 
-``in this style''.
-
 \begin{definition}
-  Two sets $A$ and $B$ are \underline{equipollent} (``have the same 
-  size'') if there is a bijection from $A$ to $B$.
+  Two sets $A$ and $B$ are \emph{equipollent} (``have the same 
+  size''), if there is a bijection from $A$ to $B$.
 \end{definition}
 
 \begin{definition}
-  A function $f$ from $A$ to $B$ is 
-  \begin{enumerate}
-    \item \underline{one-to-one} if for all $x$ and $y$ in $A$, if 
-    $x \neq y$, then $f(x) \neq f(y)$.
-    \item \underline{onto} if for all $z$ in $B$, there exists $x$ 
-    in $A$ such that $f(x) = z$.
-    \item \underline{bijective} if $f$ is one-to-one and onto.
-  \end{enumerate}
+  A function $f$ from $A$ to $B$ is: 
+  (i) \emph{one-to-one} if for all $x$ and $y$ in $A$, if $x \neq y$, then $f(x) \neq f(y)$;
+  (ii) \emph{onto} if for all $z$ in $B$, there exists $x$ 
+    in $A$ such that $f(x) = z$;
+(iii) \emph{bijective} if $f$ is one-to-one and onto.
 \end{definition}
+
+\subsection{Style Guide}
+We provide an informal style guide for writing mathematical proofs. 
 
 \begin{center}
-\begin{tabular}{
-  p{0.35\linewidth} | p{0.35\linewidth} | p{0.2\linewidth}}
-  Goals & Knowledge & Outermost symbol \\
-  \hline
-  \begin{itemize}[leftmargin=*]
-    \item[] Show for all $x$, $G(x)$.
-    \item[] Consider arbitrary $\hat{x}$.
-    \item[] Show $G(\hat{x})$. 
-  \end{itemize} & \begin{itemize}[leftmargin=*]
-    \item[] We know for all $x$, $K(x)$.
-    \item[] In particular, we know $K(\hat{t})$.
-    \item[] $\hat{t}$: term containing only constants. 
-  \end{itemize} & \begin{itemize}
-    \item[] \Large $\forall$
-  \end{itemize} \\ 
-  \hline 
-  \begin{itemize}[leftmargin=*]
-    \item[] Show there exists $x$ s.t. $G(x)$.
-    \item[] We show that $G(\hat{t})$.
-    \item[] $\hat{t}$: term containing only constants.
-  \end{itemize} & \begin{itemize}[leftmargin=*]
-    \item[] We know there exists $x$ s.t. $K(x)$.
-    \item[] Let $\hat{x}$ be s.t. $K(\hat{x})$.
-  \end{itemize} & \begin{itemize}
-    \item[] \Large $\exists$
-  \end{itemize}
+    \begin{tabular}{l|l|c}
+     Goal & Knowledge & Outermost symbol \\
+    \hline 
+     \pbox{20cm}{Show for all $x$, $G(x)$. \\ Consider arbitrary $\hat{x}$.\\ Show $G(\hat{x})$} & \pbox{20cm}{We know for all $x$, $K(x)$ \\ In particular we know $K(\hat{t})$ for constant $\hat{t}$} & $\forall$ \\ 
+    \hline 
+     \pbox{20cm}{Show: exists $x$ s.t. $G(x)$. \\ We show $G(\hat{t})$} & \pbox{20cm}{We know exists $x$ s.t. $K(x)$ \\ Let $\hat{x}$ be s.t. $K(x)$} & $\exists$ \\ 
+     \hline 
+     \pbox{20cm}{Show $G_1$ iff $G_2$ \\ 1. Show if $G_1$ then $G_2$\\ 2. Show if $G_2$ then $G_1$} & \pbox{20cm}{We know $K_1$ iff $K_2$\\ In particular we know if $K_1$ then $K_2$\\ and if $K_2$ then $K_1$} & $\iff$ \\ 
+     \hline 
+     \pbox{20cm}{Show if $G_1$ then $G_2$ \\ Assume $G_1$\\ Show $G_2$} & \pbox{20cm}{We know if $K_1$ then $K_2$\\ 1. To show $K_2$ it suffices to show $K_2$\\ 2. Know $K_1$, Also know $K_2$} & $\rightarrow$ \\ 
+     \hline 
+     \pbox{20cm}{Show $G_1$ and $G_2$\\ 1. Show $G_1$\\ 2. Show $G_2$} & \pbox{20cm}{Know $K_1$ and $K_2$\\ 1. Also Know $K_1$ \\ 2. Also Know $K_2$} & $\wedge$ \\ 
+     \hline 
+     \pbox{20cm}{Show $G_1$ or $G_2$\\ 1. Assume $\neg G_1$, show $G_2$\\ 2. Assume $\neg G_2$, show $G_1$} & \pbox{20cm}{We know $K_1$ or $K_2$. Show $G$.\\
+     1. Assume $K_1$, Show $G$\\ 2. Assume $K_2$, Show $G$ \\ Case split $\uparrow$} & $\vee$ \\ 
+     \hline 
+     \multicolumn{2}{c|}{\pbox{20cm}{Move Negation Inside, as far as possible}} &  $\neg$ \\ 
+     \hline 
 \end{tabular}
 \end{center}
 
-}} % End localization of command definitions
+
+
+% \begin{center}
+% \begin{tabular}{
+%   p{0.35\linewidth} | p{0.35\linewidth} | p{0.2\linewidth}}
+%   Goals & Knowledge & Outermost symbol \\
+%   \hline
+%   \begin{itemize}[leftmargin=*]
+%     \item[] Show for all $x$, $G(x)$.
+%     \item[] Consider arbitrary $\hat{x}$.
+%     \item[] Show $G(\hat{x})$. 
+%   \end{itemize} & \begin{itemize}[leftmargin=*]
+%     \item[] We know for all $x$, $K(x)$.
+%     \item[] In particular, we know $K(\hat{t})$.
+%     \item[] $\hat{t}$: term containing only constants. 
+%   \end{itemize} & \begin{itemize}
+%     \item[] \Large $\forall$
+%   \end{itemize} \\ 
+%   \hline 
+%   \begin{itemize}[leftmargin=*]
+%     \item[] Show there exists $x$ s.t. $G(x)$.
+%     \item[] We show that $G(\hat{t})$.
+%     \item[] $\hat{t}$: term containing only constants.
+%   \end{itemize} & \begin{itemize}[leftmargin=*]
+%     \item[] We know there exists $x$ s.t. $K(x)$.
+%     \item[] Let $\hat{x}$ be s.t. $K(\hat{x})$.
+%   \end{itemize} & \begin{itemize}
+%     \item[] \Large $\exists$
+%   \end{itemize}
+% \end{tabular}
+% \end{center}
+
+\begin{theorem}[Schr\"{o}der-Bernstein theorem]
+    \label{thrm:class1:bernstein}
+    If there is a one-to-one function on a set $A$ to a sub-
+    set of a set $B$ and there is also a one-to-one function on $B$ to a sub-
+    set of $A$, then $A$ and $B$ are equipollent.
+\end{theorem}
+
+\begin{exercise}
+    Correct the following incorrect proof of Theorem \ref{thrm:class1:bernstein} \emph{in the presented style}:
+    \begin{quote}
+Suppose that $f$ is a one-to-one map of $A$ into $B$ and $g$ is
+one-to-one on $B$ to $A$. It may be supposed that $A$ and $B$ are disjoint. The proof of the theorem is accomplished by decomposing $A$ and $B$ into classes which are most easily described in terms of parthenogenesis. A point $x$ (of either $A$ or $B$) is an ancestor of a point $y$ iff $y$ can be obtained from $x$ by successive application of $f$ and $g$ (or $g$ and $f$). Now decompose $A$ into three sets:
+let $A_e$ consist of all points of $A$ which have an even number of ancestors, let $A_o$ consist of points which have an odd number of ancestors, and let $A_{\infty}$ consist of points with infinitely many ancestors. Decompose $B$ similarly and observe: f maps $A_e$ onto
+$B_o$ and $A_{\infty}$ onto  $B_{\infty}$, and $g^{-1}$ maps $A_o$ onto $B_e$. Hence the function which agrees with $f$ on $A_e\cup A_{\infty}$, and agrees with $g^{-1}$ on $A_o$ is a one-to-one map of $A$ onto $B$.
+    \end{quote}
+\end{exercise}

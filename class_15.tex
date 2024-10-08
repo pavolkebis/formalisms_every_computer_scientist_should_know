@@ -1,0 +1,695 @@
+% \documentclass{article}
+% \usepackage{graphicx} % Required for inserting images
+% \usepackage{amssymb,amsmath,amsthm}
+% \usepackage{stmaryrd}
+% \usepackage{listings}
+% \usepackage{mathpartir}
+% \usepackage[a4paper, portrait]{geometry}
+
+% \newtheorem{theorem}{Theorem}
+% \newtheorem{lemma}{Lemma}
+% \newtheorem{definition}{Definition}
+% \newtheorem{example}{Example}
+% \newtheorem{exercise}{Homework}
+
+
+% \newcommand{\NQ}{\mathbb{Q}}
+% \newcommand{\BN}{\mathbb{B}}
+\section{IMP}
+
+\begin{remark}
+      IMP is a simple imperative language corresponding to PCF.
+\end{remark}
+
+\begin{definition}[IMP Syntax]
+There are three types of \emph{expressions} in IMP, i.e., 
+arithmetic, boolean, and command expressions. Programs in IMP belong to the following grammar:
+\begin{align*}
+    a &\Coloneqq n \;|\; x \;|\; a + a \;|\; a - a \;|\; a * a \;|\; S a \;|\; 0\\
+    b &\Coloneqq \true \;|\; \false  \;|\; a \leq a \;|\; \neg b \;|\; b \land b\\
+    c &\Coloneqq \sskip \;|\; x = a \;|\; c; c \;|\; \sif{b}{c}{c}\;|\; \swhile{b}{c}
+\end{align*}
+\end{definition}
+
+\begin{definition}[IMP Semantics]
+    There are three different types of semantics for the IMP programming language. All consider the set of variables $X$ as locations, the define a state as the function $\sigma\colon X \to \ZN$. We use $\bot$ to denote the \emph{undefined} state (e.g., for a non-terminating program).
+    Moreover, we denote the set of all states (including $\bot$) as $\Sigma$ ($\Sigma_{\bot}$).
+\end{definition}
+
+
+
+% \begin{lstlisting}[basicstyle=\ttfamily,mathescape=true]
+%     a \coloneqq    n | x 
+%        | a $+$ a | a $-$ a | a $*$ a 
+%        | S a | 0
+%     b \coloneqq    true | false 
+%        | a $\leq$ a | $\neg$ b | b $\land$ b
+%     c \coloneqq    skip | x = a 
+%        | c; c | if b then c else c | while b do c
+% % \end{lstlisting}
+% where $\imp{x} \in X$ denotes 
+% a \emph{location} in our program, 
+% among the set of locations $X$.
+% We define a \emph{state} of the program
+% as a function $\sigma: X \to \ZN$
+% and use $\Sigma$ to denote the set of all states.
+% We use $\bot$ to denote the \emph{undefined} state 
+% (e.g., for a non-terminating program).
+
+\subsection{Operational Semantics}
+
+ \begin{definition}[Operational Semantics]
+          The operational semantics for IMP was originally introduced as structured operational semantics (SOS) by Plotkin.
+          It is defined by a set of rules.
+          We use
+        $\langle c, \sigma \rangle \downarrow \sigma' \in \Sigma_\bot$ 
+        to denote that, starting with state $\sigma$, 
+        a command expression $c$ takes us to state $\sigma'$.
+        $\langle a, \sigma \rangle \downarrow n \in \ZN$
+        and $\langle b, \sigma \rangle \downarrow v \in \BN$ 
+        are defined similarly for arithmetic and Boolean expressions.
+        The judgements of the operational semantics are as follows:
+        \begin{itemize}
+            \item[(i)] for \emph{arithmetic expressions}, note that the same structure can be used for judgements on subtraction and multiplication.
+        \end{itemize}
+        \begin{center}
+            \AxiomC{}
+            \UnaryInfC{$\sop{n}{\sigma} \downarrow n$}
+            \DisplayProof
+            $\quad$
+            \AxiomC{}
+            \UnaryInfC{$\sop{x}{\sigma} \downarrow \sigma(x)$}
+            \DisplayProof
+            $\quad$
+             \AxiomC{$\sop{a_1}{\sigma} \downarrow n_1 $}
+             \AxiomC{$\sop{a_2}{\sigma} \downarrow n_2$}
+            \BinaryInfC{$\sop {a_1 + a_2}{\sigma} \downarrow n_1 + n_2$}
+            \DisplayProof
+        \end{center}
+        \item[(ii)] for \emph{boolean expressions}, note that the same structure can be used for completing the set of judgements on Boolean operators.
+        \begin{center}
+            \AxiomC{}
+            \UnaryInfC{$\sop{true}{\sigma} \downarrow \top$}
+            \DisplayProof
+             $\quad$
+             \AxiomC{$ \sop{b_1}{\sigma} \downarrow \top $}
+              \AxiomC{$\sop{b_2}{\sigma} \downarrow \top$}
+            \BinaryInfC{$\sop{b_1 \land b_2}{\sigma} \downarrow \top$}
+            \DisplayProof
+        \end{center}
+        \begin{center}
+            \AxiomC{$\sop{a_1}{\sigma} \downarrow n_1 $}
+             \AxiomC{$\sop{a_2}{\sigma} \downarrow n_2$}
+              \AxiomC{$n_1 \leq n_2$}
+            \TrinaryInfC{$\sop{a_1 \leq a_2}{\sigma} \downarrow \top$}
+            \DisplayProof
+        \end{center}
+        \item[(iii)] for \emph{command expressions}.
+         In the expression below, note that $\bot$ in $\sop{b}{\sigma} \downarrow \bot$ is the Boolean false. The other case for $\sif{b}{c_1}{c_2}$ is relatively easy to work out.
+         \begin{center}
+            \AxiomC{}
+            \UnaryInfC{$\sop{skip}{\sigma} \downarrow \sigma$}
+            \DisplayProof
+             $\quad$
+            \AxiomC{$\sop{a}{\sigma} \downarrow n$}
+            \UnaryInfC{$\sop{x = a}{\sigma} \downarrow \sigma[x \mapsto n]$}
+            \DisplayProof
+             $\quad$
+            \AxiomC{$\sop{b}{\sigma} \downarrow \bot$}
+            \UnaryInfC{$\sop{\swhile{b}{c}}{\sigma} \downarrow \sigma$}
+            \DisplayProof
+         \end{center}
+       \begin{center}
+            \AxiomC{$ \sop{b}{\sigma} \downarrow \top $}
+             \AxiomC{$ \sop{c}{\sigma} \downarrow \sigma' $}
+              \AxiomC{$ \sop{\swhile{b}{c}}{\sigma'} \downarrow \sigma''$}
+            \TrinaryInfC{$\sop{\swhile{b}{c}}{\sigma} \downarrow \sigma''$}
+            \DisplayProof
+        \end{center}
+        \begin{center}
+            \AxiomC{$\sop{c_1}{\sigma} \downarrow \sigma'$}
+            \AxiomC{$\sop{c_2}{\sigma'} \downarrow \sigma''$}
+            \BinaryInfC{$\sop{c_1; c_2}{\sigma} \downarrow \sigma''$}
+            \DisplayProof
+            $\quad$
+            \AxiomC{$\sop{b}{\sigma} \downarrow \top$}
+            \AxiomC{$\sop{c_1}{\sigma} \downarrow \sigma'$}
+            \BinaryInfC{$\sop{\sif{b}{c_1}{c_2}}{\sigma} 
+            \rangle \downarrow \sigma'$}
+            \DisplayProof
+         \end{center}
+ \end{definition}
+
+\begin{remark}
+  What  we have defined above is 
+\emph{multi-step} operational semantics.
+We can also define it as rules over \emph{single} steps;
+however, there are many versions of single-step semantics, 
+depending on the \emph{step size} we pick.  
+For single-step semantics, we use
+$\sop{c}{\sigma} \to \opsem{c'}{\sigma'}$
+to denote that, starting with state $\sigma$, 
+a command expression $\imp{c}$ takes us to state $\sigma'$
+\emph{after one step}, 
+and program $\imp{c'}$ is yet to be executed.
+\end{remark}
+
+
+\begin{example}
+    An example of rules in are single-step semantics are as follows.
+    \begin{center}
+        \AxiomC{$\sop{a}{\sigma} \downarrow n$}
+        \UnaryInfC{$\sop{x \coloneqq   a}{\sigma} \to \sop{\sskip}{\sigma[x \mapsto a]}$}
+    \DisplayProof
+    $\quad$
+    \AxiomC{$ \sop{c_1}{\sigma} \to \opsem{skip}{\sigma'}$}
+    \UnaryInfC{$\sop{c_1; c_2}{\sigma}
+     \to \sop{c_2}{\sigma'}$}
+    \DisplayProof
+    \end{center}
+            \begin{center}
+            \AxiomC{$\sop{c_1}{\sigma} \to \sop{c_1'}{\sigma'} $}
+            \AxiomC{$\simp{c_1'} \neq \simp{\sskip}$}
+            \BinaryInfC{$\sop{c_1; c_2}{\sigma}
+     \to \sop{c_1'; c_2}{\sigma'}$}
+            \DisplayProof
+         \end{center}
+\end{example}
+
+
+
+\begin{example}
+    For the program $\simp{c = x \coloneqq    0; x \coloneqq    1}$, we have:
+    \begin{align*}
+      \sop{x \coloneqq    0}{\sigma} 
+      & \to \sop{\sskip}{\sigma[x \mapsto 0]} \\
+      \sop{x \coloneqq    0; x \coloneqq    1}{\sigma} 
+      & \to \sop{x \coloneqq    1}{\sigma[x \mapsto 0]} \\
+      & \to \sop{skip}{\sigma[x \mapsto 1]}
+    \end{align*}
+\end{example}
+
+
+
+
+% We have the following set of judgements 
+% for operational semantics:
+
+% \begin{enumerate}
+    % \item Arithmetic expressions:
+    % \[ \infer
+    %     { }{\opsem{n}{\sigma} \downarrow n} 
+    % \qquad \infer
+    %     { }{\opsem{x}{\sigma} \downarrow \sigma(x)}
+    % \qquad \infer {
+    %     \opsem{a$_1$}{\sigma} \downarrow n_1 \\
+    %     \opsem{a$_2$}{\sigma} \downarrow n_2}
+    %     {\opsem {a$_1$ + a$_2$}{\sigma} \downarrow n_1 + n_2}
+    % \]
+    % The same structure can be used 
+    % for judgements on subtraction and multiplication.
+    % \item Boolean expressions:
+    % \[ \infer 
+    %     { }{\opsem{true}{\sigma} \downarrow \top}
+    % \qquad \infer {
+    %     \opsem{a$_1$}{\sigma} \downarrow n_1 \\
+    %     \opsem{a$_2$}{\sigma} \downarrow n_2 \\
+    %     n_1 \leq n_2}
+    % {\opsem{a$_1$ $\leq$ a$_2$}{\sigma} \downarrow \top} \] 
+    % \[ \infer {
+    %     \opsem{b$_1$}{\sigma} \downarrow \top \\
+    %     \opsem{b$_2$}{\sigma} \downarrow \top}
+    %     {\opsem{b$_1$ $\land$ b$_2$}{\sigma} \downarrow \top} \]
+    % The same structure can be used 
+    % for completing the set of judgements on Boolean operators.
+    % \item Command expressions:
+    % \[ \infer
+    %     { }{\opsem{skip}{\sigma} \downarrow \sigma}
+    %   \qquad \infer 
+    %     {\opsem{a}{,~\sigma} \downarrow n}
+    %     {\opsem{x = a}{\sigma} \downarrow \sigma[x \mapsto n]} \]
+%     \[ \infer {
+%         \opsem{c$_1$}{,~\sigma} \downarrow \sigma' \\
+%         \opsem{c$_2$}{,~\sigma'} \downarrow \sigma''}
+%         {\opsem{c$_1$; c$_2$}{\sigma} \downarrow \sigma''} \]
+%     \[ \infer {
+%         \opsem{b}{\sigma} \downarrow \top \\
+%         \opsem{c$_1$}{\sigma} \downarrow \sigma'}
+%         {\opsem{if b then c$_1$ else c$_2$}{\sigma} 
+%             \rangle \downarrow \sigma'} \]
+%     \[ \infer {
+%         \opsem{b}{\sigma} \downarrow \top \\
+%         \opsem{c}{\sigma} \downarrow \sigma' \\
+%         \opsem{while b do c}{\sigma'} \downarrow \sigma''}
+%         {\opsem{while b do c}{\sigma} \downarrow \sigma''}
+%     \qquad \infer 
+%         {\opsem{b}{\sigma} \downarrow \bot}
+%         {\opsem{while b do c}{\sigma} \downarrow \sigma}
+%     \]
+%     Note that $\bot$ 
+%     in $\opsem{b}{\sigma} \downarrow \bot$
+%     is the Boolean false.
+%     The other case 
+%     for \texttt{if b then c$_1$ else c$_2$}
+%     is relatively easy to work out.
+% \end{enumerate}
+
+% What  we have defined above is 
+% \emph{multi-step} operational semantics.
+% We can also define it as rules over \emph{single} steps;
+% however, there are many versions of single-step semantics, 
+% depending on the \emph{step size} we pick.
+
+% For single-step semantics, we use
+% $\opsem{c}{\sigma} \to \opsem{c'}{\sigma'}$
+% to denote that, starting with state $\sigma$, 
+% a command expression $\imp{c}$ takes us to state $\sigma'$
+% \emph{after one step}, 
+% and program $\imp{c'}$ is yet to be executed.
+
+% Some examples of rules in single-step semantics 
+% would be as follows:
+% \[ \infer {
+%     \opsem{a}{\sigma} \downarrow n}
+%   {\opsem{x \coloneqq    a}{\sigma} 
+%     \to \opsem{skip}{\sigma[x \mapsto a]}} \]
+% \[ \infer {
+%     \opsem{c$_1$}{\sigma} \to \opsem{c$_1$'}{\sigma'} \\
+%     \imp{c$_1$'} \neq \imp{skip}}
+%    {\opsem{c$_1$; c$_2$}{\sigma}
+%      \to \opsem{c$_1$'; c$_2$}{\sigma'}} \]
+% \[ \infer {
+%     \opsem{c$_1$}{\sigma} \to \opsem{skip}{\sigma'}}
+%    {\opsem{c$_1$; c$_2$}{\sigma}
+%      \to \opsem{c$_2$}{\sigma'}} \]
+
+% \begin{example}
+%     For the program \imp{c = x \coloneqq    0; x \coloneqq    1}, we have:
+%     \begin{align*}
+%       \opsem{x \coloneqq    0}{\sigma} 
+%       & \to \opsem{skip}{\sigma[x \mapsto 0]} \\
+%       \opsem{x \coloneqq    0; x \coloneqq    1}{\sigma} 
+%       & \to \opsem{x \coloneqq    1}{\sigma[x \mapsto 0]} \\
+%       & \to \opsem{skip}{\sigma[x \mapsto 1]}
+%     \end{align*}
+% \end{example}
+
+
+
+\subsection{Denotational Semantics}
+
+\begin{definition}[Denotational Semantics]
+We define functions 
+$\sde{a}: \Sigma \to \ZN$ and 
+$\sde{b}: \Sigma \to \BN$ 
+as semantic functions for arithmetic and boolean expressions.
+For command expressions, we define 
+$\sde{c}: \Sigma \to \Sigma_\bot$ 
+% where $\bot$ denotes non-termination.
+(alternatively define $\sde{c}$ as the \emph{partial} function $\Sigma \rightharpoonup \Sigma$).
+Similar to operational semantics, 
+we define denotational semantic functions 
+for different types of expressions in IMP:
+\begin{enumerate}
+    \item Arithmetic expressions:
+    \begin{align*}
+        \sde{n} &\coloneqq \defun{n}\\
+        \sde{x} &\coloneqq \defun{\sigma(x)}  \\
+        \sde{a_1 + a_2} &\coloneqq
+          \defun{\sde{a_1} + \sde{a_2}}
+    \end{align*}
+    Notice the difference between the syntactic $+$ in $  \sde{a_1 + a_2}$ and the semantic one  $\defun{\sde{a_1} + \sde{a_2}}$
+    the syntactic + and the semantic `+' operators.
+    \item Boolean expressions:
+    \begin{align*}
+        \sde{true}  &\coloneqq \defun{\top} \\
+        \sde{a_1 \leq a_2}  &\coloneqq 
+          \defun{\sde{a_1} \sigma \leq \sde{a_2} \sigma}  \\ 
+        \sde{b_1 \land b_2}  &\coloneqq 
+          \defun{\sde{b_1} \sigma \land \sde{b_2} \sigma}
+    \end{align*}
+    Again, notice the difference between the syntactic and semantic $\land$.
+    \item Command expressions:
+    \begin{align*}
+        \sde{\sskip}  &\coloneqq \defun{\sigma} \\
+        \sde{x \coloneqq    a}  &\coloneqq
+          \defun{\sigma[x \mapsto \sde{a} \sigma]} \\
+        \sde{c_1; c_2}  &\coloneqq 
+          \defun{\sif{\sde{c_1} \sigma = \bot}{\bot}{\sde{c_2}(\sde{c_1} \sigma)}} \\
+        \sde{ \sif{b}{c_1}{c_2}} &\coloneqq 
+          \defun{ \sif{\sde{b} \sigma = \top}{\sde{c_1} \sigma}{\sde{c_2} \sigma}}
+    \end{align*}
+    The case for a $\swhile{a}{b}$ command is more elaborate:
+    its semantic function is defined as 
+    the \emph{least fixed point} of a higher order function $F$,
+    which takes a program $f: \Sigma \to \Sigma_\bot$
+    and a state $\sigma$, and returns a state $\sigma' \in \Sigma_\bot$.
+    We formally define function $F$ as follows: 
+    \begin{align*}
+         F(f) = 
+      \defun{\sif{\sde{b} \sigma = \top}{(\sif{\sde{c} \sigma = \bot}{\bot}{f(\sde{c} \sigma)})}{\sigma}}
+    \end{align*}
+\end{enumerate}
+\end{definition}
+
+
+\begin{exercise}
+    We can approximate the lfp of a function $F$ 
+    by constructing the sequence 
+    $F(\bot), F^2(\bot), \dots$.
+    For the factorial program,
+    first \emph{define} a program $\hat{\bot}$,
+    then calculate 
+    $\hat{F}(\hat{\bot}), \hat{F}^2(\hat{\bot}), \dots$,
+    where $\hat{F}$ is 
+    the semantic function of the $\swhile{a}{b}$ command in factorial.
+\end{exercise}
+
+The following theorem connects 
+operational and denotational semantics:
+
+\begin{theorem}[Connect Operational and Denotational Semantic]
+  The following equivalences hold
+  over expressions in IMP:
+  \begin{alignat*}{5}
+    & \forall \simp{a}, n, \sigma && .~ 
+      \sop{a}{\sigma} \downarrow n 
+      &&& \iff \sde{a} \sigma & = n \\
+    & \forall \simp{b}, n, \sigma && .~
+      \sop{a}{\sigma} \downarrow v
+      &&& \iff \sde{b} \sigma & = v \\
+    & \forall \simp{c}, \sigma, \sigma' && .~
+      \sop{c}{\sigma} \downarrow \sigma'
+      &&& \iff \sde{c} \sigma & = \sigma' \qquad (*) \\
+    & \forall \simp{c}, \sigma && .~
+      (\neg \exists \sigma'.~ \sop{c}{\sigma} \downarrow \sigma')
+      &&& \iff \sde{c} \sigma & = \bot
+  \end{alignat*}
+  Arithmetic, Boolean, and command expressions
+  are denoted with $\simp{a}$, $\simp{b}$, and $\simp{c}$.
+\end{theorem}
+
+\begin{exercise}[Optional]
+    Prove (*) in the theorem above.
+    You can assume the equivalences for 
+    arithmetic and Boolean expressions.
+\end{exercise}
+
+
+\subsection{Axiomatic Semantics (Hoare Logic)}
+
+
+\begin{definition}[Notation]
+Let $\simp{c}$ be an IMP program, let $\sigma \in \Sigma$ is a state,
+and $\interp: Y \mapsto \ZN$ is a mapping of free variables to integers,
+then
+\begin{align*}
+    \sigma \models^{\interp}  \{ \varphi \} \;\simp{c}\;  \{ \psi \} 
+\end{align*}
+denotes that the program $\simp{c}$ satisfies the assertions in $\{ \psi \}$, if the assertions in $\{ \varphi \}$ are satisfied before execution.
+Each of $\{ \varphi \}$ and $\{ \psi \}$
+are a set of \emph{assertions} 
+($\sim$ first-order logic formulas)
+over the set of program locations $X$,
+the set of free variables $Y$,
+and at least all functions and predicate symbols
+that occur in arithmetic and Boolean expressions of IMP.
+\end{definition}
+
+% We use the following notation to show 
+% program \imp{c} satisfies assertions in $\{ \psi \}$,
+% if assertions in $\{ \varphi \}$ are satisfied before execution:
+% \[ \sigma \models^I  \{ \varphi \} ~\imp{c}~ \{ \psi \} \]
+% where $\sigma \in \Sigma$ is a state, 
+% \imp{c} is an IMP program,
+% and $I: Y \mapsto \ZN$ is 
+% a mapping of free variables to integers.
+
+
+
+\begin{definition}[Partial Correctness]
+    The expression $\models^{\interp}$ is defined as follows.
+    $\sigma \models^{\interp} \{ \varphi \} ~\simp{c}~ \{ \psi \}$
+    if and only if for any $\sigma'$, 
+    if $\sop{c}{\sigma} \downarrow \sigma'$
+    and $\sigma \models^{\interp} \varphi$, 
+    then $\sigma' \models^{\interp} \psi$.
+    Moreover, we write $\models \{ \varphi \} ~\simp{c}~ \{ \psi \}$ iff 
+    $\forall \sigma, I.~ 
+      \sigma \models^I \{ \varphi \} ~\simp{c}~ \{ \psi \}$
+\end{definition}
+
+\begin{definition}[Axiomatic Semantics]
+ Similar to other proof systems, 
+axiomatic semantics for IMP is a set of inference rules.
+% We begin with defining the axioms for $\simp{\sskip}$ and assignment:
+\begin{enumerate}
+    \item Skip and assignment command
+    \begin{center}
+    \AxiomC{}
+    \UnaryInfC{$\{\varphi \} ~\simp{\sskip}~ \{ \varphi \}$}
+    \DisplayProof
+    $\quad$
+    \AxiomC{$ \varphi[x \mapsto a]$}
+    \UnaryInfC{$\simp{x \coloneqq    a}~ \{ \varphi \}$}
+    \DisplayProof
+    $\quad$
+\end{center}
+\item Command expressions
+    \begin{center}
+    \AxiomC{$\{\varphi \} ~\simp{c_1}~ \{ \psi \}$}
+    \AxiomC{$\{ \psi \} ~\simp{c_2}~ \{ \chi \} $}
+    \BinaryInfC{$\{ \varphi \} ~\simp{c_1; c_2}~ \{ \chi \} $}
+    \DisplayProof
+    $\quad$
+    \AxiomC{$ \{ \varphi \land b \} ~\simp{c_1}~ \{ \psi \} $}
+    \AxiomC{$\{ \varphi \land \neg b \} ~\simp{c_2}~ \{ \psi \} $}
+    \BinaryInfC{$\{ \varphi \} 
+    ~\simp{\sif{b}{c_1}{c_2}}~  \{ \psi \}$}
+    \DisplayProof
+\end{center}
+
+\item Loop invariant
+    \begin{center}
+    \AxiomC{$\{ \varphi \land b \} ~\simp{c}~ \{ \varphi \}$}
+    \UnaryInfC{$\{ \varphi \} 
+    ~\simp{\swhile{b}{c}}~ 
+    \{ \varphi \land \neg b \}$}
+    \DisplayProof
+\end{center}
+\item The consequence rule, it shows how we can
+\emph{strengthen} our pre-conditions
+and \emph{weaken} our post-conditions:
+  \begin{center}
+    \AxiomC{$ \varphi \simplies \varphi' $}
+    \AxiomC{$\{ \varphi' \} ~\simp{c}~ \{ \psi' \}$}
+    \AxiomC{$  \psi' \simplies \psi $}
+    \TrinaryInfC{$\{ \varphi \} ~\simp{c}~ \{ \psi \} $}
+    \DisplayProof
+\end{center}
+\end{enumerate}
+
+\end{definition}
+
+\begin{remark}
+    Be careful with the pre- and post-conditions of the assignment command.
+\end{remark}
+
+
+\begin{exercise}
+    For the factorial program $\simp{fact}$,
+    prove the following using Hoare logic:$ \{ x = i \} ~\simp{fact}~ \{ y = i! \}$
+\end{exercise}
+
+
+
+
+
+% We define functions 
+% $\sde{a}: \Sigma \to \ZN$ and 
+% $\sde{b}: \Sigma \to \BN$ 
+% as semantic functions for arithmetic and boolean expressions.
+% For command expressions, we define 
+% $\desem{c}: \Sigma \to \Sigma_\bot$, 
+% where $\bot$ denotes non-termination.
+% We could also define $\desem{c}$
+% as a \emph{partial} function $\Sigma \rightharpoonup \Sigma$.
+
+% Similar to operational semantics, 
+% we define denotational semantic functions 
+% for different types of expressions in IMP:
+% \begin{enumerate}
+%     \item Arithmetic expressions:
+%     \begin{align*}
+%         \desem{n} & = \defun{n} \\
+%         \desem{x} & = \defun{\sigma(x)} \\
+%         \desem{a$_1$ + a$_2$} &= 
+%           \defun{\desem{a$_1$} + \desem{a$_2$}}
+%     \end{align*}
+%     Notice the difference between 
+%     the syntactic `\imp{+}' and the semantic `+' operators.
+%     \item Boolean expressions:
+%     \begin{align*}
+%         \desem{true} & = \defun{\top} \\
+%         \desem{a$_1$ $\leq$ a$_2$} & = 
+%           \defun{\desem{a$_1$} \sigma \leq \desem{a$_2$} \sigma} \\
+%         \desem{b$_1$ $\land$ b$_2$} & = 
+%           \defun{\desem{b$_1$} \sigma \land \desem{b$_2$} \sigma}
+%     \end{align*}
+%     Again, notice the difference between the two $\land$'s.
+%     \item Command expressions:
+%     \begin{align*}
+%         \desem{skip} & = \defun{\sigma} \\
+%         \desem{x \coloneqq    a} & = 
+%           \defun{\sigma[x \mapsto \desem{a} \sigma]} \\
+%         \desem{c$_1$; c$_2$} & = 
+%           \defun{\text{
+%             if $\desem{c$_1$} \sigma = \bot$ then $\bot$
+%             else $\desem{c$_2$}(\desem{c$_1$} \sigma)$ }} \\
+%         \desem{if b then c$_1$ else c$_2$} & = 
+%           \defun{\text{
+%             if $\desem{b} \sigma = \top$ then $\desem{c$_1$} \sigma$
+%             else $\desem{c$_2$} \sigma$ }}
+%     \end{align*}
+%     The case for a \imp{while} command is more elaborate:
+%     its semantic function is defined as 
+%     the \emph{least fixed point} of a higher order function $F$,
+%     which takes a program $f: \Sigma \to \Sigma_\bot$
+%     and a state $\sigma$, and returns a state $\sigma' \in \Sigma_\bot$.
+%     We formally define function $F$ as follows: 
+%     \[ F(f) = 
+%       \defun{\text{
+%         if $\desem{b} \sigma = \top$ then 
+%          (if $\desem{c} \sigma = \bot$ then $\bot$
+%           else $f(\desem{c} \sigma)$) 
+%         else $\sigma$
+%       }} \]
+% \end{enumerate}
+
+% \begin{exercise}
+%     Remember that we can 
+%     approximate the lfp of a function $F$ 
+%     by constructing the sequence 
+%     $F(\bot), F^2(\bot), \dots$.
+%     For the factorial program,
+%     first \emph{define} a program $\hat{\bot}$,
+%     then calculate 
+%     $\hat{F}(\hat{\bot}), \hat{F}^2(\hat{\bot}), \dots$,
+%     where $\hat{F}$ is 
+%     the semantic function of the \imp{while} command in factorial.
+% \end{exercise}
+
+% The following theorem connects 
+% operational and denotational semantics:
+% \begin{theorem} 
+%   The following equivalences hold
+%   over expressions in IMP:
+%   \begin{alignat*}{5}
+%     & \forall \imp{a}, n, \sigma && .~ 
+%       \opsem{a}{\sigma} \downarrow n 
+%       &&& \iff \desem{a} \sigma & = n \\
+%     & \forall \imp{b}, n, \sigma && .~
+%       \opsem{a}{\sigma} \downarrow v
+%       &&& \iff \desem{b} \sigma & = v \\
+%     & \forall \imp{c}, \sigma, \sigma' && .~
+%       \opsem{c}{\sigma} \downarrow \sigma'
+%       &&& \iff \desem{c} \sigma & = \sigma' \qquad (*) \\
+%     & \forall \imp{c}, \sigma && .~
+%       (\neg \exists \sigma'.~ \opsem{c}{\sigma} \downarrow \sigma')
+%       &&& \iff \desem{c} \sigma & = \bot
+%   \end{alignat*}
+%   Arithmetic, Boolean, and command expressions
+%   are denoted with \imp{a}, \imp{b}, and \imp{c}.
+% \end{theorem}
+
+% \begin{exercise}[Optional]
+%     Prove (*) in the theorem above.
+%     You can assume the equivalences for 
+%     arithmetic and Boolean expressions.
+% \end{exercise}
+
+% \section{Axiomatic Semantics (Hoare Logic)}
+
+% We use the following notation to show 
+% program \imp{c} satisfies assertions in $\{ \psi \}$,
+% if assertions in $\{ \varphi \}$ are satisfied before execution:
+% \[ \sigma \models^I  \{ \varphi \} ~\imp{c}~ \{ \psi \} \]
+% where $\sigma \in \Sigma$ is a state, 
+% \imp{c} is an IMP program,
+% and $I: Y \mapsto \ZN$ is 
+% a mapping of free variables to integers.
+% Each of $\{ \varphi \}$ and $\{ \psi \}$
+% are a set of \emph{assertions} 
+% ($\sim$ first-order logic formulas)
+% over the set of program locations $X$,
+% the set of free variables $Y$,
+% and at least all functions and predicate symbols
+% that occur in arithmetic and Boolean expressions of IMP.
+% The following definition formalizes 
+% how $\models^I$ should be interpreted:
+
+% \begin{definition}[Partial Correctness]
+%     $\sigma \models^I \{ \varphi \} ~\imp{c}~ \{ \psi \}$
+%     if and only if for any $\sigma'$, 
+%     if $\opsem{c}{\sigma} \downarrow \sigma'$
+%     and $\sigma \models^I \varphi$, 
+%     then $\sigma' \models^I \psi$.
+% \end{definition}
+
+% \begin{definition}
+%     $\models \{ \varphi \} ~\imp{c}~ \{ \psi \}$ iff 
+%     $\forall \sigma, I.~ 
+%       \sigma \models^I \{ \varphi \} ~\imp{c}~ \{ \psi \}$
+% \end{definition}
+
+% Similar to other proof systems, 
+% axiomatic semantics for IMP is a set of inference rules.
+% We begin with defining the axioms for \imp{skip} and assignment:
+% \[ \infer 
+%   { }{ \{ \varphi \} ~\imp{skip}~ \{ \varphi \} } 
+% \qquad \infer 
+%   { }{ \{ \varphi[x \mapsto a] \} 
+%     ~\imp{x \coloneqq    a}~ \{ \varphi \} } \]
+% Be careful with the pre- and post-conditions 
+% of the assignment command.
+
+% For the rest of the command expressions,
+% we define the following rules:
+% \[ \infer
+%   { \{ \varphi \} ~\imp{c$_1$}~ \{ \psi \} \\ 
+%     \{ \psi \} ~\imp{c$_2$}~ \{ \chi \} }
+%   { \{ \varphi \} ~\imp{c$_1$; c$_2$}~ \{ \chi \} } \]
+% \[ \infer
+%   { \{ \varphi \land b \} ~\imp{c$_1$}~ \{ \psi \} \\ 
+%     \{ \varphi \land \neg b \} ~\imp{c$_2$}~ \{ \psi \} }
+%   { \{ \varphi \} 
+%     ~\imp{if b then c$_1$ else c$_2$}~ 
+%     \{ \psi \} }
+% \]
+
+% In the next rule, 
+% $\varphi$ is often referred to 
+% as the \emph{loop invariant}:
+% \[ \infer
+%   { \{ \varphi \land b \} ~\imp{c}~ \{ \varphi \} }
+%   { \{ \varphi \} 
+%     ~\imp{while b do c}~ 
+%     \{ \varphi \land \neg b \} } \]
+
+% The following rule,
+% also known as \textsc{Consequence},
+% shows how we can
+% \emph{strengthen} our pre-conditions
+% and \emph{weaken} our post-conditions:
+% \[ \infer
+%   { \varphi \implies \varphi' \\
+%     \{ \varphi' \} ~\imp{c}~ \{ \psi' \} \\
+%     \psi' \implies \psi }
+%   { \{ \varphi \} ~\imp{c}~ \{ \psi \} } \]
+
+% \begin{exercise}
+%     For the factorial program \imp{fact},
+%     prove the following using Hoare logic:
+%     \[ \{ x = i \} ~\imp{fact}~ \{ y = i! \} \]
+% \end{exercise}
+

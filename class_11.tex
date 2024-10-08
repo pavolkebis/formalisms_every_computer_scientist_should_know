@@ -1,0 +1,192 @@
+
+
+
+\begin{definition}[$T_{EQ}$]
+\label{cl11:def:theory-equality}
+The theory of equality and uninterpreted function + predicate symbols $T_{EQ}$ has as signature $(=)$ and is composed of the following axioms 
+\begin{itemize}
+    \item[(i)] equivalence axiom: $=$ is equivalence
+    \item[(ii)] congruence axiom: for every function symbol $f$, $\forall x_1, \cdots, x_n, y_1, \cdots, y_n$,
+    \begin{align*}
+        x_1 = y_1 \land \cdots \land x_n=y_n \Rightarrow f(x_1, \cdots, x_n) = f(y_1, \cdots, y_n)
+    \end{align*}
+    and for every predicate $p$, $\forall x_1, \cdots, x_n, y_1, \cdots, y_n$, 
+    \begin{align*}
+         x_1 = y_1 \land \cdots \land x_n=y_n \Rightarrow p(x_1, \cdots, x_n) = p(y_1, \cdots, y_n).
+    \end{align*}
+\end{itemize}
+\end{definition}
+
+% Quantifier free fragment: given quantifier free formula $\phi$, is $\phi$ $T$-satisfiable? 
+\begin{theorem}
+Satisfiability of quantifier free $T_{EQ}$ is NP-complete. 
+Satisfiability of quantifier free conjunction of $T_{EQ}$ with congruence closure is $O(n \log n)$. 
+\end{theorem}
+
+\begin{remark}[Congruence Closure] 
+First replace predicate by function symbols, i.e., replace $p(t_1, \cdots, t_n)$ by $ f_p(t_1, \cdots, t_n) = T $.
+Second the conjunction $\phi := (\land _i s_i = t_i) \land (\land_j s_j \neq t_j)$ is satisfiable iff there exists a congruence relation on terms (i.e., a relation satisfying (i) and (ii) in Definition \ref{cl11:def:theory-equality}, and for all $i$, $s_i=t_i$, and for all $j$, $s_j \neq t_j$) 
+\end{remark}
+    
+
+
+
+
+
+\begin{example}[Congruence Closure] 
+To show that $\phi := f^3(a) = a \land f^5(a) = a \land f(a) \neq a$ is unsatisfiable with congruence closure we follow the steps
+\begin{align*}
+    &\{a\}, \{f(a)\}, \cdots, \{f^5(a)\} \\
+&\{a, f^3(a)\}, \{f(a), f^4(a)\}, \{f^2(a), f^5(a)\} \\
+&\{\mathbf{a}, f^2(a), f^3(a), f^5(a), \mathbf{f(a)}, f^4(a)\}
+\end{align*}
+\end{example}
+
+
+\begin{exercise}
+    Given union find, write congruence closure (subquadratic)? 
+\end{exercise}
+
+
+
+\begin{definition}[$T_{GR}$]
+  The theory of groups ($T_{GR}$) has the signature $(=, \cdot, i, -)$ and consists of the following axioms.
+\begin{align*}
+\text{(i)} \quad & \forall x,y,z, \quad (x \cdot y) \cdot z = x \cdot (y \cdot z) \\
+\text{(ii)} \quad & \forall x, \quad x \cdot i = x \\
+\text{(iii)} \quad & \forall x, \quad x \cdot (-x) = i \\
+\text{(iv)} \quad & \forall x,y, \quad x \cdot y = y \cdot x \quad \text{(Abelian)}  . 
+\end{align*}
+\end{definition}
+
+\begin{theorem}
+    The theory $T_{GR}$ is incomplete and undecidable. 
+\end{theorem}
+
+
+
+\begin{exercise}
+    Analyze the quantifier-free $T_{GP}$. Is it undecidable and/or incomplete?
+\end{exercise}
+
+
+
+
+\begin{definition}[$T_{\NN}$]
+\label{cl11:def:theory-nn}
+ Theory of the natural numbers ($T_{\NN}$) has the signature $(=, 0, 1, +, \cdot)$. There are two different set of axioms, i.e., the Peano arithmetic (Definition \ref{cl11:def:peano}) and Presburger arithmetic (Remark \ref{cl11:rem:pres}).
+\end{definition}
+
+
+
+
+
+\begin{definition}[$T_{PE}$]
+\label{cl11:def:peano}
+Given the signature in Definition \ref{cl11:def:theory-nn}, the theory of Peano arithmetic ($T_{PE}$) is defined w.r.t.\ the following axioms. 
+ \begin{align*}
+\text{(i)} \quad &\forall x, \quad Sx \neq 0 \\
+\text{(ii)} \quad &\forall x,y, \quad Sx = Sy \simplies x=y \\
+\text{(iii)} \quad&\phi(0) \land \forall x (\phi(x) \simplies \phi(x+1)) \simplies \forall x, \phi(x) \\
+\text{(iv)} \quad&\forall x, \quad x + 0 = x \\
+\text{(v)} \quad&\forall x,y, \quad x + Sy = S (x+y) \\
+\text{(vi)} \quad&\forall x, \quad x \cdot 0 = 0 \\
+\text{(vii)} \quad&\forall x,y, \quad x \cdot Sy = xy + x .
+ \end{align*}
+\end{definition}
+
+\begin{theorem}
+The theory $T_{PE}$ is incomplete and undecidable,  
+including its quantifier-free fragment (see Goedel).
+\end{theorem}
+
+\begin{remark}[$T_{PR}$]
+\label{cl11:rem:pres}
+   The theory of Presburger arithmetic is defined over the same signature as in Definition \ref{cl11:def:theory-nn} is an alternative axiomatisation of the natural numbers. The axioms are omitted.
+   No quantifier elimination (QE) is possible in this theory.
+   Where QE means that for every formula $\forall x$, $\phi (x, y_1, \cdots, y_n)$, there exists a $T$-equivalent $\psi (y_1, \cdots, y_n)$. 
+\end{remark}
+
+\begin{theorem}
+    The theory $T_{PR}$ is complete and decidable in $3\mathrm{EXP}$. The quantifier free fragment is in $\mathrm{NP}$.
+\end{theorem}
+
+\begin{exercise}
+    Give a $T_{PR}$ formula that has no quantifier-free equivalent. 
+\end{exercise}
+
+\begin{definition}[$T_{\RN}$]
+      The theory of the reals ($T_{\RN}$) has the signature $(=, 0, 1, +, -, \cdot, \leq)$ and consists of the following axioms.
+      \begin{align*}
+          \text{G-(i)} \quad&  (+,0) ;&&\text{Abelian group} \\
+          \text{R-(i)}\quad& (xy)z=x(yz),\; && \text{Ring} \\
+        \text{R-(ii)}\quad&   x \cdot 1 = 1 \cdot x = x, &&\; \\
+          \text{R-(iii)}\quad&  (x+y)z = xz + yz,&& \\
+          \text{R-(iv)}\quad &  x(y+z) = xy + xz; &&\\
+          \text{F-(i)}\quad& xy=yx,\; && \text{Field} \\
+        \text{F-(ii)}\quad&  0 \neq 1,&& \\
+        \text{F-(iii)}\quad&  x \neq 0 \simplies \exists y . xy=1;&& \\
+        \text{O-(i)}\quad& x \leq y \land y \leq x \simplies x=y && \text{Order} \\
+        \text{O-(ii)}\quad& x \leq y \land y \leq z \simplies x \leq z,&& \\
+         \text{O-(iii)}\quad& x \leq y \lor y \leq x;&& \\
+        \text{(i)}\quad& \forall x\exists y. \; x = yy \lor -x = yy &&  \\
+        \text{(ii)}\quad& \forall x_1, \cdots,x_n \exists y. \; y^n + x_1y^{n-1} + \cdots + x_{n-1}y + x_n = 0 && \text{(odd $n$)} \\
+      \end{align*}      
+\end{definition}
+
+
+\begin{theorem}
+    The theory $T_{\RN}$ is complete and decidable in $2\mathrm{EXP}$ using cylindrical algebraic decomposition for QE.
+\end{theorem}
+
+
+\begin{definition}[$T_{\mathrm{LI}}$]
+    The theory of linear arithmetic ($T_{\mathrm{LI}}$) has the signature $(=, 0, 1, +, -,\leq)$ and consists of the following axioms.
+      \begin{align*}
+    \text{(i)}\quad& \leq \quad \text{anti-symmetric, transitive, total} \\
+    \text{(ii)}\quad& + \quad \text{associative, commutable, identity $0$, inverse $-$} \\
+    \text{(iii)}\quad&\forall x\, y\, z. \; x\geq y \simplies x+z \geq y+z \\
+    \text{(iv)}\quad&\forall x . \; nx=0 \simplies x=0 \quad \text{for all $n$}\\
+    \text{(v)}\quad&\forall x\, \exists y. \; x=ny \quad \text{for all $n>0$} \\
+  \end{align*}      
+\end{definition}
+
+\begin{theorem}
+    The theory $T_{\mathrm{LI}}$ is complete and decidable in  $2\mathrm{EXP}$ using Fourier-Motzkin for QE.
+\end{theorem}
+
+
+\begin{example}
+Starting with the set of equations 
+\begin{align*}
+    \left\lbrace x_1 - x_2 \leq 0 , \;
+    x_1 - x_3 \leq 0 ,\; 
+-x_1 + x_2 + 2x_3 \leq 0 ,\;
+-x_3 \leq 1\right\rbrace . 
+\end{align*}
+we first eliminate $x_1$ obtaining 
+\begin{align*}
+   \left\lbrace x_1 \leq x_2 ,\; x_1 \leq x_2 ,\;  x_1 \geq x_2 + 2 x_3 \right\rbrace .
+\end{align*}
+Next we get 
+\begin{align*}
+   \left\lbrace 
+      2x_3\leq 0 ,\; 
+    x_2 + x_3 \leq 0,\; 
+    -x_3 \leq 1
+   \right\rbrace .
+\end{align*}
+Eliminating $x_2$ we obtain
+\begin{align*}
+   \left\lbrace 
+      x2\leq -x_3 ,\; 
+     x_3 \leq 0,\; 
+    -x_3 \leq 1
+   \right\rbrace.
+\end{align*}
+Finally eliminating $x_3$ to obtain $\top$. 
+\end{example}
+
+\begin{remark}
+    Linear inequalities over $\QN$ are $\mathrm{NP}$-complete, e.g., integer linear programming. 
+\end{remark}

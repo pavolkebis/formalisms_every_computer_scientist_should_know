@@ -1,134 +1,159 @@
-\chapter{First Order Logic (FOL)}
-\begin{definition}
-    Interpretation $I$ in first-order structure: 
-    \begin{enumerate}
-        \item Domain $D_I$
-        \item for each $n$-ary function symbol $f \in F$, $[f]_I: D_I^n \to D_I$
-        \item for each $n$-ary predicate symbol $p \in P$, $[p]_I: D_I^n \to B = \{true,false\}$
-        \item "context" (environment) for each (free) variable $x \in X$, $[x]_I \in D_I$
-    \end{enumerate}
+
+
+\begin{definition}[Interpretation]
+    Interpretation $\interp$ in first-order structure: 
+    \begin{itemize}
+        \item[(i)] Domain $D_{\interp}$
+        \item[(ii)] for each $n$-ary function symbol $f \in F$, $\eval{f}_{\interp}: D_{\interp}^n \to D_{\interp}$
+         \item[(iii)]  for each $n$-ary predicate symbol $p \in P$, $\eval{p}_{\interp}: D_{\interp}^n \to B = \{true,false\}$
+        \item[(iv)]  "context" (environment) for each (free) variable $x \in X$, $\eval{x}_{\interp} \in D_{\interp}$
+    \end{itemize}
+    Formula $\varphi$ is closed if it has no free variables.
 \end{definition}
-Formula $\phi$ is closed if it has no free variables.
-
-Given an interpretation $I$, a term $t$ and a formula $\phi$ have the following meaning: 
-\[
-\begin{split}
-    [t]_I &= \begin{cases}
-        [x]_I & t=x  \\
-        [f]_I([t_1]_I, [t_2]_I, \dots, [t_n]_I) & t=f(t_1, \dots, t_n)
-    \end{cases}
-\end{split}
-\]
-
-\[
-\begin{split}
-    [\phi]_I &= \begin{cases}
-        [x]_I & t=x  \\
-        [p]_I([t_1]_I, [t_2]_I, \dots, [t_n]_I) & \phi = p(t_1, \dots, t_n)
-    \end{cases}
-\end{split}
-\]
-\[
-\begin{split}
-    [\phi_1 \Rightarrow \phi_2]_I &= \textit{True iff} [\phi_1]_I = false \textit{ or } [\phi_2]_I = true
-\end{split}
-\]
-
-\[
-[\forall x. \phi]_I = \textit{True iff for all } d \in D_I, [\phi]_{I[x \to d]}
-\]
-\[
-[\exists x. \phi]_I = \textit{True iff for some } d \in D_I, [\phi]_{I[x \to d]}
-\]
-
-\[
-\phi \textit{ valid } (\vDash \phi) \textit{ iff } [\phi]_I = \textit{True for all interpretations } I  
-\]
 
 
-\[
-\phi \textit{ satisfiable } \textit{ iff } [\phi]_I = \textit{True for some interpretations } I 
-\]
+\begin{definition}[Semantics]
+Given an interpretation $\interp$, a term $t$ and a formula $\varphi$ have the following meaning: 
+\begin{align*}
+     \eval{t}_{\interp} &\coloneqq \begin{cases}
+         \eval{x}_{\interp} & t=x  \\
+         \eval{f}_{\interp}([ \eval{t_1}_{\interp},  \eval{t_2}_{\interp}, \dots,  \eval{t_n}_{\interp}) & t=f(t_1, \dots, t_n)
+    \end{cases} \\
+     [\varphi]_{\interp} &\coloneqq \begin{cases}
+        \eval{x}_{\interp} & t=x  \\
+        \eval{p}_{\interp}(\eval{t_1}_{\interp}, \eval{t_2}_{\interp}, \dots, \eval{t_n}_{\interp}) & \varphi = p(t_1, \dots, t_n)
+    \end{cases}\\
+     \eval{\varphi_1 \simplies \varphi_2}_{\interp} &\coloneqq \true \; \textit{ iff } \; \eval{\varphi_1}_{\interp} = \false \textit{ or } \eval{\varphi_2}_{\interp} = \true \\
+     \eval{\forall x. \varphi}_{\interp} &\coloneqq \true \; \textit{ iff for all } \;  d \in D_{\interp}, \eval{\varphi}_{I[x \to d]}=\true \\ 
+     \eval{\exists x. \varphi}_{\interp} &\coloneqq \true \; \textit{ iff for some } \; d \in D_{\interp}, \eval{\varphi}_{I[x \to d]}=\true
+\end{align*}
+\end{definition}
+
+\begin{definition}[Satisfiable and Valid]
+    Let $\varphi$ be a first-order formula. The formula $\varphi$ is: 
+     (i)\emph{satisfiable} iff it is true for \emph{some} interpretation $\interp$, i.e., $\exists \interp . \models \varphi$.
+    (ii) \emph{valid} iff it is true for \emph{all} interpretations $\interp$, i.e., $\forall \interp . \models \varphi$.
+\end{definition}
 
 
-\subsection{Small Detour}
-PCP (Post Correspondence Problem): Given a finite set $S$ of dominoes $\frac{s}{t}$ where $s,t \in \{0,1\}^*$. Is there a finite sequence $\frac{s_1}{t_1}, \dots \frac{s_n}{t_n}$ of (possibly repeating) dominoes from $S$ such that the 
+\begin{definition}[Post Correspondence Problem]
+    PCP (Post Correspondence Problem): Given a finite set $S$ of dominoes $\frac{s}{t}$ where $s,t \in \{0,1\}^*$. Is there a finite sequence $\frac{s_1}{t_1}, \dots \frac{s_n}{t_n}$ of (possibly repeating) dominoes from $S$ such that the 
 $$s_1 \cdot s_2 \cdot \dots \cdot s_n = t_1 \cdot t_2 \dots \cdot t_n$$
+\end{definition}
 
 \begin{theorem}
     The PCP problem is undecidable.
 \end{theorem}
 
 
-\subsection{Back to Work}
-\begin{metatheorem} 
-    \begin{enumerate}
-        \item (Compactness) Set $\Gamma$ of formulas is satisfiable iff every finite subset of $\Gamma$ is satisfiable.
-        \item (Lowenheim-Skolem). If a set $\Gamma$ of formulas is satisfiable then $\Gamma$ is satisfiable by an interpretation with countable domain. 
-        \item Both the validity and satisfiability problems for FOL are undecidable.
-    \end{enumerate}
-\end{metatheorem}
+\begin{theorem}[Compactness] 
+The set of formulas $\Gamma$ is satisfiable iff every finite subset of $\Gamma$ is satisfiable.
+\end{theorem}
+
+
+\begin{theorem}[Lowenheim-Skolem] 
+If a set $\Gamma$ of formulas is satisfiable then $\Gamma$ is satisfiable by an interpretation with countable domain. 
+\end{theorem}
+
+
+\begin{theorem}[Undecidability]
+    Both the validity and satisfiability problems for FOL are undecidable.
+\end{theorem}
 \begin{proof}
-    (Proof sketch of undecidability) Let $F = \{e,f_0, f_1\}$ where $e$ is 0-ary and $f_0,f_1$ are unary. Basically a string $011$ of 0,1s is represented as $f_1(f_1(f_0(e)))$.  
-
-    Let $P = \{p\}$ where $p$ is a binary predicate. Basically a domino $\frac{s}{t}$ is represented by $p(s,t)$. 
-
-    Given an instance $R$ of PCP, the formula $\phi_R = (\phi_1 \wedge \phi_2) \Rightarrow \phi_3$ is valid iff the answer to $R$ is yes:
-
-    \[
-    \begin{split}
-        \phi_1 &= \bigwedge_{1 \leq i \leq k} P(s_i(e), t_i(e)) \\
-        \phi_2 &= \forall v,w. (p(v,w) \Rightarrow \bigwedge_{1 \leq i \leq k} p(s_i(v), t_i(w))) \\ 
-        \phi_3 &= \exists z. p(z,z)
-    \end{split}
-    \]
+   Let $F = \{e,f_0, f_1\}$ where $e$ is 0-ary and $f_0,f_1$ are unary. With those functions we can encode the string $011$ as $f_1(f_1(f_0(e)))$.  
+    Let $P = \{p\}$ where $p$ is a binary predicate. Intuitively, the domino $\frac{s}{t}$ is represented by $p(s,t)$. 
+    Given an instance $R\coloneqq \{r_1, \dots, r_k\}$ of PCP we define the formulas
+    \begin{align*}
+        \varphi_1 &\coloneqq \bigwedge_{1 \leq i \leq k} P(s_{\interp}(e), t_{\interp}(e)) \\
+        \varphi_2 &\coloneqq \forall v,w. (p(v,w) \simplies \bigwedge_{1 \leq i \leq k} p(s_{\interp}(v), t_{\interp}(w))) \\ 
+        \varphi_3 &\coloneqq \exists z. p(z,z)
+    \end{align*}
+    It remains to be shown that the formula $\varphi_R = (\varphi_1 \land \varphi_2) \simplies \varphi_3$ is valid iff the answer to $R$ is yes.
 \end{proof}
-\subsection{Three Sound and Complete Proof Systems}
-\subsubsection{Hilbert}
-\[
-\begin{split}
-1. &(\forall x. \phi) \Rightarrow \phi[x:=t]  \\
-2. &\forall x. (\phi \Rightarrow \psi) \Rightarrow (\forall x. \phi) \Rightarrow (\forall x. \psi) \\ 
-3. & \phi \Rightarrow \forall x. \phi ~~~ \textit{provided that } x \textit{ is not free in } \phi
-\end{split}
-\]
-($\phi[x:=t]$ means safely replacing each occurrence of $x$ by $t$) \\
 
-\subsection{Gentzen}
-\[
-\begin{split}
-\frac{\Gamma, \phi[x:=t] \vdash \Delta}{\Gamma, \forall x. \phi \vdash \Gamma} &  \forall-elim \\
-\frac{\Gamma \vdash \Delta, \phi[x:=y]}{\Gamma \vdash \Delta, \forall x. \phi} &  \forall-intro \textit{ y is a new (fresh) variable} \\
-\frac{\Gamma, \phi[x:=y]}{\Gamma, \exists x. \phi \vdash \Delta} & \exists-elim \\ 
-\frac{\Gamma \vdash \Delta, \phi[x:=t]}{\Gamma \vdash \Delta, \exists x. \phi} & \exists-intro
-\end{split}
-\]
-
-\subsection{Natural Deduction}
-\[
-\begin{split}
-    \frac{\forall x \phi}{\phi[x:=t]} \\ 
-    \frac{\phi[x:=t]}{\exists x. \phi} \\ 
-    \frac{\begin{bmatrix}
-        y \textit{ new} \\ 
-        ...\\
-        \phi[x:=y]
-    \end{bmatrix}}{\forall x. \phi} \\ 
-    \frac{ \exists x. \phi, \begin{bmatrix}
-        y: \phi[x:=y] \\ 
-        ...\\
-        \psi 
-    \end{bmatrix}}{\psi}
-\end{split}
-\]
-
-\begin{homework} Prove de Morgan for quantifiers 
-\[
-\forall x. \phi \Leftrightarrow \not \exists x. \not \phi
-\]
-in all three systems. 
-\end{homework}
-
-\begin{homework}
+\begin{exercise}
 	 Use PCP to show satisfiability of FOL is undecidable. 
-\end{homework}
+\end{exercise}
+
+\subsection{Three Sound and Complete Proof Systems}
+
+
+\begin{definition}[Hilbert]
+We extend the Hilbert system $\hilbert$ by adding the following axioms
+\begin{align*}
+    (1) \quad & \quad (\forall x. \varphi) \simplies \varphi[x\coloneqq t] \\
+    (2) \quad & \quad \forall x. (\varphi \simplies \psi) \simplies (\forall x. \varphi) \simplies (\forall x. \psi) \\ 
+    (3) \quad & \quad \varphi \simplies \forall x. \varphi \quad \text{provided $x$ is not free in $\varphi$}
+\end{align*}
+We denote the safe replacement of every free variable $x$ in $\varphi$ by $t$ as $\varphi[x\coloneqq t]$
+\end{definition}
+
+
+
+\begin{definition}[Genzen]
+We extend the Genzen system $\lk$ by adding the following rules for the $\forall$-quantifier
+\begin{center}
+    \AxiomC{$\Gamma, \varphi[x\coloneqq t] \proofs \Delta$}
+    \RightLabel{\small ($\forall$-elim)}
+    \UnaryInfC{$\Gamma, \forall x. \varphi \proofs \Gamma$}
+    \DisplayProof 
+    $\quad$
+    \AxiomC{$\Gamma \proofs \Delta, \varphi[x\coloneqq y]$}
+    \RightLabel{\small ($\forall$-intro)}
+    \UnaryInfC{$\Gamma \proofs \Delta, \forall x. \varphi$}
+    \DisplayProof 
+\end{center}
+and for the $\exists$-quantifier
+\begin{center}
+    \AxiomC{$\Gamma, \varphi[x\coloneqq y]$}
+    \RightLabel{\small ($\exists$-elim)}
+    \UnaryInfC{$\Gamma, \exists x. \varphi \proofs \Delta$}
+    \DisplayProof 
+    $\quad$
+        \AxiomC{$\Gamma \proofs \Delta, \varphi[x\coloneqq t]$}
+    \RightLabel{\small ($\exists$-intro)}
+    \UnaryInfC{$\Gamma \proofs \Delta, \exists x. \varphi$}
+    \DisplayProof 
+\end{center}
+where $y$ is a new (fresh) variable.
+\end{definition}
+
+
+\begin{definition}[Natural Deduction]
+    We extend the Natural Deduction system $\nk$ (and $\nj$) by adding the following rules for the $\forall$-quantifier
+\begin{center}
+    \AxiomC{$\forall x. \varphi$}
+    \RightLabel{\small ($\forall$-elim)}
+    \UnaryInfC{$\varphi[x\coloneqq t]$}
+    \DisplayProof 
+    $\quad$
+    \AxiomC{$\varphi[x\coloneqq y]$}
+    \RightLabel{\small ($\forall$-intro)}
+    \UnaryInfC{$\forall x. \varphi$}
+    \DisplayProof 
+\end{center}
+and for the $\exists$-quantifier
+\begin{center}
+    \AxiomC{$\exists x . \varphi$}
+            \AxiomC{$\varphi[x\coloneqq y]$}
+            \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+    \UnaryInfC{$\psi$}
+    \RightLabel{\small ($\exists$-elim)}
+    \BinaryInfC{$\psi$}
+    \DisplayProof 
+    $\quad$
+        \AxiomC{$\varphi[x\coloneqq t]$}
+    \RightLabel{\small ($\exists$-intro)}
+    \UnaryInfC{$\exists x. \varphi$}
+    \DisplayProof 
+\end{center}
+where $y$ is a new (fresh) variable.
+\end{definition}
+
+
+
+\begin{exercise} 
+Prove de Morgan, i.e., $ \forall x. \varphi \Leftrightarrow \neg \exists x. \neg \varphi$, for quantifiers in all three systems.
+\end{exercise}

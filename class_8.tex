@@ -1,121 +1,179 @@
-{{%Localize command definitions
 
-\chapter{Class 8}
+\subsection{Decision Procedures}
 
-We now talk about three proof systems:
-\begin{itemize}
-\item Hilbert $$\vdash \phi$$
-\item Natural deduction $$\Gamma \vdash \phi$$
-\item Grentzen $$\Gamma \vdash \Delta$$
-\end{itemize}
-We now talk abou three decision procedures (either for validity or for satisfiability):
-\begin{itemize}
-\item Branching (if we don't derive $\bot$ then it is satisfiable)
-$$\inferrule
-{\Gamma[\bot]\qquad\qquad\Gamma[\top]}
-{\Gamma[p]}
-$$
-\item Resolution
-$$\inferrule
-{\Gamma,\, C_1,\, C_2,\, C_1[\bot] \vee C_2[\bot]}
-{\Gamma,\, C_1[p],\, C_2[p]}
-$$
-\item Unit resolution, combined with branching of lower priority (DPLL)
-$$\inferrule
-{\Gamma,\, C[\bot]}
-{\Gamma,\, \ell,\, C[\neg\ell]}
-$$
-Example: $$p \vee q \vee r ,\; \neg p \vee \neg q \vee \neg r ,\; \neg p \vee q \vee r ,\; \neg q \vee r ,\; q \vee \neg r$$
+\begin{remark}
+    We now talk about three proof systems for validity: 
+    \begin{align*}
+            \overset{\text{Hilbert}}{\proofs \varphi} & \quad &  \overset{\text{Natural Deduction}}{\Gamma \proofs \varphi} & \quad &  
+            \overset{\text{Grentzen}}{\Gamma \proofs \Delta}
+        \end{align*}
+\end{remark}
+    
+\begin{remark}
+   We now talk abou three decision procedures (either for validity or for satisfiability)
+\end{remark}
+
+
+\begin{definition}
+We define three decision procedures (either for validity or for satisfiability):
+(i) Branching (if we don't derive $\bot$ then it is satisfiable)
+\begin{center}
+    \begin{prooftree}
+    \AxiomC{$\Gamma[\top] \; \unsat$ }
+    \AxiomC{$\Gamma[\bot]\; \unsat$}
+    \BinaryInfC{$\Gamma[p]\; \unsat$}
+\end{prooftree}
+\end{center}
+(ii) Resolution
+\begin{center}
+    \begin{prooftree}
+    \AxiomC{$\Gamma, C_1, C_2, C_1[\bot] \lor C_2[\top]$ $\; \unsat$}
+    \UnaryInfC{$\Gamma, C_1[p] , C_2[\neg p]$ $ \; \unsat$}
+    \end{prooftree}
+\end{center}
+(iii) DPLL using unit resolution combined with branching of lower priority ($\ell$ is a literal)
+\begin{center}
+    \begin{prooftree}
+    \AxiomC{$\Gamma, C[\bot]$ $\; \unsat$}
+    \UnaryInfC{$\Gamma, \ell, C[\neg \ell]$ $ \; \unsat$}
+    \end{prooftree}
+\end{center}
+\end{definition}
+
+\begin{example}
+Consider $p \lor q \lor r ,\; \neg p \lor \neg q \lor \neg r ,\; \neg p \lor q \lor r ,\; \neg q \lor r ,\; q \lor \neg r$
 First we branch on $r$.
-\begin{itemize}
-\item Case $r=\bot$:
-$$p \vee q ,\; \neg p \vee q ,\; \neg q$$
-We didn't continue this branch.
-\item Case $r=\top$:
-$$\neg p \vee \neg q ,\; q$$
-Then we propagate $q$. We end up with $\neg p$.\\
-It is satisfied by $p=\bot,\; q=\top,\; r=\top$.
-\end{itemize}
-\end{itemize}
-
-Horn clause is a clause with at most one positive literal.
-We can view them as implications where LHS is a conjunction of positive propositions:
 \begin{align*}
-\neg p \vee \neg q 
-	&\iff p \wedge q \rightarrow \bot \\
-\neg p \vee \neg q \vee r 
-	&\iff p \wedge q \rightarrow r \\
-r 
-	&\iff \top \rightarrow r \\
+    \text{Case } r=\bot &: & p \lor q ,\; \neg p \lor q ,\; \neg q  &&\overset{Res. \neg q}{\longrightarrow} && p,\;\neg p && \overset{Res. \neg p}{\longrightarrow} &\bot \\
+    \text{Case } r=\top &:  & \neg p \lor \neg q &&\overset{q=\top}{\longrightarrow} && \;\neg p && \overset{p=\bot}{\longrightarrow}& \bot
 \end{align*}
+\end{example}
+
+
+\begin{definition}[Horn Clauses]
+    Horn clause is a clause with at most one positive literal.
+\end{definition}
+
+
+\begin{remark}
+    We can view Horn clauses as implications where LHS is a conjunction of positive propositions:
+    \begin{align*}
+\neg p \lor \neg q 
+	&\iff p \land q \simplies \bot \\
+\neg p \lor \neg q \lor r 
+	&\iff p \land q \simplies r \\
+r 
+	&\iff \top \simplies r \\
+\end{align*}
+\end{remark}
+
 
 \subsection{Metatheorems}
 
-\subsubsection{Compactness}
+\begin{theorem}
+    A countable set $\Gamma$ of formulas is satisfiable iff every finite subset of $\Gamma$ is satisfiable.
+\end{theorem}
 
-Countable set $\Gamma$ of formulas is satisfiable iff every finite subset of $\Gamma$ is satisfiable.
-
-\subsubsection{Craig's interpolation}
-
-We have $\vdash \phi \rightarrow \psi$ iff there exists a third formula $\chi$ (the "interpolant") which only uses
+\begin{theorem}[Craig's interpolation]
+    We have $\proofs \varphi \simplies \psi$ iff there exists a third formula $\chi$ (the "interpolant") which only uses
 nonlogical symbols (in propositional logic, it is propositions only) that occur in
-both $\phi$ and $\psi$ such that $\vdash \phi \rightarrow \chi$ and $\vdash \chi \rightarrow \psi$.
+both $\varphi$ and $\psi$ such that $\proofs \varphi \simplies \chi$ and $\proofs \chi \simplies \psi$.
+\end{theorem}
 
-\subsubsection{Cut elimination}
+\begin{exercise}
+    How hard is it to compute interpolates in propositional logic?
+\end{exercise}
 
-Cut rule in NK / NJ:
-$$\inferrule
-{\Gamma\vdash\phi\qquad\qquad\qquad\Gamma,\phi\vdash\psi}
-{\Gamma\vdash\psi}
-$$
-Cut rule in LK:
-$$\inferrule
-{\Gamma\vdash\phi,\Delta\qquad\qquad\qquad\Gamma,\phi\vdash\Delta}
-{\Gamma\vdash\Delta}
-$$
+\begin{definition}
+    The cut rule in $\nk$, $\nj$ (left) and $\lk$ (right) is respectively
+    \begin{center}
+        \AxiomC{$\Gamma \proofs \varphi$}
+        \AxiomC{$\Gamma, \varphi \proofs \psi$}
+        \BinaryInfC{$\Gamma \proofs \psi$}
+        \DisplayProof
+        $\quad$
+        \AxiomC{$\Gamma \proofs \varphi, \Delta$}
+        \AxiomC{$\Gamma, \varphi \proofs \Delta$}
+        \BinaryInfC{$\Gamma \proofs \Delta$}
+        \DisplayProof
+    \end{center}
+\end{definition}
 
-If a judgement can be proved with the cut rule, it can also be proved without the cut rule.
+\begin{theorem}[Cut elimination]
+\label{cl8:thrm:cut}
+    If a judgement can be proved with the cut rule, it can also be proved without the cut rule.
+\end{theorem}
+
+\begin{remark}[Theorem \ref{cl8:thrm:cut}]
 In fact, it is ``iff''; the other direction is trivial.
-Of course, the proof may become longer (introducing a lemma $\phi$ often helps in practice).
+Of course, the proof may become longer (introducing a lemma $\varphi$ often helps in practice).
 It is a purely syntactic metatheorem. We cannot use deduction to prove it.
+\end{remark}
+
+% \subsubsection{Cut elimination}
+
+% Cut rule in NK / NJ:
+% $$\inferrule
+% {\Gamma\proofs\varphi\qquad\qquad\qquad\Gamma,\varphi\proofs\psi}
+% {\Gamma\proofs\psi}
+% $$
+% Cut rule in LK:
+% $$\inferrule
+% {\Gamma\proofs\varphi,\Delta\qquad\qquad\qquad\Gamma,\varphi\proofs\Delta}
+% {\Gamma\proofs\Delta}
+% $$
+
+% If a judgement can be proved with the cut rule, it can also be proved without the cut rule.
+
 
 \section{First-order logic}
 
-First-order logic, also called ``predicate logic'', is propositional logic with quantifiers $\forall$ (for all) and $\exists$ (exists).
 
-\subsection{Syntax}
+\subsection{Definition}
+\begin{remark}
+    First-order logic, also called ``predicate logic'', is propositional logic with quantifiers $\forall$ (for all) and $\exists$ (exists).
+\end{remark}
 
-\subsubsection{Nonlogical symbols (``signature'')}
+\begin{definition}[Signature]
+    A Signature defines the non-logical symbols
 \begin{itemize}
-\item finite set of variables $X = \{ x, y, z, \dots \}$
-\item finite set of function symbols $F = \{ f, g, h, \dots \}$
-\item finite set of predicate symbols $P = \{ p, q, r, \dots \}$
+\item[(i)] finite set of variables $X = \{ x, y, z, \dots \}$
+\item[(ii)] finite set of function symbols $F = \{ f, g, h, \dots \}$
+\item[(iii)] finite set of predicate symbols $P = \{ p, q, r, \dots \}$
 \end{itemize}
 Each function symbol has a fixed ``arity'' (number of arguments), which can be zero (arity 0 gives a constant).
 Each predicate symbol has also a fixed ``arity'' (number of arguments), which can be zero (arity 0 gives a proposition).
+\end{definition}
 
-\subsubsection{Logical symbols}
+
+\begin{definition}[Logical symbols]
+The logical symbols consist of:
 \begin{itemize}
-\item connectives ($\bot, \top, \neg, \wedge, \vee, \rightarrow$)
-\item quantifiers ($\forall, \exists$)
-\item finite set of predicate symbols $P = \{ p, q, r, \dots \}$
+\item[(i)] connectives ($\bot, \top, \neg, \land, \lor, \simplies$)
+\item[(ii)] quantifiers ($\forall, \exists$)
+\item[(iii)] finite set of predicate symbols $P = \{ p, q, r, \dots \}$
 \end{itemize}
+\end{definition}
+
+\begin{remark}
 We don't add parentheses to the symbols; we will talk about syntax trees;
 only if we want to write them down as strings, we add parentheses (as few as possible).
+\end{remark}
 
-\subsubsection{Grammar}
-\begin{itemize}
-\item Terms: $\phi ~:=~ f_0 ~|~ f_n(t_1,\dots,t_n)$
-\item Formulas: $\phi ~:=~ p_0 ~|~ p_n(t_1,\dots,t_n) ~|~ \bot ~|~ \top ~|~ \neg\phi ~|~ \phi\wedge\phi ~|~ \phi\vee\phi ~|~ \phi\rightarrow\phi ~|~ \forall x. \phi ~|~ \exists x. \phi$
-\end{itemize}
-When we write $\forall x. \phi$, every occurence of $x$ is bound in $\phi$.
+\begin{definition}[Syntax]
+The syntax of first-order logic is given by the following grammar for terms and formulas repsectively
+\begin{align*}
+    t &\Coloneqq f_0 \; | \;  f_n(t_1,\dots,t_n) \\
+    \varphi &\Coloneqq p_0  \; | \; p_n(t_1,\dots,t_n)  \; | \; \bot  \; | \; \top  \; | \; \neg\varphi  \; | \;\varphi\land\varphi  \; | \; \varphi\lor\varphi  \; | \; \varphi\simplies\varphi  \; | \; \forall x. \varphi  \; | \; \exists x. \varphi
+\end{align*}
+When we write $\forall x. \varphi$, every occurence of $x$ is bound in $\varphi$.
 A variable that is not bound is called free.
 A change of bound variables does not change the abstract syntax tree (same in abstract syntax).
+\end{definition}
 
-\subsubsection{Safe substitution}
-$$\forall x\,.\;\, \exists y\,.\;\, y \ge x + 1$$
-If we want to substitute $y^2$ for $x$, we must first rename $y$ to $z$ and then substitute.
-$$\forall x\,.\;\, \exists z\,.\;\, z \ge x + 1$$
-$$\exists z\,.\;\, z \ge y^2 + 1$$
 
-}} % End localization of command definitions
+\begin{remark}[Safe substitution]
+    If we want to substitute $y^2$ for $x$ in $\forall x\,.\;\, \exists y\,.\;\, y \ge x + 1$, we must first rename $y$ to $z$, i.e., $\forall x\,.\;\, \exists z\,.\;\, z \ge x + 1$, and then substitute, i.e., 
+    $\exists z\,.\;\, z \ge y^2 + 1$.
+\end{remark}
+

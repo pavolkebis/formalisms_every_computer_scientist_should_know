@@ -1,87 +1,93 @@
-\chapter{Class 4}
 
-\begin{definition}[Merge] Let $\Sigma^*$ be an alphabet with linear operator $\leq$. Then for all $x,y \in \Sigma^*$ and $a,b \in \Sigma$ we have that:
-    \begin{itemize}
-        \item $merge(\epsilon, x) = x$,
-        \item $merge(y, \epsilon) = y$, and
-        \item $merge(a\cdot x, b\cdot y) = a\cdot merge(x, b\cdot y)$ if $a \leq b$, otherwise $b\cdot merge(a\cdot x, y)$.
-    \end{itemize}
+
+
+
+
+
+
+\subsection{Correctness of programs on (co-)inductive sets}
+\begin{definition}[$\merges$] Let $\Sigma^*$ be an alphabet with linear operator $\leq$. Then for all $x,y \in \Sigma^*$ and $a,b \in \Sigma$ we have that: (i) $\merges(\epsilon, x) = x$, (ii) $\merges(y, \epsilon) = y$, and (iii) $\merges(a\cdot x, b\cdot y) = a\cdot \merges(x, b\cdot y)$ if $a \leq b$, otherwise $b\cdot \merges(a\cdot x, y)$.
 \end{definition}
 
-\begin{definition}For all $y \in \Sigma^*$, we have that $\epsilon,y = y$.
-    \label{def1}
+\begin{definition}[Concatenation]
+  \label{cl4:def:concat}
+For all $y \in \Sigma^*$, we have that $\epsilon,y = y$.
+For all $a \in \Sigma$, and $x,y \in \Sigma^*$, we have that $(a\cdot x), y = a \cdot (x,y)$.
+  
 \end{definition}
 
-\begin{definition}For all letters $a \in \Sigma$, and strings $x,y \in \Sigma^*$, we have that $(a\cdot x), y = a \cdot (x,y)$.
-    \label{def2}
+\begin{definition}
+    \label{cl4:def2}
 \end{definition}
 
-\begin{theorem}$\forall x,y,z \in \Sigma^*$ we have that $(x,y),z = x,(y,z)$.
-    \label{t:assoc}
+\begin{theorem}[Associativity]
+\label{cl4:thrm:assoc}
+$\forall x,y,z \in \Sigma^*$ we have that $(x,y),z = x,(y,z)$.
+    
 \end{theorem}
 \begin{proof} Consider arbitrary $\hat{y}, \hat{z} \in \Sigma^*$. The goal is to show that for all $x \in \Sigma^*$, holds that $(x, \hat{y}),\hat{z} = x , (\hat{y}, \hat{z})$. We use induction on $x$ and we have the following cases:
     \begin{itemize}
-        \item \textbf{$x = \epsilon$}. We get that $(\epsilon, \hat{y}), \hat{z} = \epsilon, (\hat{y}, \hat{z})$. Using Definition $\ref{def1}$ we get $\hat{y},\hat{z} = \hat{y},\hat{z}$.
+        \item \textbf{$x = \epsilon$}. We get that $(\epsilon, \hat{y}), \hat{z} = \epsilon, (\hat{y}, \hat{z})$. Using Definition $\ref{cl4:def:concat}$ we get $\hat{y},\hat{z} = \hat{y},\hat{z}$.
         \item \textbf{$x = \hat{a}\cdot \hat{u}$} for some $a \in \Sigma$ and $\hat{u} \in \Sigma^*$, we have that the induction hypothesis is $(\hat{u}, \hat{y}), \hat{z} = \hat{u},(\hat{y}, \hat{z})$ and the goal is to show that 
         \begin{equation}
             (\hat{a}\cdot \hat{u}, \hat{y}), \hat{z} = (\hat{a} \cdot \hat{u}), (\hat{y}, \hat{z}).
         \end{equation}  
-        If we apply Definition \ref{def2} we get
+        If we apply Definition \ref{cl4:def:concat} we get
         \begin{equation}
             (\hat{a}\cdot (\hat{u}, \hat{y})), z = \hat{a}\cdot(\hat{u}, (\hat{y}, \hat{z})).
             \label{eq:1}
         \end{equation}
-        Applying Definition \ref{def2} to the left side and the induction hypothesis to the right side of equation \ref{eq:1} we get
+        Applying Definition \ref{cl4:def:concat} to the left side and the induction hypothesis to the right side of equation \ref{eq:1} we get
         \begin{equation}
             \hat{a} \cdot ((\hat{u}, \hat{y}), \hat{z}) = \hat{a} \cdot ((\hat{u}, \hat{y}), \hat{z}). 
         \end{equation}
     \end{itemize}
 \end{proof}
 
-\begin{definition}$reverse(\epsilon) = \epsilon$.
-    \label{def:rev1}
-\end{definition}
-\begin{definition}For all $a \in \Sigma$ and $x \in \Sigma^*$, we have that $reverse(a\cdot x) = reverse(x)\cdot a$.
-    \label{def:rev2}
-\end{definition}
-
-\begin{definition} For all $y\in \Sigma^*$, we have that $r(\epsilon, y) = y$.
-    \label{def:r1}
+\begin{definition}[$\reverseA$]
+$\reverseA(\epsilon) = \epsilon$.
+For all $a \in \Sigma$ and $x \in \Sigma^*$, we have that $\reverseA(a\cdot x) = \reverseA(x)\cdot a$.
+    \label{cl4:def:rev1}
 \end{definition}
 
-\begin{definition} For all $a\in \Sigma$ and $x, y\in \Sigma^*$, we have that $r(a \cdot x, y) = r(x, a\cdot y)$.
-    \label{def:r2}
+
+\begin{definition}[$\reverseB$]
+\label{cl4:def:rev2}
+For all $y\in \Sigma^*$, we have that $\reverseB(\epsilon, y) = y$.
+For all $a\in \Sigma$ and $x, y\in \Sigma^*$, we have that $\reverseB(a \cdot x, y) = \reverseB(x, a\cdot y)$.
 \end{definition}
 
-\begin{theorem} For all $x \in \Sigma^*$, $reverse(x) = r(x, \epsilon)$.
+
+
+\begin{theorem}
+For all $x \in \Sigma^*$, $\reverseA(x) = \reverseB(x, \epsilon)$.
 \end{theorem}
-
 \begin{proof} We prove it by induction on $x$.
     \begin{itemize}
-        \item For the base case we have to prove that for $x=\epsilon$, $reverse(\epsilon) =r(\epsilon, \epsilon)$. Using Definitions $\ref{def:rev1}$ and $\ref{def:r1}$ we get that $\epsilon=\epsilon$.
-        \item As induction hypothesis we assume that for all $y \in \Sigma^*$ and $x = \hat{a}\cdot \hat{u}$, where $\hat{a} \in \Sigma$ and $\hat{u}\in\Sigma^*$, it holds that $reverse(\hat{u}), y = r(\hat{u}, y)$. Then we have to show that 
+        \item For the base case we have to prove that for $x=\epsilon$, $\reverseA(\epsilon) =\reverseB(\epsilon, \epsilon)$. Using Definition $\ref{cl4:def:rev1}$ we get that $\epsilon=\epsilon$.
+        \item As induction hypothesis we assume that for all $y \in \Sigma^*$ and $x = \hat{a}\cdot \hat{u}$, where $\hat{a} \in \Sigma$ and $\hat{u}\in\Sigma^*$, it holds that $\reverseA(\hat{u}), y = \reverseB(\hat{u}, y)$. Then we have to show that 
         \begin{equation}
-            reverse(\hat{a}\cdot \hat{u}), y = r(\hat{a}\cdot\hat{u}, y).
+            \reverseA(\hat{a}\cdot \hat{u}), y = \reverseB(\hat{a}\cdot\hat{u}, y).
             \label{eq:rev_ind}
         \end{equation}
         \begin{itemize}
-            \item Consider an arbitrary $\hat{y}$. If we apply Definitions $\ref{def:rev2}$ and $\ref{def:r2}$ to the left and the right side respectively we get
+            \item Consider an arbitrary $\hat{y}$. If we apply Definition $\ref{cl4:def:rev2}$ to the left and the right side respectively we get
             \begin{equation}
-                (reverse(\hat{u}), \hat{a}),\hat{y} = r(\hat{u}, \hat{a}\cdot \hat{y}).
+                (\reverseA(\hat{u}), \hat{a}),\hat{y} = \reverseB(\hat{u}, \hat{a}\cdot \hat{y}).
             \end{equation}
-            \item Then we apply Theorem \ref{t:assoc} to the left side and get
+            \item Then we apply Theorem \ref{cl4:thrm:assoc} to the left side and get
             \begin{equation}
-                reverse(\hat{u}), (\hat{a}, \hat{y})= r(\hat{u}, \hat{a}\cdot \hat{y}).
+                \reverseA(\hat{u}), (\hat{a}, \hat{y})= \reverseB(\hat{u}, \hat{a}\cdot \hat{y}).
             \end{equation}
             Finally, we apply the induction hypothesis to the left side of our previous equation and get
             \begin{equation}
-                r(\hat{u}, \hat{a}\cdot \hat{y}) = r(\hat{u}, \hat{a}\cdot \hat{y}).
+                \reverseB(\hat{u}, \hat{a}\cdot \hat{y}) = \reverseB(\hat{u}, \hat{a}\cdot \hat{y}).
             \end{equation}
         \end{itemize}
     \end{itemize}
     
 \end{proof}
-\begin{definition}[Odd and Even] For all $x \in \Sigma^*$ and $a \in \Sigma$, we have that $odd(\epsilon) = \epsilon$ otherwise $odd(a\cdot x) = a\cdot even(x)$, where $even(\epsilon) = \epsilon$ and $even(a\cdot x) = odd(x)$.
+\begin{definition}[$\odd$ and $\even$] For all $x \in \Sigma^*$ and $a \in \Sigma$, we have that $\odd(\epsilon) = \epsilon$ otherwise $\odd(a\cdot x) = a\cdot \even(x)$, where $\even(\epsilon) = \epsilon$ and $\even(a\cdot x) = \odd(x)$.
 \end{definition}
 
 \begin{definition}[Well-founded] A binary relation $\prec$ on a set $A$ is  \underline{well-founded} if there is no infinite descending sequence $x_0 \succ x_1 \succ x_2 \succ \ldots$ on $A$.
@@ -90,50 +96,71 @@
 \begin{example} Two examples are $<$ over the set of natural numbers and "shorter than" on $\Sigma^*$.
 \end{example}
 
-\paragraph*{Well-founded induction principle (for well-founded $\prec$)}. In order to show $\forall x\in A$, $G(x)$:
-\begin{enumerate}
-    \item Consider an arbitrary $\hat{x} \in A$.
-    \item Assume $\forall y \prec \hat{x}$, $G(y)$.
-    \item Show $G(\hat{x})$.
-\end{enumerate}
+
+\begin{remark}[Well-founded induction]
+ In order to show $\forall x\in A$, $G(x)$ for well-founded $\prec$. Consider an arbitrary $\hat{x} \in A$.
+Assume $\forall y \prec \hat{x}$, $G(y)$.
+Show $G(\hat{x})$.
+\end{remark}
 
 
-\begin{definition}[Mergesort] For all $x \in \Sigma^*$, we have that 
-    \begin{equation}
-        mergesort = merge(mergesort(odd(x)), mergesort(even(x))).
-    \end{equation}
+
+\begin{definition}[$\mergesort$] For all $x \in \Sigma^*$, we have that $\mergesort = \merges(\mergesort(\odd(x))$ and  $\mergesort(\even(x)))$
 \end{definition}
 
-\begin{definition}[Sorted] For all $a \in \Sigma$, we have that $sorted(\epsilon)$, $sorted(a\cdot\epsilon)$ and for all $x\in \Sigma^*$, we have that $sorted(a\cdot b\cdot x)$ iff $a\leq b$ and $sorted(b\cdot x)$.
+\begin{definition}[$\sorted$] For all $a \in \Sigma$, we have that $\sorted(\epsilon)$, $\sorted(a\cdot\epsilon)$ and for all $x\in \Sigma^*$, we have that $\sorted(a\cdot b\cdot x)$ iff $a\leq b$ and $\sorted(b\cdot x)$.
 \end{definition}
 
-\begin{lemma}[Homework]For all $x,y \in \Sigma^*$, if $sorted(x)$ and $sorted(y)$, then $sorted(merge(x,y))$.
+\begin{lemma}
+\label{cl4:lemma:merge-sort}
+For all $x,y \in \Sigma^*$, if $\sorted(x)$ and $\sorted(y)$, then $\sorted(\merges(x,y))$.
 \end{lemma}
 
 
-\begin{theorem}[Homework]For all $x\in \Sigma^*$, we have that $sorted(mergesort(x))$.
+\begin{theorem}[Merge-Sort]
+\label{cl4:thrm:merge-sort}
+For all $x\in \Sigma^*$, we have that $\sorted(\mergesort(x))$.
 \end{theorem}
 
-\begin{definition}[Homework] Write a definition of permutation.
-\end{definition}
 
-\begin{theorem}[Homework] For all $x \in \Sigma^*$, we have that $permutation(x, mergesort(x))$.
+\begin{theorem}[Permutation]
+\label{cl4:thrm:permutation}
+For all $x \in \Sigma^*$, we have that $permutation(x, \mergesort(x))$.
 \end{theorem}
 
-\subsection{Humans and Monkeys}
+
+\begin{exercise}
+ (i) Proof Lemma~\ref{cl4:lemma:merge-sort} and Theorem~\ref{cl4:thrm:merge-sort}. (ii) Write a definition of permutation. 
+ (iii) Proof Theorem~\ref{cl4:thrm:permutation}
+\end{exercise}
 
 
-\begin{definition}[D1] for all $x$ and $y$, we have $x > y$ iff parent(x,y) or there exists z such that parent(x,z) and $z > y$.
+\subsubsection{Humans and Monkeys}
+
+\begin{definition}
+\label{cl4:def:hm1}
+For all $x$ and $y$, we have $x > y$ iff $\parent(x,y)$ or there exists z such that $\parent(x,z)$ and $z > y$.
 \end{definition}
-\begin{definition}[D2] For all x and y, we have $x > y$ iff parent(x,y) or there exists z such that $x > z$ and parent(z,y).
+\begin{definition} 
+\label{cl4:def:hm2}
+For all x and y, we have $x > y$ iff $\parent(x,y)$ or there exists z such that $x > z$ and $\parent(z,y)$.
 \end{definition}
 
-\begin{axiom} $<$ is well-founded.
-\end{axiom}
 
 \begin{axiom}For all $x$, we have that $h(x)$ implies $\neg m(x)$ and $m(x)$ implies $\neg h(x)$.
 \end{axiom}
 
+\begin{axiom} 
+$<$ is well-founded.
+\end{axiom}
 
-\begin{theorem}[Homework] Provide a proof of the following using D1 and then using D2. If there exist x and y such that $x > y$ and m(x) and h(y), then there exist x and y such that parent(x,y) and m(x) and h(y).
+
+
+\begin{theorem}
+\label{cl4:thrm:hm}
+Provide a proof of the following using Def.~\ref{cl4:def:hm1} and then using Def.~\ref{cl4:def:hm2}. If there exist $x$ and $y$ such that $x > y$ and $m(x)$ and $h(y)$, then there exist $x$ and $y$ such that $\parent(x,y)$ and $m(x)$ and $h(y)$.
 \end{theorem}
+
+\begin{exercise}
+Proof Theorem~\ref{cl4:thrm:hm}.
+\end{exercise}

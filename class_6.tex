@@ -1,99 +1,139 @@
-{{%Localize command definitions
 
-\chapter{Class 6}
-% ChatGPT was used when working on this transcript.
+\subsection{Formal Systems}
 
-Formal system $F$ is a set of rules.
-Rule is a finite set of (formulas) premises $p_0, \dots, p_k$ and (a formula called) conclusion $c$.
+\begin{definition}[Formal System]
+    A \emph{formal system} $F$ is a set of rules.
+    Rule is a finite set of (formulas) premises $p_0, \dots, p_k$ and (a formula called) conclusion $c$.
+    An axiom is a rule without premises.
+\end{definition}
+
+
+\begin{remark}
 We usually have infinitely many rules but only finitely many different rule schemata.
-For example, schema $\phi \rightarrow \phi$ gives infinitely many rules like $p_3 \rightarrow p_3$.
-Axiom is a rule without premises.\bigskip\\
-Proof (derivation) is a finite sequence of formulas $\phi_0, \dots, \phi_n$ such that every formula in the sequence is
+For example, schema 
+\begin{prooftree}
+   \AxiomC{}
+   \UnaryInfC{$\varphi \simplies \varphi$}
+\end{prooftree}
+gives infinitely many rules, e.g., 
+\begin{prooftree}
+   \AxiomC{}
+   \UnaryInfC{$p_3 \simplies p_3$}
+\end{prooftree}
+\end{remark}
+
+\begin{definition}[Proof: Linear View]
+A \emph{proof} (derivation) is a finite sequence of formulas $\varphi_0, \dots, \varphi_n$ such that every formula in the sequence is (i) either an axiom (which can be viewed as a special case of the following), or (ii) the conclusion of a rule whose premises occur earlier in the sequence.
+\end{definition}
+
+\begin{remark}
+    Linear view is usually easier for proving meta theorems.
+    Tree view (inductive definition) is usually better in practice.
+\end{remark}
+
+\begin{definition}[Theorem]
+    A theorem can be defined (i) syntactically or (ii) semantically.
+    The formula $\varphi$ is a \emph{theorem}, 
+    (i) (in the formal system $F$) if it has a proof in a formal system $F$, denoted as $\proofs_F \varphi$;
+    (ii) if $\varphi$ is valid, denoted as $\models  \varphi$.
+\end{definition}
+
+
+\begin{remark}[Logic]
+    Formal system equipped with semantics is called a logic.
+    The core problem in logic is establishing $\proofs \varphi$ iff $\models \varphi$. We speak of (i) \emph{soundness} if $\proofs \varphi \implies \models  \varphi$ and of (ii) \emph{completeness} if $ \models  \varphi\implies\proofs \varphi$.
+\end{remark}
+
+
+\begin{definition}[Soundness and Completeness]
+Let $F$ be a formal system, let $R$ be a rule of this formal system, let $L$ be a logic, and let $\psi$ be a formula then:
+    \begin{align*}
+        \text{$R$ is \emph{sound}} &\iff \text{if all premises of $R$ are valid, then its conclusion is valid;} \\
+        \text{$F$ is \emph{sound}} &\iff \text{all rules are sound (or every theorem is valid);} \\
+        \text{$F$ is \emph{complete}} &\iff  \text{every valid formula is a theorem;} \\
+        \text{$F$ is \emph{consistent}} &\iff  \not\proofs_F \bot \text{ (or there exists a formula that is not a theorem);}\\
+        \text{$R$ is \emph{derivable} in $F$} &\iff \text{for all formulas $\varphi$, $\proofs_{F \cup \{R\}} \varphi$ iff $\proofs_F \varphi$}; \\  \text{$\psi$ is \emph{expressible} in $L$} &\iff \text{there exists a formula $\chi$ of $L$ s.t., for all $\valfoo$, $[[ \psi ]]_{\valfoo} = [[ \chi ]]_{\valfoo}$}; \\ 
+    \end{align*}
+\end{definition}
+
+\begin{example}
+    For example $\varphi_1 \wedge \varphi_2$ is expressible using only $\neg$ and $\vee$ (de Morgan) as $\psi = \neg(\neg\varphi_1 \wedge \neg\varphi_2)$.
+\end{example}
+% Formal system $F$ is sound iff all rules are sound (or equivalently, every theorem is valid).
+% Formal system $F$ is complete iff every valid formula is a theorem.
+% Formal system $F$ is consistent unless $\proofs \bot$ (or equivalently, there exists a formula that is not a theorem).
+% Rule $R$ is derivable in $F$ iff [for all formulas $\varphi$, $\underset{F \cup \{R\}}\proofs \varphi$ iff $\underset{F}\proofs \varphi$].
+% Rule $R$ is admissible in $F$ iff $F \cup \{R\}$ is still consistent.
+% Formula $\varphi$ is expressible in a logic $L$ iff [there exists a formula $\psi$ of $L$ such that, for all interpretations $v$, $[[ \varphi ]]_v = [[ \psi ]]_v$.
+
+\begin{remark}
+    We can enumerate all theorems by systematically enumerating all possible proofs. The proof is a witness for validity.
+    \begin{itemize}
+        \item Sound formal system $\implies$ sound procedure for validity (but not necessarily complete). 
+        \item Sound and complete formal system $\implies$ sound semi-complete procedure for validity (may not terminate on inputs that represent a formula that is not valid).
+    \end{itemize}
+    To get a decision procedure (sound and complete procedure for validity), we need both: (i) sound complete formal system for validity, and
+    (ii) sound complete formal system for satisfiability (to define a formal system for satisfiability.
+    Those are formal systems systems where valid formulas are replaced by satisfiable judgments. Then all axioms are satisfiable and all rules go from satisfiables to satisfiable.
+    If we have both (i) and (ii) then for every input $\varphi$, one of them will eventually terminate and we can conclude either $\varphi$ is valid, or $\neg\varphi$ is satisfiable (which means that $\varphi$ is not valid). 
+    This is only possible the set is decidable, i.e., both the set and its complement are recursively-enumerable implying that the set is recursive (decidable).
+\end{remark}
+
+
+\subsection{Hilbert formal system $\hilbert$ for propositional logic}
+
+\begin{definition}
+     The Hilbert system $\hilbert$ uses connectives $\simplies$ and $\neg$ only, has three axioms
+     \begin{align*}
+         (K) \quad &\quad \varphi\simplies\psi\simplies\varphi \\
+         (S) \quad &\quad (\varphi\simplies\psi\simplies\chi)\simplies((\varphi\simplies\psi)\simplies(\varphi\simplies\chi)) \\
+         (ex \; middle) \quad &\quad (\neg\varphi\simplies\neg\psi)\simplies(\psi\simplies\varphi)
+     \end{align*}
+     and one rule, called \emph{modus ponens} (MP)
+    \begin{prooftree}
+        \AxiomC{$\varphi$}
+        \AxiomC{$\varphi \simplies \psi$}
+        \RightLabel{\small (MP)}
+        \BinaryInfC{$\psi$}
+    \end{prooftree}
+\end{definition}
+
+
+\begin{example}
+    The proof of $\varphi \simplies \varphi$ in Hilbert system:
+    \begin{align*}
+(K) \quad & \varphi \simplies (\psi \simplies \varphi) \simplies \varphi\\
+(S)  \quad &(\varphi \simplies (\psi \simplies \varphi) \simplies \varphi) \simplies ((\varphi \simplies \psi \simplies \varphi) \simplies (\varphi \simplies \varphi))\\
+(MP) \quad & (\varphi \simplies \psi \simplies \varphi) \simplies (\varphi \simplies \varphi)\\
+(K)  \quad &\varphi \simplies \psi \simplies \varphi\\
+(MP) \quad &  \varphi \simplies \varphi\\
+    \end{align*}
+\end{example}
+
+\begin{theorem}[Soundness and Completeness]
+  The formal system $\hilbert$ is sound and complete for propositional logic.
+\end{theorem}
+
+\begin{corollary}
+    The formal system $\hilbert$ is consistent for propositional logic.
+\end{corollary}
+
+\begin{theorem}[Deduction Theorem]
+    $\Gamma \proofs \varphi \simplies \psi$ iff $\Gamma, \varphi \proofs \psi$ where $\Gamma \proofs \varphi$ denotes $\underset{F \,\cup\, \Gamma}\proofs \varphi$, i.e., the set of formulas $\Gamma$ is used as added axioms.
+\end{theorem}
+\begin{proof}
+    ``$\implies$'': One application of modus ponens.\\
+    ``$\impliedby$'': 
+Assume $\psi$ has a proof $\pi$ using axioms $\Gamma$, $\varphi$, (K), (S), (ex). Show that $\varphi \simplies \psi$ has a proof $\pi'$ using $\Gamma$, (K), (S), (ex). Proof by induction on length $n$ of $\pi$.
 \begin{itemize}
-\item either an axiom (which can be viewed as a special case of the following);
-\item or the conclusion of a rule whose premises occur earlier in the sequence.
-\end{itemize}
-This is a linear view.
-
-Linear view is usually easier for proving meta theorems.
-Tree view (inductive definition) is usually better in practice.
-
-Theorem is a formula that occurs in a proof. We distinguish the following:
-\begin{itemize}
-\item $\vdash \phi \;\dots\;$ ``$\phi$ is a theorem (of the formal system $F$)'' (has a proof) [syntax]
-\item $\vDash \phi \;\dots\;$ ``$\phi$ is valid ($\phi$ is tautology)'' (is true in all models) [semantics]
-\end{itemize}
-Formal system equipped with semantics is called a logic.
-Most of logic is about establishing $\vdash \phi$ iff $\vDash \phi$.
-
-Rule $R$ is sound iff [if all premises of $R$ are valid, then the conclusion of $R$ is valid].
-Formal system $F$ is sound iff all rules are sound (or equivalently, every theorem is valid).
-Formal system $F$ is complete iff every valid formula is a theorem.
-Formal system $F$ is consistent unless $\vdash \bot$ (or equivalently, there exists a formula that is not a theorem).
-Rule $R$ is derivable in $F$ iff [for all formulas $\phi$, $\underset{F \cup \{R\}}\vdash \phi$ iff $\underset{F}\vdash \phi$].
-Rule $R$ is admissible in $F$ iff $F \cup \{R\}$ is still consistent.
-Formula $\phi$ is expressible in a logic $L$ iff [there exists a formula $\psi$ of $L$ such that, for all interpretations $v$, $[[ \phi ]]_v = [[ \psi ]]_v$.
-For example $\phi_1 \wedge \phi_2$ is expressible using only $\neg$ and $\vee$ (de Morgan)
-as $\psi = \neg(\neg\phi_1 \wedge \neg\phi_2)$.
-
-We can enumerate all theorems by systematically enumerating all possible proofs.
-The proof is a witness for validity.
-Sound formal system gives a sound procedure for validity (but not necessarily complete).
-Sound complete formal system gives a sound semi-complete procedure for validity (may not terminate on inputs
-that represent a formula that is not valid).
-To get a decision procedure (sound and complete procedure for validity), we need both
-(1) sound complete formal system for validity, and
-(2) sound complete formal system for satisfiability (to define a formal system for satisfiability,
-replace ``formulas'' ($\phi$ is valid) by ``judgements'' ($\phi$ is satisfiable);
-all axioms are satisfiable, all rules go from satisfiables to satisfiable).
-For every input $\phi$, one of them will eventually terminate.
-Conclude; either $\phi$ is valid, or $\neg\phi$ is satisfiable (which means that $\phi$ is not valid).
-Recall that, if both a set and its complement are recursively-enumerable, the set is recursive (decidable).
-
-Example (formal system for unsatisfiability):
-$$\inferrule
-{\Gamma[\bot]\qquad\qquad\Gamma[\top]}
-{\Gamma[p]}
-$$
-
-\section{Hilbert formal system for propositional logic}
-
-Hilbert system uses connectives $\rightarrow$ and $\neg$ only.
-Hilbert system has three axioms and one rule -- modus ponens (MP):
-$$\inferrule
-{\phi\qquad\qquad\qquad\phi\rightarrow\psi}
-{\psi}
-$$
-Axioms:
-\begin{itemize}
-\item (K): $\qquad
-\phi\rightarrow\psi\rightarrow\phi$
-\item (S): $\qquad
-(\phi\rightarrow\psi\rightarrow\chi)\rightarrow((\phi\rightarrow\psi)\rightarrow(\phi\rightarrow\chi))$
-\item (em): $\qquad
-(\neg\phi\rightarrow\neg\psi)\rightarrow(\psi\rightarrow\phi)$
-\end{itemize}
-Example (prove $\phi \rightarrow \phi$ in Hilbert system):\\
-(K) $\phi \rightarrow (\psi \rightarrow \phi) \rightarrow \phi$\\
-(S) $(\phi \rightarrow (\psi \rightarrow \phi) \rightarrow \phi) \rightarrow ((\phi \rightarrow \psi \rightarrow \phi) \rightarrow (\phi \rightarrow \phi))$\\
-(MP) $(\phi \rightarrow \psi \rightarrow \phi) \rightarrow (\phi \rightarrow \phi)$\\
-(K) $\phi \rightarrow \psi \rightarrow \phi$\\
-(MP) $\phi \rightarrow \phi$\bigskip\\
-Notation: $\Gamma \vdash \phi$ means $\underset{F \,\cup\, \Gamma}\vdash \phi$ (the set of formulas $\Gamma$ is used as added axioms)\\
-Metatheorem (``deduction theorem''):
-$\Gamma \vdash \phi \rightarrow \psi$ iff $\Gamma, \phi \vdash \psi$\\
-Metaproof:\\
-``$\implies$'': One application of modus ponens.\\
-``$\impliedby$'':
-Assume $\psi$ has a proof $\pi$ using axioms $\Gamma$, $\phi$, (K), (S), (em).
-Show that $\phi \rightarrow \psi$ has a proof $\pi'$ using $\Gamma$, (K), (S), (em) --- induction on length $n$ of $\pi$.\\
-Case $n=1$: $\psi$ must be an axiom.
+    \item Case $n=1$: $\psi$ must be an axiom.
 Either $\psi \in \Gamma \cup \{\textup{K}, \textup{S}, \textup{em}\}$ so we prove it by (K),
-or $\psi = \phi$ so we use $\vdash \phi \rightarrow \phi$ as derived above.\\
-Case $n>1$: $\psi$ is the result of an application of modus ponens.
-We have $\chi$ and $\chi \rightarrow \psi$, both of which were derived from $\Gamma, \phi$ in fewer steps.
-Induction hypothesis gives us $\Gamma \vdash \phi \rightarrow \chi$ and $\Gamma \vdash \phi \rightarrow \chi \rightarrow \psi$.
-We use (S) in the form $(\phi \rightarrow \chi \rightarrow \psi) \rightarrow (\phi \rightarrow \chi) \rightarrow (\phi \rightarrow \psi)$ and apply modus ponens twice,
-resulting in $\phi \rightarrow \psi$ derived from $\Gamma$ only.
+or $\psi = \varphi$ so we use $\proofs \varphi \simplies \varphi$ as derived above.
+\item Case $n>1$: $\psi$ is the result of an application of modus ponens.
+We have $\chi$ and $\chi \simplies \psi$, both of which were derived from $\Gamma, \varphi$ in fewer steps.
+Induction hypothesis gives us $\Gamma \proofs \varphi \simplies \chi$ and $\Gamma \proofs \varphi \simplies \chi \simplies \psi$.
+We use (S) in the form $(\varphi \simplies \chi \simplies \psi) \simplies (\varphi \simplies \chi) \simplies (\varphi \simplies \psi)$ and apply modus ponens twice,
+resulting in $\varphi \simplies \psi$ derived from $\Gamma$ only.
+\end{itemize}
+\end{proof}
 
-}} % End localization of command definitions

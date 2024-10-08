@@ -1,0 +1,265 @@
+\subsection{New types}
+
+
+\begin{definition}
+ To define simply typed $\lambda$-calculus we define:   types, terms, typing rules, reduction rules, and congruence rules
+    \begin{itemize}
+        \item The \emph{Types} are defined by the grammar
+    \begin{align*}
+        A \Coloneqq X \; | \; A_1\to A_2  \; | \; A_1 \times A_2 \; | \; 1
+    \end{align*}
+    where the type system of the simply typed lambda calculus is extended by the product type and unit type (empty product) respectively.
+    \item The terms are defined by the following grammar
+    \begin{align*}
+       t \Coloneqq x \; | \; \lambda x \colon t \; | \; t_1, t_2 \; | \; \tuple{t_1, t_2} \; | \; \Pi_1(t) \; | \;  \Pi_2(t) \; | \; \tuple{}
+    \end{align*}
+    \item The \emph{typing rules} are,
+    \begin{center}
+        \AxiomC{}
+        \UnaryInfC{$\Gamma \proofs \tuple{} \colon 1$}
+        \DisplayProof
+        $\quad$
+        \AxiomC{$\Gamma \proofs t_1 \colon A$}
+        \AxiomC{$\Gamma \proofs t_2 \colon B$}
+        \BinaryInfC{$\Gamma \proofs \tuple{t_1, t_2} \colon A\times B$}
+        \DisplayProof 
+        $\quad$
+        \AxiomC{$\Gamma \proofs t \colon A \times B$}
+        \UnaryInfC{$\Gamma \proofs \pi_1(t) \colon A$}
+        \noLine
+        \UnaryInfC{$\Gamma \proofs \pi_2(t) \colon B$}
+        \DisplayProof
+    \end{center}
+    \item The \emph{reduction rules} are,
+    \begin{center}
+        \AxiomC{}
+        \UnaryInfC{$\pi_1(\tuple{t_1, t_2}) \to t_1$}
+        \DisplayProof
+        $\quad$
+        \AxiomC{}
+        \UnaryInfC{$\pi_1(\tuple{t_1, t_2}) \to t_2$}
+        \DisplayProof
+    \end{center}
+ \item The\emph{congruence rules} are,
+    \begin{center}
+        \AxiomC{$s\to t$}
+        \UnaryInfC{$\pi_1(s) \to \pi_1(t)$}
+        \noLine
+        \UnaryInfC{$\pi_2(s) \to \pi_2(t)$}
+        \noLine
+        \UnaryInfC{$\tuple{s,s'} \to \tuple{t,s'}$}
+        \noLine
+        \UnaryInfC{$\tuple{s',s} \to \tuple{s',t}$}
+        \noLine
+        \DisplayProof
+    \end{center}
+    \end{itemize}
+    
+   
+\end{definition}
+% $$A \colon = X|A \to A | A \times A \text{(product type)}| 1 \text{(unit type, empty product)}$$
+% $$t \colon = x | \lambda x \colon  t | t_1 t_2 | <t_1, t_2> | \Pi_1(t) |  \Pi_2(t) |  <>$$
+
+
+% \paragraph{Typing rules}
+% $$\frac{\Gamma \proofs  t\colon A \times B }{\Gamma \proofs  \Pi_1(t)\colon A, \Gamma \proofs  \Pi_2(t)\colon B}$$
+% $$\frac{\Gamma \proofs  t_1 \colon  A,  \Gamma \proofs  t_2 \colon  B  }{\Gamma \proofs  <t_1, t_2> \colon  A \times B}$$
+% $$\frac{}{\Gamma \proofs  <> \colon  1}$$
+
+% \paragraph{Reduction rules}
+% $$\frac{}{\Pi_1(<t_1, t_2>) \to t_1}$$
+% $$\frac{}{\Pi_2(<t_1, t_2>) \to t_2}$$
+
+% \paragraph{Congruence rules}
+% $$\frac{s \to t}{\Pi_1(s) \to \Pi_1(t), \Pi_2(s) \to \Pi_2(t), <s, s'> \to <t, s'>, <s', s> \to <s', t>}$$
+
+\begin{remark}
+    We will have:  (i) subject reduction, (ii) confluence, (iii) strong normalization, and (iv) curry-howard, i.e., $\to$ corresponds to $\simplies$, $\times$ corresponds to $\land$.
+\end{remark}
+
+\begin{remark}[Expressiveness over $\mathbb{N}$]
+    Regarding the expressiveness over $\mathbb{N}$
+    Simply typed $\lambda$-calculus (extended polynomial functions) can be enriched by (i) still staying total, e.g., type for primitive recursion (Godel "system T") and (ii) adding fixedpoints, e.g., $Y$.
+    
+\end{remark}
+
+
+\begin{definition}[Plotkin's PCF]
+Plotkin's Programming Computable Functions (PCF) expresses all computable functions (total and partial) while losing strong normalization.
+They are defined w.r.t. to the grammar 
+\begin{align*}
+    A &\Coloneqq \NN \;|\; A_1 \to A_2 \\
+    t &\Coloneqq  0 \;|\; Sx \;|\; \lambda x\colon A.t \;|\; t_1, t_2 \;|\; \mathrm{if }\; t_1 \; \mathrm{ then }\; t_2 \; \mathrm{ else }\; t3 \;|\; \mathrm{fix}_A
+\end{align*}
+and has the following typing rules
+\begin{center}
+    \AxiomC{}
+    \UnaryInfC{$\Gamma \proofs  O \colon  \mathbb{N}$}
+    \DisplayProof
+    $\quad$
+    \AxiomC{$\Gamma \proofs  x\colon \mathbb{N}$}
+    \UnaryInfC{$\Gamma \proofs  Sx\colon \mathbb{N}$}
+    \DisplayProof
+    $\quad$
+    \AxiomC{$\Gamma \proofs  t\colon  A \to A$}
+    \UnaryInfC{$\Gamma \proofs  \mathrm{fix}_A t \colon  A$}
+    \DisplayProof
+\end{center}
+\begin{center}
+        \AxiomC{$\Gamma \proofs  t\colon \mathbb{N}$}
+    \AxiomC{$\Gamma \proofs  s\colon A$}
+    \AxiomC{$\Gamma \proofs  s'\colon A$}
+    \TrinaryInfC{$\Gamma \proofs  \mathrm{if }\; t \; \mathrm{ then }\; s\; \mathrm{ else }\; s'  \colon  A$}
+    \DisplayProof
+\end{center}
+and has the following reduction rules
+\begin{center}
+    \AxiomC{}
+    \UnaryInfC{$\mathrm{if }\; 0 \; \mathrm{ then }\; s\; \mathrm{ else }\; s'  \to s$}
+    \DisplayProof
+    $\quad$
+     \AxiomC{}
+    \UnaryInfC{$\mathrm{if }\; Sx \; \mathrm{ then }\; s\; \mathrm{ else }\; s'  \to s'$}
+    \DisplayProof
+    $\quad$
+      \AxiomC{}
+    \UnaryInfC{$ \mathrm{fix}_A t \to t ( \mathrm{fix}_A t)$}
+    \DisplayProof
+\end{center}
+\end{definition}
+% \subsection{Plotkin's PCF ("programming computable functions")}
+% Expresses all computable functions (total and partial) while losing strong normalizing.
+
+% $$A\colon = N | A_1 \to A_2$$
+% $$t \colon = O | Sx | \lambda x\colon A.t | t_1 t_2 | \text{if }t_1\text{ then }t_2\text{ else }t3 | fix_A$$
+
+% $$\frac{}{ \Gamma \proofs  O \colon  \mathbb{N}}$$
+% $$\frac{\Gamma \proofs  x\colon \mathbb{N} }{ \Gamma \proofs  Sx\colon \mathbb{N}}$$
+% $$\frac{\Gamma \proofs  t\colon \mathbb{N},   \Gamma \proofs  s\colon A  , \Gamma\proofs  s'\colon A }{ \Gamma \proofs  \text{if }t\text{ then }s\text{ else }s'\colon A}$$
+% $$\frac{\Gamma \proofs  t\colon  A \to A }{ \Gamma \proofs  fix_At\colon A}$$
+% $$\frac{}{ fix_A t \to t (fix_A t)}$$
+
+
+\begin{example}
+    \label{cl14:ex:fact}
+    The factorial function can be defined as follows: 
+    \begin{align*}
+        \mathrm{fact} \coloneqq \mathrm{fix}_{\mathbb{N} \to \mathbb{N}} (\lambda f. \lambda x. \;\mathrm{if }\;x\;\mathrm{ then }\;S0\;\mathrm{ else }\;x \times f(x-1))
+    \end{align*}
+\end{example}
+
+\begin{exercise}
+	Define multiplication and subtraction in Example \ref{cl14:ex:fact}.
+\end{exercise}
+
+\subsection{Typed $\lambda$ calculus "without types"}
+
+
+\begin{remark}
+    Type inference is concerned with checking typability, i.e., i.e., given closed $t$, is there a type $A$ such that $\proofs  t\colon A$?, if so, find $A$ . For typed $\lambda$-calculus "without types" this can be checked in linear time. 
+\end{remark}
+
+
+\begin{definition}
+    Typed $\lambda$ calculus "without types" follows the grammar
+    \begin{align*}
+        A \Coloneqq X \;|\; A_1 \to A_2 \;|\; 1
+        t \Coloneqq  \;|\; \lambda x.t \;|\; t_1 t_2
+    \end{align*}
+    and uses the following typing rules
+    \begin{center}
+        \AxiomC{}
+        \UnaryInfC{$ \Gamma \proofs  x \colon \Gamma(x)$}
+        \DisplayProof
+        $\quad$
+        \AxiomC{$\Gamma, x\colon A \proofs  t\colon B$ }
+        \UnaryInfC{$  \Gamma \proofs  \lambda x.t\colon A \to B$}
+        \DisplayProof
+        $\quad$
+        \AxiomC{$\Gamma \proofs  t \colon A \to B$}
+        \AxiomC{$ \Gamma \proofs  s\colon A $}
+        \BinaryInfC{$ \Gamma \proofs  ts \colon B$}
+        \DisplayProof
+        $\quad$
+    \end{center}
+\end{definition}
+
+
+\begin{remark}
+    In this type system terms can have multiple types, e.g., 
+    \begin{align*}
+        \lambda x.x \colon 1 \to 1 \quad \text{and} \quad \lambda x.x \colon (1 \to 1) \to 1 \to 1
+    \end{align*}
+    However, there is always a \emph{most general} type called the principal type, e.g., $\lambda x.x \colon  X \to X$.
+\end{remark}
+
+
+\begin{remark}[Substitution on types]
+    We denote $\sigma\coloneqq A[X \mapsto B]$ substitution on types.
+    If $\proofs  t\colon A$ then for all substitutions $\sigma$, $\proofs  t \colon  A\sigma$.
+\end{remark}
+   
+
+\begin{theorem}[Principal type]
+\label{cl14:thrm:principal}
+	If $\proofs  t\colon A$, then there exists $B$ such that for all $B'$ is $\proofs  t \colon  B'$ then exists $\sigma$ such that $B' = B\sigma$.
+\end{theorem}
+
+
+
+% $$\frac{}{}$$
+% $$\frac{\Gamma, x\colon A \proofs  t\colon B }{ \Gamma \proofs  \lambda x.t\colon A \to B}$$
+% $$\frac{\Gamma \proofs  t \colon A \to B , \Gamma \proofs  s\colon A }{ \Gamma \proofs  ts \colon B}$$
+
+
+
+% Note: Terms can have multiple types. e.g. 
+% $$\lambda x.x \colon 1 \to 1$$  $$\lambda x.x \colon (1 \to 1) \to 1 \to 1$$
+\begin{remark}[cont.~Thrm \ref{cl14:thrm:principal}]
+    To find $B$, collect ``$=$''-constraints on types. In particular, type variables are equal, i.e. $A = A"$, if they can be unified, i.e., $\exists \sigma, \sigma'\colon  A\sigma = A'\sigma'$.
+    Judgments can be used to add ``$=$''-constraints on types to typing rules, i.e, $\Gamma \proofs  t\colon A \; |\;  E $ where $E$ is a set of equations on types and for $Y$ being free
+    \begin{prooftree}
+        \AxiomC{$\Gamma \proofs  t \colon  A | E$}
+        \AxiomC{$\Gamma \proofs  s \colon  B | F$}
+        \BinaryInfC{$\Gamma \proofs  ts    |     E \cup F \cup \{A = B \to Y\}$}
+    \end{prooftree}
+    
+This gives you an algorithm for computing principal types.
+\end{remark}
+
+
+\begin{definition}[Polymorphic types]
+    Polymorphic types, i.e., $\lambda x.x \colon  \forall X.X\to X$, are the simplest form is Hinolley-Milner types. 
+    They follow the grammar
+    \begin{align*}
+        A \Coloneqq X \; |\; A \to A \; |\; \forall X.A
+    \end{align*}
+\end{definition}
+
+
+
+% \subsection{IMP}
+
+% \begin{definition}[IMP Syntax]
+%     IMP is a simple imperative language corresponding to PCF. Let $X$ be a set of variables, intuitively they are locations, then we can define IMP syntactically with the following grammar
+%     \begin{align*}
+%         Aexp&\Coloneqq  a \coloneqq 0 \;|\; X \;|\; Sa \\
+%         Cexp&\Coloneqq  c \coloneqq \sskip \;|\; X\coloneqq a \;|\; c_1 ; c_2 \;|\; 
+%         \sif{a}{c_1}{c_2}\;|\; \swhile{a}{c}.
+%     \end{align*}
+% \end{definition}
+
+% \begin{remark}
+%     There are two semantis, i.e., the operational semantics (which evaluates the expression) and the denotational semantics.
+% \end{remark}
+
+% \begin{definition}[IMP Semantics]
+% Let $X$ be a setof variables representing locations.
+% A state $\sigma\colon  X \to \mathbb{N}$ is a function from locations to $\NN$. We denote $\Sigma$ as the set of states, then
+% $\eval{a}\colon \Sigma\to \NN$ and $\eval{c}\colon \Sigma \to \Sigma$. 
+% The function $\eval{c}$ is a partial function, thus we can alternatively denote is as  $\eval{c}\colon \Sigma \to \Sigma_{\bot}$ where $\Sigma_{\bot}\coloneqq \Sigma \cup \{\bot\}$ with $\bot$ representing non-termination.     
+% \end{definition}
+
+
+
+

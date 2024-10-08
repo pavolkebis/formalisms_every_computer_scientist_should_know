@@ -1,0 +1,213 @@
+\begin{definition}[$T_{\mathrm{List}}$]
+    The theory of list ($T_{\mathrm{List}}$), or recursive data structures, has the signature $(=, \tatom, \tcar, \tcdr, \tcons)$ where: $\tatom$ is a unary predicate, 
+    $\tcar$ and $\tcdr$ are unary functions, and $\tcons$ is a binary function.
+    The theory consists of the following axioms
+    \begin{align*}
+        (i) \quad &\forall x, y. \, \tcar(\tcons(x,y,)) = x \\
+        (ii) \quad &\forall x, y. \, \tcdr(\tcons(x,y,)) = y \\
+        (iii) \quad &\forall x, y. \, \neg\tatom(\tcons(x,y,))  \\
+        (iv) \quad &\forall x. \, \neg\tatom(x)  \simplies \tcons(\tcar(x), \tcdr(x))=x \\
+        (v) \quad &\forall x. \, \tatom(x)  \simplies \varphi[x] \land \forall x,y .(\tatom(x) \land \underbrace{\varphi[y]}_{\text{IH}} \simplies \varphi[\tcons(x,y)]) \simplies \forall x. \varphi[x] 
+    \end{align*}
+    Where (i),(ii) are destructor axioms, (v) is the constructor axiom, and (vi) is the induction scheme. 
+\end{definition}
+
+\begin{theorem}
+    The theory $T_{\mathrm{List}}$ is undecidable (decidable if quantifier-free), consistent and incomplete.
+\end{theorem}
+\begin{example}
+    The list $(1\; 2 \; 3)$ can be represented as $(\tcons(1, \tcons(2,3)))$
+\end{example}
+
+
+\begin{definition}[$T_{\mathrm{Array}}$]
+    The theory of arrays ($T_{\mathrm{Array}}$) has the signature $(=, \tread, \twrite, \tcdr, \tcons)$ where: $\tread$ is a binary function, e.g., $\tread(a,i)$ reads array $a$ at index $i$ and returns a value; $\twrite(a,i,x)$ writes the value $x$ at position $i$ in array $a$. 
+    The theory consists of the following axioms
+    \begin{align*}
+        (i) \quad & \forall a\forall i,j \forall x . \; i=j \simplies \tread(\twrite(a, i, x),j) = x \\
+        (ii) \quad & \forall a\forall i,j \forall x . \; i\ne j \simplies \tread(\twrite(a, i, x),j) = \tread(a, j) \\        
+    \end{align*}
+    Where (i),(ii) are destructor axioms, (vi) is the constructor axiom, and (v) is the induction scheme. 
+\end{definition}
+
+
+\begin{theorem}
+    The theory $T_{\mathrm{List}}$ is undecidable (decidable if quantifier-free), consistent and incomplete.
+\end{theorem}
+
+
+\begin{remark}[QBF]
+    Quantified boolean formulas have an empty signature and no axioms. They are in $\mathrm{PSPACE}$, i.e., decidable, (quantifier-free $\mathrm{NP}$), and complete.
+\end{remark}
+
+\begin{remark}[Combination of theories]
+    The Nelson-Oppen Algorithm can be used to combine theories. 
+    If the satisfiability of quantifier-free formulas of $T_1$ and $T_2$ are decidable, then the Nelson-Oppen Algorithm decides the satisfiability of quantifier-free formulas in the combined theory $T_1 \oplus T_2$ (the axioms of $T_1 \oplus T_2$ is the union of the respective axioms).
+    The condition is that $T_1$ and $T_2$ are stably infinite and contain $=$. 
+\end{remark}
+
+\begin{definition}
+    The theory $T$ is stable infinite if for all quantifier-free $\varphi$, if $\varphi $is satisfiable then there exists a $T$-interpretation $\interp$ with inf. domain s.t. $\interp\models \varphi$.
+\end{definition}
+
+
+\begin{remark}[Nelson-Oppen Algorithm]
+    The Nelson-Oppen Algorithm for the combined theory $T_1 \oplus T_2$ of $T_1$ and $T_2$ has two steps:
+    \begin{itemize}
+        \item \emph{Step 1: Purification} Given a formula $\varphi$ in $T_1 \oplus T_2$ construct $\varphi_1$ in $T_1$  and $\varphi_2$ in $T_2$ s.t. $\varphi$ is satisfiable iff $\varphi_1\land \varphi_2$ is satisfiable.
+
+        \item \emph{Step 2: Equality propagation:} $\varphi_1\land \varphi_2$ is satisfiable iff there exists an equivalence relation $\sim$ on the variables with characteristic formula $\psi_{\sim}$ s.t. $\varphi_1\land \psi_{\sim}$ and $\varphi_2\land \psi_{\sim}$ satisfiable
+        \begin{align*}
+            \psi_{\sim}\coloneqq \bigwedge_{x \sim y} x=y \land \bigwedge_{x\not\sim y} x\neq y 
+        \end{align*}
+    \end{itemize}
+\end{remark}
+
+
+\begin{example}
+    Consider the combined theory of Presburger arithmetic and uninterpreted functions.
+    Then the purification step of $\varphi$ into $\varphi_1$ and $\varphi_2$ results in the following
+    \begin{align*}
+        \varphi&\coloneqq (1\leq x\leq 2\land f(1)\neq f(x) \land f(2)\neq f(x)) \\
+        \varphi_1&\coloneqq (1\leq x\leq 2\land y_1=1 \land y_2=2) \\
+         \varphi_2&\coloneqq ( f(1)\neq f(x) \land f(2)\neq f(x)) \\
+    \end{align*}
+    We then have the equivalence relation $\sim\coloneqq \{\{x,y_1\}, \{y_2\}\}$ and 
+    \begin{align*}
+        \psi_{\sim}\coloneqq (x=y_1\land x\neq y_2 \land y_1\neq y_2)
+    \end{align*}
+    for the equality propagation step.
+\end{example}
+
+
+
+
+
+\section{Lambda Calculus}
+
+\begin{remark}
+    The term $\lambda x.t$ denotes the function that maps x to $t(x)$, e.g., $(\lambda y. \lambda x. x^2 \cdot y)(2) = \lambda x.2x^2$.
+\end{remark}
+
+\begin{definition}[Lambda Calculus: Syntax]
+    The syntax of Lambda calculus is given be the following grammar
+    \begin{align*}
+        t\Coloneqq x \; \mid \; \lambda x.t \; \mid \;  t_1 \, t_2
+    \end{align*}
+    where $x$ is a variable, $\lambda x.t $ is an abstraction, and $ t_1 \, t_2$ is an application. Application is left-associated, i.e., $(t_1 \, t_2)\, t_3 = t_1 \, t_2 \, t_3$, and binds stronger than abstraction, i.e., $\lambda x.(t_1 \, t_2)=\lambda x. t_1 \, t_2$ (not to be confused with $(\lambda x.t_1) \, t_2$).
+\end{definition}
+
+
+\begin{definition}[Lambda Calculus: Operational semantics]
+    We have the axiom $\beta$-reduction, i.e.,
+    \begin{prooftree}
+        \AxiomC{}
+        \UnaryInfC{$(\lambda x.t)s \to_{\beta} t[x\mapsto s]$}
+    \end{prooftree}
+    where $t[x\mapsto s]$ indicates safe substitution, and the proof rules congruence 
+    \begin{center}
+        \AxiomC{$t\to_{\beta} t' $}
+        \UnaryInfC{$\lambda x.t  \to_{\beta} \lambda x.t'$}
+        \DisplayProof
+        \quad
+        \AxiomC{$t\to_{\beta} t' $}
+        \UnaryInfC{$t\, s  \to_{\beta} t'\, s$}
+        \DisplayProof
+        \quad 
+        \AxiomC{$t\to_{\beta} t' $}
+        \UnaryInfC{$s\,t \to_{\beta}s \, t'$}
+        \DisplayProof
+    \end{center}
+    
+\end{definition}
+
+
+\begin{remark}[Nondeterministic]
+    Lambda calculus is nondeterministic, e.g.,
+     \begin{center}
+     \begin{tikzpicture}[->, >=Stealth]
+
+
+    \node (0) at (0, 0) {$(\lambda x. y)((\lambda z. z\, z)(\lambda u, u))$};
+    \node (1) at (-3, -1) {$y$};
+    \node (2) at (3, -1) {$(\lambda x. y)((\lambda z. z\, z)(\lambda u, u))$};
+    \node (3) at (1, -2) {$y$};
+    \node (4) at (5, -2) {$(\lambda x. y)((\lambda z. z\, z)(\lambda u, u))$};
+    \node (5) at (5, -3) {$\vdots$};
+
+    \draw (0) -- (1) node[midway, left=0.8cm] {\small call-by-name};
+    \draw (0) -- (2) node[midway, right=0.8cm] {\small call-by-value};
+    \draw (2) -- (3) node[midway, right] {};
+    \draw (2) -- (4) node[midway, right] {};
+% % Edges
+% \draw (0) -- (A) node[midway, below] {\small $\true$};
+% \draw (C) -- (1) node[midway, above] {\small$x=m\cdot n$};
+% \draw (A) -- (B) node[midway, left] {\small$x=0$};
+% \draw (B) -- (C) node[midway, left] {\small$x=0\land y=0$};
+% \draw (C) -- (D) node[midway, right=0.5cm] {\small$x=m\cdot y \land y<n$};
+% \draw (D) -- (E) node[midway, right=0.5cm] {\small$x=m\cdot (y+1) \land y<n$};
+% \draw (E) -- (C) node[midway, left] {\small$x=m\cdot (y) \land y\leq n$};
+
+\end{tikzpicture}
+ \end{center}
+\end{remark}
+
+
+\begin{theorem}[Confluence]
+    For all $t, t_1, t_2$ if $t \to_{\beta}^* t_1$ and $t \to_{\beta}^* t_2$ then there exists an $s$ such that $t_1 \to_{\beta}^* s$ and $t_2 \to_{\beta}^* s$, where $ \to_{\beta}^*$ is the reflexive, transitive closure of $\to_{\beta}$.
+\end{theorem}
+
+\begin{remark}
+    The confluence theorem is also known as the Church Rosser theorem or the Diamond theorem.
+         \begin{center}
+     \begin{tikzpicture}[->, >=Stealth]
+
+
+    \node (0) at (0, 0) {$t$};
+    \node (1) at (-1, -1) {$t_1$};
+    \node (2) at (1, -1) {$t_2$};
+    \node (3) at (0,-2) {$s$};
+    
+  
+
+    \draw (0) -- (1) node[midway, left=0.8cm] {};
+    \draw (0) -- (2) node[midway, right=0.8cm] {};
+    \draw (1) -- (3) node[midway, right] {};
+    \draw (2) -- (3) node[midway, right] {};
+% % Edges
+% \draw (0) -- (A) node[midway, below] {\small $\true$};
+% \draw (C) -- (1) node[midway, above] {\small$x=m\cdot n$};
+% \draw (A) -- (B) node[midway, left] {\small$x=0$};
+% \draw (B) -- (C) node[midway, left] {\small$x=0\land y=0$};
+% \draw (C) -- (D) node[midway, right=0.5cm] {\small$x=m\cdot y \land y<n$};
+% \draw (D) -- (E) node[midway, right=0.5cm] {\small$x=m\cdot (y+1) \land y<n$};
+% \draw (E) -- (C) node[midway, left] {\small$x=m\cdot (y) \land y\leq n$};
+
+\end{tikzpicture}
+ \end{center}
+\end{remark}
+
+\begin{definition}
+    The term $t$ is irreducible (in ``normal form''), if for all $t'$, $t\not\to_{\beta} t'$. 
+\end{definition}
+
+\begin{corollary}
+    For all $t, t_1, t_2$ if $t \to_{\beta}^* t_1$ and $t \to_{\beta}^* t_2$ and
+    if $t_1$ and $t_2$ are in normal form, then $t_1=t_2$.
+\end{corollary}
+
+\begin{remark}
+    The term $t$ can only be irreducible, if it has the form $\lambda x.t'$ with $t'$ being irreducible, or if it has the form $t= t_1 \dots t_n$ and $t_1, \dots t_n$ are irreducible. If you start from a closed term then the only normal forms are $\lambda x t$ terms. 
+\end{remark}
+
+\begin{remark}
+    There are infinite computations of the term $(\lambda x. x\, x)(\lambda x. x\, x)$.
+\end{remark}
+
+\begin{definition}
+    A term $t$ is weakly normalizing, if some computation from $t$ terminates. It is strongly normalizing if all computations from $t$ terminate
+\end{definition}
+
+\begin{theorem}[Church]
+    The problem whether $t$ is (weakly) normalizing is undecidable, i.e., the halting problem for $\lambda$-calculus.
+\end{theorem}

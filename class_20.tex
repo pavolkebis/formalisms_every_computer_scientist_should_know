@@ -1,0 +1,459 @@
+% \documentclass{article}
+% \usepackage{graphicx} % Required for inserting images
+
+
+% \renewcommand{\equsim}{\approx_{sim}}
+% \providecommand{\equbis}{\approx_{bis}}
+
+
+% \input{macros}
+
+% \commenter{ruichen}{violet}
+
+
+
+
+% \section{$\equsim$ and $\equbis$}
+
+
+\begin{definition}
+    We define the predecessor and successor of a subset $\sigma\subseteq S$ for some actions $a\in A$ respectively as 
+    \begin{align*}
+         \pre_a(\sigma) \coloneqq \{ s \mid  \exists s' \in \sigma.\ s \xrightarrow{a} s' \} \\
+          \post_a(\sigma) \coloneqq \{ s' \mid \exists s \in \sigma.\ s \xrightarrow{a} s' \} 
+    \end{align*}
+\end{definition}
+
+\begin{remark}
+    The set $\pre_a(\sigma)$ is the set of states that can reach $\sigma$ by action $a$ and the set $\post_a(\sigma)$ is the set of states that can be reached from $\sigma$ by action $a$.
+    \begin{center}
+         \begin{tikzpicture}
+    % Draw the three intersecting circles
+    \draw (0,0) circle (1cm) node[below] {\small $ \pre_a(\sigma)$};  % First circle
+    \draw (1.5,0) circle (0.8cm) node[below] {\small $\sigma$};  % Center circle
+    \draw (3,0) circle (1 cm) node[below] {\small $\post_a(\sigma)$};  % Third circle
+    
+    % Draw the arrows
+    % Arrow from the middle circle to the first circle
+    \draw[->, bend left] (-0.5, -0.1) to node[midway, above] {\small$a$}  (1.2, 0.3) ;
+    % Arrow from the middle circle to the third circle
+    \draw[->,bend left] (1.6, 0.3) to  node[midway, above] {\small$a$}  (3.5, 0.2);
+\end{tikzpicture}
+    \end{center}
+\end{remark}
+
+\begin{theorem}
+    \begin{align*}
+        s \lequsim t &\iff \exists R \subseteq S \times S.\ (s,t) \in R \simplies \forall a\ \forall s' \in \post_a(s)\ \exists t' \in post_a(t).  (s', t') \in R  \\
+          s \equsim t &\iff s \lequsim t \land  t \lequsim s  \\
+           s \equbis t &\iff \exists R \subseteq S \times S.\ (s,t) \in R \simplies \forall a\left[
+            \begin{array}{l}
+               ( \forall s' \in \post_a(s)\ \exists t' \in \post_a(t). (s', t') \in R )\; \land \\
+                ( \forall t' \in \post_a(t)\ \exists s' \in \post_a(s). (s', t') \in R )
+            \end{array}
+        \right]
+    \end{align*}
+\end{theorem}
+
+
+\subsection{Characterization}
+
+
+\begin{theorem}[Game theoretic characterization of $\lequsim$]
+The game theoretic characterization  $\lequsim$ is given be the following game.
+\begin{enumerate}
+    \item Put red token on $s$, and blue token on $t$.
+    \item Repeat:
+        \begin{enumerate}
+            \item Player $1$ moves the \emph{red} token to a successor state.
+            \item Player $2$ moves the \emph{blue} button to a successor state, matching the action of the player $1$ move.
+        \end{enumerate}
+\end{enumerate}
+If in the following game player $1$ has a strategy s.t. at some point, player $2$ cannot match player $1$'s move, then $s \not\lequsim t$, otherwise $s \lequsim t$.
+\end{theorem}
+
+
+\begin{theorem}[Game theoretic characterization of $\equbis$]
+The game theoretic characterization  $\lequsim$ is given be the following game.
+\begin{enumerate}
+    \item Put red token on $s$, and blue token on $t$.
+    \item Repeat:
+        \begin{enumerate}
+            \item Player $1$ chooses either the red or blue token.
+            \item Player $1$ moves the \emph{chosen} token to a successor state.
+            \item Player $2$ moves the \emph{other} button to a successor state, matching the action of the player $1$ move.
+        \end{enumerate}
+\end{enumerate}
+If in the following game player $1$ has a strategy s.t. at some point, player $2$ cannot match player $1$'s move, then $s \not\equbis t$, otherwise $s \equbis t$.
+\end{theorem}
+
+
+
+% \begin{definition}[Game theoretic of $\equsim$]
+% The game theoretic characterization of $\lequsim$ and $\equbis$ is the following.
+% For $\lequsim$, if in the following game player $1$ has a strategy s.t. at some point, player $2$ cannot match player $1$'s move, then $s \not\lequsim t$, otherwise $s \lequsim t$.
+% \begin{enumerate}
+%     \item Put red token on $s$, and blue token on $t$.
+%     \item Repeat:
+%         \begin{enumerate}
+%             \item Player $1$ moves the \emph{red} token to a successor state.
+%             \item Player $2$ moves the \emph{blue} button to a successor state, matching the action of the player $1$ move.
+%         \end{enumerate}
+% \end{enumerate}
+% For $\equbis$ the same holds for the following game.
+% \begin{enumerate}
+%     \item Put red token on $s$, and blue token on $t$.
+%     \item Repeat:
+%         \begin{enumerate}
+%             \item Player $1$ chooses either the red or blue token.
+%             \item Player $1$ moves the \emph{chosen} token to a successor state.
+%             \item Player $2$ moves the \emph{other} button to a successor state, matching the action of the player $1$ move.
+%         \end{enumerate}
+% \end{enumerate}
+% \end{definition}
+
+
+% \begin{definition}[Fixpoint of $\equsim$]
+% The fixpoint characterization of $\equsim$ and $\equbis$ is the following.
+% For 
+% For $\lequsim$, if in the following game player $1$ has a strategy s.t. at some point, player $2$ cannot match player $1$'s move, then $s \not\lequsim t$, otherwise $s \lequsim t$.
+% \begin{enumerate}
+%     \item Put red token on $s$, and blue token on $t$.
+%     \item Repeat:
+%         \begin{enumerate}
+%             \item Player $1$ moves the \emph{red} token to a successor state.
+%             \item Player $2$ moves the \emph{blue} button to a successor state, matching the action of the player $1$ move.
+%         \end{enumerate}
+% \end{enumerate}
+% For $\equbis$ the same holds for the following game.
+% \begin{enumerate}
+%     \item Put red token on $s$, and blue token on $t$.
+%     \item Repeat:
+%         \begin{enumerate}
+%             \item Player $1$ chooses either the red or blue token.
+%             \item Player $1$ moves the \emph{chosen} token to a successor state.
+%             \item Player $2$ moves the \emph{other} button to a successor state, matching the action of the player $1$ move.
+%         \end{enumerate}
+% \end{enumerate}
+% \end{definition}
+
+% \begin{enumerate}
+%     \item Put red token on $s$, and blue token on $t$.
+%     \item Repeat:
+%         \begin{enumerate}
+%             \item ($\equbis$) Player $1$ chooses either red or blue, and moves the chosen token to a successor state. ($\equsim$) Player $1$ moves the red token to a successor state.
+%             \item ($\equbis$) Player $2$ moves the other token to a successor state, matching the action of the player $1$ move. ($\equsim$) Player $2$ moves the blue button to a successor state, matching the action of the player $1$ move.
+%         \end{enumerate}
+% \end{enumerate}
+
+
+
+
+\begin{algorithm}[htp]
+\caption{$\algo_{\equbis}$}
+\label{alg:bis}
+\begin{algorithmic}
+    \State $X \gets \{ S \}$
+    \State $X' \gets \{ \emptyset\}$
+    \While{$X'\not=X$} 
+        \State $X' \gets X$
+        \State $X \gets X \cup \{ \sigma \cup \pre_a(\sigma') | \sigma, \sigma' \in X,\ a \in A \} \cup \{ \sigma \setminus \pre_a(\sigma') | \sigma, \sigma' \in X,\ a \in A \}$
+    \EndWhile
+    \If{$\forall \sigma\in X.\; s,t \in \sigma \lor s,t \notin \sigma$ }
+        \State \Return $\true$
+    \EndIf
+    \State \Return $\false$
+\end{algorithmic}
+\end{algorithm}
+
+
+
+\begin{theorem}[Fixpoint characterization of $\equbis$]
+        Algorithm $\algo_{\equbis}$ provides a fixed point characterization of $\equbis$, i.e., $\forall s, t\in S$ we have that $s \equbis t$ iff  $\algo_{\equbis}$ terminates with $\true$.
+\end{theorem}
+
+\begin{algorithm}[htp]
+\caption{$\algo_{\equsim}$}
+\label{alg:bis}
+\begin{algorithmic}
+    \State $X \gets \{ S \}$
+    \State $X' \gets \{ \emptyset\}$
+    \While{$X'\not=X$} 
+        \State $X' \gets X$
+        \State $X \gets X \cup \{ \sigma \cup \pre_a(\sigma') | \sigma, \sigma' \in X,\ a \in A \}$
+    \EndWhile
+    \If{$\forall \sigma\in X.\; s,t \in \sigma \lor s,t \notin \sigma$ }
+        \State \Return $\true$
+    \EndIf
+    \State \Return $\false$
+\end{algorithmic}
+\end{algorithm}
+
+
+
+\begin{theorem}[Fixpoint characterization of $\equsim$]
+        Algorithm $\algo_{\equsim}$ provides a fixed point characterization of $\equsim$, i.e., $\forall s, t\in S$ we have that $s \equsim t$ iff  $\algo_{\equsim}$ terminates with $\true$.
+\end{theorem}
+
+\begin{definition}[Hennessy-Milner Logic ($\HML$) Syntax]
+    The syntax of Hennessy-Milner Logic ($\HML$) is given by the following grammar.
+    \begin{align*}
+        \varphi \Coloneqq\true  \; \mid \;  \false \; \mid \;  \varphi \land \varphi \; \mid \;  \varphi \lor \varphi \; \mid \;  \bev{a} \varphi  ,\;  a \in A \; \mid \;  \bal{a} \varphi,\;  a \in A
+    \end{align*}
+    \end{definition}
+
+
+\begin{definition}[Hennessy-Milner Logic ($\HML$) Semantics]
+    The semantics of Hennessy-Milner Logic ($\HML$) is defined as follows. 
+    Let $T\coloneqq (S, \to)$ be a labeled transition system, let $\varphi$ a $\HML$ formula, let $s\in S$, then we define $s\models \varphi$ inductively:
+    \begin{itemize}[noitemsep]
+        \item if $ \varphi = \varphi_1 \land \varphi_2 $, then $ s \models_T \varphi_1 \land \varphi_2$ iff $s \models_T \varphi_1$ and  $\models_T \varphi_2$;
+        \item if $ \varphi = \varphi_1 \lor \varphi_2 $, then $ s \models_T \varphi_1 \lor \varphi_2$ iff $s \models_T \varphi_1$ and  $\models_T \varphi_2$;
+      \item if $ \varphi = \bev{a}\varphi $, then $ s \models_T\bev{a}\varphi $ iff $\exists s' \in \post_a(s).\ s' \models_T \varphi$ \\
+      (equivalent to $\exists s' .\; s \xrightarrow{a} s' \land  \varphi$); 
+    \item if $ \varphi = \bal{a}\varphi $, then $ s \models_T\bal{a}\varphi $ iff $\forall s' \in \post_a(s).\ s' \models_T \varphi$ \\
+      (equivalent to $\forall s' .\; s \xrightarrow{a} s' \simplies  \varphi$); 
+    \end{itemize}
+    Moreover, we define $\eval{\varphi}_T\subseteq S$ s.t. $\eval{\true}_T\coloneqq S$, $\eval{\false}_T \coloneqq  \emptyset$, $\eval{\varphi_1 \land \varphi_2}_T \coloneqq  \eval{\varphi_1 }_T \cap \eval{\varphi_2}_T$, and $\eval{\varphi_1 \lor \varphi_2}_T \coloneqq  \eval{\varphi_1 }_T \cup \eval{\varphi_2}_T$.
+\end{definition}
+
+\begin{definition}[$\HML$ Fragments]
+     The logic $\HML^\exists$ is the $\HML$ without $\bal{a}$. The logic $\HML ^\forall$ is the $\HML$ without $\bev{a}$. The logic $\HML_\neg$ adds negation, i.e., for any $\HML$ formula we add $\neg \varphi$.
+\end{definition}
+
+\begin{lemma}
+    In $\HML_{\neg}$ the following equivalences hold
+    \begin{align*}
+        \neg \true &\equiv \false \\
+        \neg (\varphi_1 \land \varphi_2) &\equiv \neg \varphi_1 \lor \neg\varphi_2 \\
+        \neg \bev{a}\varphi &\equiv \bal{a}\neg \varphi \\
+        \neg \bal{a}\varphi &\equiv \bev{a}\neg \varphi \\
+    \end{align*}
+\end{lemma}
+
+\begin{theorem}[Logical Characterization of $\equbis$]
+    The $\equbis$ is logically characterized by $\HML$, i.e.,  $s \equbis t$ iff $\forall \varphi \in \HML$, either $s,t \models \varphi$ or $s,t \not\models \varphi$. 
+\end{theorem}
+
+\begin{theorem}[Logical Characterization of $\equsim$]
+    The $\equsim$ is logically characterized by $\HML^{\exists}$ (or $\HML^{\forall}$), i.e.,
+    $s \equsim t$ iff $\forall \varphi \in \HML ^\exists$, either $s,t \models \varphi$ or $s,t \not\models \varphi$. (Alternatively,  $s \equsim t$  iff $\forall \varphi \in \HML ^\forall$, either $s,t \models \varphi$ or $s,t \not\models \varphi$). 
+\end{theorem}
+
+
+\subsection{State equivalence language (or trace) equivalence}
+
+
+\begin{definition}
+    Let $T= (S, \to)$ be an LTS, let $s\in S$, then we define
+    \begin{align*}
+        L_T(s) \coloneqq \{ a_1a_2\cdots a_n | \exists s_0 \cdots s_n.\ s_0 \xrightarrow{a_1}  s_1  \xrightarrow{a_2} \cdots \xrightarrow{a_n} s_n \land s_0 = s \}
+    \end{align*}
+\end{definition}
+
+
+\begin{lemma}
+    $L_T(s)$ contains $\varepsilon$ and is prefix-closed.
+\end{lemma}
+
+
+\begin{definition}[Linear Equivalence]
+    $s_1 \equlin s_2$ iff $L_T(s_1) = L_T(s_2)$.
+\end{definition}
+
+
+
+\begin{remark}
+    $s_1 \equsim s_2$ implies $s_1 \equlin s_2$ (but not the other direction).
+    The problem of $s_1 \stackrel{?}{\equlin} s_2$ reduces to $L_T(s_1) \stackrel{?}{=} L_T(s_2)$. 
+    The latter is known as the language inclusion problem and corresponds to the equivalence problem for finite non-deterministic automata (NFA).  
+\end{remark}
+
+\begin{remark}
+To decide whether $L_{\T_1}(s) = L_{\T_2}(s)$, we decide whether $L_{\T_1}(s) \subseteq L_{\T_2}(s)$ and $L_{\T_2}(s) \subseteq L_{\T_1}(s)$. However, for two languages $L_1$ and $L_2$ accepted by NFAs we have $L_1 \subseteq L_2$ iff $L_1 \cap A^* \setminus L_2 = \empty$. Hence, the language inclusion problem is $\mathrm{PSPACE}$-hard.
+To elaborate while the intersection of two languages is polynomial and the emptiness check for NFAs is linear, the step $A^* \setminus L_2 $ requires the determinization of an NFA which is exponential. 
+\end{remark}
+
+\begin{example}
+    Below an example of the determinization of a NFA.
+        \begin{center}
+    \begin{tikzpicture}[->, >=Stealth, node distance=2cm, thick, 
+    main/.style = {draw, ellipse}, 
+    dot/.style = {circle, fill, inner sep=1.5pt}]
+    % Nodes
+
+    \node[dot] (4) at (0, 0) {};
+    \node[dot] (5) at (-1, -1) {};
+    \node[dot] (6) at (1, -1) {};
+    \node[dot] (7) at (-1, -2) {};
+    \node[dot] (8) at (1, -2) {};
+
+
+    \node[dot] (11) at (5, 0) {};
+    \node[dot] (12) at (5, -2) {};
+    \node[dot] (13) at (7, 0) {};
+    \node[dot] (14) at (7, -2) {};
+    \node[dot] (15) at (9, -2) {};
+    \node[dot] (16) at (9, 0) {};
+
+    % Edges
+  
+
+    \draw  (4) to node[midway, below] {\small$a$} (5) ;
+    \draw  (5) to node[midway, below] {\small$b$} (7) ;
+    \draw  (4) to node[midway, below] {\small$a$} (6) ;
+    \draw  (6) to node[midway, below] {\small$c$} (8) ;
+
+
+    \draw  (13) to node[midway, right] {\small$a$} (14) ;
+    \draw  (14) to node[midway, below] {\small$b$} (12) ;
+    \draw  (12) to node[midway, left] {\small$a,b,c$} (11) ;
+    \draw  (13) to node[midway, below] {\small$b,c$} (11) ;
+    \draw  (14) to node[midway, below] {\small$a$} (11) ;
+    \draw  (14) to node[midway, below] {\small$c$} (15) ;
+    \draw  (15) to node[midway, right] {\small$a,b,c$} (16) ;
+    
+    
+
+\end{tikzpicture}
+ \end{center}
+    
+\end{example}
+
+
+\begin{definition}[$\HMLlin$]
+    The fragment $\HMLlin^\exists$ of $\HML$ is characterized by the grammar
+    \begin{align*}
+        \varphi \Coloneqq true \; \mid \; \bev{a} \varphi        
+    \end{align*}
+    The fragment $\HML _{lin}^\forall$ is defined analogously. 
+\end{definition}
+
+
+\begin{example}
+    Below an example of comparing bisimulation and linear equivalence
+    \begin{center}
+    \begin{tikzpicture}[->, >=Stealth, node distance=2cm, thick, 
+    main/.style = {draw, ellipse}, 
+    dot/.style = {circle, fill, inner sep=1.5pt}]
+    % Nodes
+
+    \node[dot] (1) at (0, 0) {};
+    \node[dot] (2) at (0, -1) {};
+    \node[dot] (3) at (0, -2) {};
+
+
+    \node (b) at (1,-1) {\large$\not\equlin$};
+  
+    
+    \node[dot] (4) at (3, 0) {};
+    \node[dot] (5) at (2, -1) {};
+    \node[dot] (6) at (4, -1) {};
+    \node[dot] (7) at (2, -2) {};
+    \node[dot] (8) at (4, -2) {};
+
+    \node (b) at (5,-0.5) {\large$\equlin$};
+    \node (b) at (5,-1.5) {\large$\not\equbis$};
+        
+    \node[dot] (9) at (7, 0) {};
+    \node[dot] (10) at (7, -1) {};
+    \node[dot] (11) at (6, -2) {};
+    \node[dot] (12) at (8, -2) {};
+   
+
+    % Edges
+  
+    \draw  (1) to node[midway, right] {\small$a$} (2) ;
+    \draw  (2) to node[midway, right] {\small$b$} (3) ;
+    
+    \draw  (4) to node[midway, right] {\small$a$} (5) ;
+    \draw  (5) to node[midway, right] {\small$b$} (7) ;
+
+    \draw  (4) to node[midway, right] {\small$a$} (6) ;
+    \draw  (6) to node[midway, right] {\small$c$} (8) ;
+
+    \draw  (9) to node[midway, right] {\small$a$} (10) ;
+    \draw  (10) to node[midway, right] {\small$b$} (11) ;
+    \draw  (10) to node[midway, right] {\small$c$} (12) ;
+    
+    
+
+\end{tikzpicture}
+ \end{center}
+\end{example}
+
+% \begin{theorem}
+%     $s \equbis t$ iff after Algorithm~\ref{alg:bis} terminates, either $s,t \in \sigma$, or $s,t \notin \sigma$. $s \equsim t$ iff after Algorithm~\ref{alg:sim} terminates, either $s,t \in \sigma$, or $s,t \notin \sigma$. 
+% \end{theorem}
+
+
+
+% \subsection{Logical charcterization}
+
+% \begin{definition}[Hennessy-Milner Logic ($\HML$)]
+%     Syntax: $\varphi = true\ |\ false\ |\ \varphi \land \varphi\ |\ \varphi \lor \varphi\ |\ \bev{a} \varphi\ |\ \bal{a} \varphi$, where $a \in A$.
+    
+%     Semantics: 
+%     \begin{itemize}
+%         \item $\T = (S, \to)$
+%         \item $s \in S$
+%         \item $\llbracket \varphi \rrbracket _\T \subseteq S$
+%         \item $S \vDash _\T \varphi_1 \land \varphi_2$ iff $S \vDash_\T \varphi_1$ and $S \vDash _\T \varphi_2$
+%         \item $S \vDash _\T \varphi_1 \lor \varphi_2$ iff $S \vDash_\T \varphi_1$ or $S \vDash _\T \varphi_2$
+%         \item $S \vDash _\T \bev{a} \varphi$ iff $\exists s' \in \post_a(s).\ s' \vDash_\T \varphi$
+%         \item $S \vDash _\T [ {a} ] \varphi$ iff $\forall s' \in \post_a(s).\ s' \vDash_\T \varphi$
+%         \item $\llbracket true \rrbracket _\T = S$
+%         \item $\llbracket false \rrbracket _\T = \varphi$
+%         \item $\llbracket \varphi_1 \land \varphi_2 \rrbracket _\T = \llbracket \varphi_1 \rrbracket _\T \cap \llbracket \varphi_2 \rrbracket _\T$
+%         \item $\llbracket \varphi_1 \lor \varphi_2 \rrbracket _\T = \llbracket \varphi_1 \rrbracket _\T \cup \llbracket \varphi_2 \rrbracket _\T$
+%     \end{itemize}
+% \end{definition}
+
+% \begin{definition}
+   
+% \end{definition}
+
+% \begin{theorem}
+%     $s \equbis t$ iff $\forall \varphi \in \HML$, either $s,t \vDash \varphi$ or $s,t \nvDash \varphi$. $s \equsim t$ iff $\forall \varphi \in \HML ^\exists$, either $s,t \vDash \varphi$ or $s,t \nvDash \varphi$, iff $\forall \varphi \in \HML ^\forall$, either $s,t \vDash \varphi$ or $s,t \nvDash \varphi$. 
+% \end{theorem}
+
+% \section{State equivalence language (or trace) equivalence}
+
+% Semantics:
+% \begin{itemize}
+%     \item $\T = (S, \to)$
+%     \item $s \in S$
+%     \item $L_\T = \{ a_1a_2\cdots a_n | \exists s_0 \cdots s_n.\ s_0 \stackrel {a_1} \to s_1 \stackrel {a_2} \to \cdots \stackrel {a_n} \to s_n \land s_0 = s \}$
+% \end{itemize}
+
+% \begin{lemma}
+%     $L_\T(s)$ contains $\varepsilon$ and is prefix-closed.
+% \end{lemma}
+
+% \begin{definition}
+%     $s_1 \approx_{lin} s_2$ iff $L_\T (s_1) = L_\T (s_2)$.
+% \end{definition}
+
+% \begin{remark}
+%     $s_1 \equsim s_2$ implies $s_1 \approx_{lin} s_2$. (but not the other direction)
+% \end{remark}
+
+% To decide whether $L_{\T_1}(s) = L_{\T_2}(s)$, we decide whether $L_{\T_1}(s) \subseteq L_{\T_2}(s)$ and $L_{\T_2}(s) \subseteq L_{\T_1}(s)$. 
+
+% \begin{remark}
+%     $L_1 \subseteq L_2$ iff $L_1 \cap A^\star \setminus L_2 = \empty$. In total, this is PSPACE-hard.
+% \end{remark}
+
+% \begin{definition}[$\HML _{lin} ^\exists$]
+%      $\varphi := true\ |\ \bev{a} \varphi$.
+% \end{definition}
+
+%
+%% \newpage
+% \bibliographystyle{plainnat}
+% %\bibliographystyle{myplainnat} %a bit nicer for arxiv, revert to plainnat once bib is polished
+% {\small
+% \bibliography{reference}
+% }
+
+

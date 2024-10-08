@@ -1,0 +1,156 @@
+
+
+%%%%%% Basic Math
+\newcommand{\comment}[1]{\textcolor{red}{#1}}
+
+\newcommand{\notimplies}{%
+  \mathrel{{\ooalign{\hidewidth$\not\phantom{=}$\hidewidth\cr$\implies$}}}}
+
+
+\newcommand{\RN}{\mathbb{R}}
+\newcommand{\QN}{\mathbb{Q}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\BN}{\mathbb{B}}
+\newcommand{\ZN}{\mathbb{Z}}
+\newcommand{\power}{\mathcal{P}}
+
+\newcommand{\true}{\mathbf{true}}
+\newcommand{\false}{\mathbf{false}}
+
+
+\newcommand{\simplies}{\Rightarrow}
+\newcommand{\simplied}{\Leftarrow}
+\newcommand{\siff}{\Leftrightarrow}
+\newcommand{\emptystring}{\epsilon}
+\newcommand{\gfp}{\mathrm{gfp}}
+\newcommand{\lfp}{\mathrm{lfp}}
+\newcommand{\bottom}{\perp}
+
+\newcommand{\valfoo}{\nu}
+\newcommand{\eval}[1]{\llbracket #1 \rrbracket}
+\newcommand{\interp}{\mathcal{I}}
+
+\newcommand{\sat}{\mathbf{sat}}
+\newcommand{\unsat}{\mathbf{unsat}}
+%%%%%% Merge Sort
+
+\newcommand{\mergesort}{\mathtt{mergesort}}
+\newcommand{\merges}{\mathtt{merge}}
+\newcommand{\odd}{\mathtt{odd}}
+\newcommand{\even}{\mathtt{even}}
+\newcommand{\sorted}{\mathtt{sorted}}
+\newcommand{\reverseA}{\mathtt{reverse}}
+\newcommand{\reverseB}{\mathtt{r}}
+
+\newcommand{\parent}{\mathtt{parent}}
+
+
+\newcommand{\proofs}{\vdash}
+
+
+\newcommand{\hilbert}{\mathcal{H}}
+% \newcommand{\nj}{\mathcal{N}\mkern-9mu\mathcal{J}}
+% \newcommand{\nk}{\mathcal{N}\mkern-6mu\mathcal{K}}
+% \newcommand{\lk}{\mathcal{L}\mkern-6mu\mathcal{K}}
+\newcommand{\nj}{\mathcal{NJ}}
+\newcommand{\nk}{\mathcal{NK}}
+\newcommand{\lk}{\mathcal{LK}}
+ 
+\newcommand{\kripke}{m}
+\newcommand{\krel}{\preceq}
+\newcommand{\kinit}{w_0}
+\newcommand{\kworld}{W}
+
+
+\newcommand{\lif}{\mathrm{if}}
+% \newcommand{\ln}{\underline{if}}
+
+
+\newcommand{\tuple}[1]{\langle #1 \rangle}
+
+\newcommand{\sif}[3]{\mathrm{if}\;#1\;\mathrm{then}\;#2\;\mathrm{else}\;#3}
+\newcommand{\swhile}[2]{\mathrm{while}\;#1\;\mathrm{do}\;#2}
+\newcommand{\siffi}[1]{\mathrm{if}\;#1\;\mathrm{fi}}
+\newcommand{\sdo}[1]{\mathrm{do}\;#1\;\mathrm{od}}
+\newcommand{\sskip}{\mathtt{skip}}
+\newcommand{\sassert}{\mathtt{assert}}
+\newcommand{\sfail}{\mathtt{fail}}
+\newcommand{\sassume}{\mathtt{assume}}
+\newcommand{\sabort}{\mathtt{abort}}
+\newcommand{\ssc}{\mathtt{c}}
+\newcommand{\ssb}{\mathtt{b}}
+\newcommand{\sgc}{\mathtt{gc}}
+
+\newcommand{\simp}[1]{\mathtt{#1}}
+\newcommand{\sop}[2]{\langle \simp{#1},~#2 \rangle}
+\newcommand{\sde}[1]{\llbracket \simp{#1} \rrbracket}
+\newcommand{\sdefun}[1]{\lambda \sigma.~ #1}
+
+\newcommand{\imp}[1]{\texttt{#1}}
+\newcommand{\opsem}[2]{\langle \imp{#1},~#2 \rangle}
+\newcommand{\desem}[1]{\llbracket \imp{#1} \rrbracket}
+\newcommand{\defun}[1]{\lambda \sigma.~ #1}
+
+
+
+\newcommand{\vc}{\mathrm{vc}}
+\newcommand{\wlp}{\mathrm{wlp}}
+\newcommand{\wsp}{\mathrm{wp}}
+
+
+
+\newcommand{\ccs}{\mathcal{P}}
+
+\newcommand{\coin}{\;\mathrm{coin}\,}
+\newcommand{\discof}{\;\mathrm{discof}\,}
+\newcommand{\reqcof}{\;\mathrm{reqcof}\,}
+\newcommand{\distea}{\;\mathrm{distea}\,}
+\newcommand{\reqtea}{\;\mathrm{reqtea}\,}
+
+
+\newcommand{\inc}{\;\mathrm{inc}\,}
+\newcommand{\dec}{\;\mathrm{dec}\,}
+\newcommand{\zero}{\;\mathrm{zero}\,}
+\newcommand{\Counter}{\;\mathrm{Counter}\,}
+\newcommand{\semicounter}{\;\mathrm{Semicounter}\,}
+
+
+
+\newcommand{\equiso}{\approx_{\mathrm{iso}}}
+\newcommand{\equbis}{\approx_{\mathrm{bis}}}
+\newcommand{\equsim}{\approx_{\mathrm{sim}}}
+\newcommand{\equlin}{\approx_{\mathrm{lin}}}
+
+\newcommand{\lequsim}{\preceq_{\mathrm{sim}}}
+\newcommand{\gequsim}{\succeq_{\mathrm{sim}}}
+
+\providecommand{\T}{T}
+\DeclareMathOperator{\pre}{pre}
+\DeclareMathOperator{\post}{post}
+\DeclareMathOperator{\HML}{HML}
+\DeclareMathOperator{\HMLlin}{HML_{\mathrm{lin}}}
+
+
+
+\newcommand{\bev}[1]{\langle #1 \rangle}
+\newcommand{\bal}[1]{[ #1 ]}
+
+\newcommand{\lev}{\lozenge}
+\newcommand{\lal}{\square}
+\newcommand{\lne}{\bigcirc}
+\newcommand{\lun}{\,\mathcal{U}\,}
+
+\newcommand{\lmu}{\mu\,}
+\newcommand{\lnu}{\nu\,}
+
+\newcommand{\algo}{\mathcal{A}}
+
+
+\newcommand{\tatom}{\mathrm{atom}}
+\newcommand{\tcar}{\mathrm{car}}
+\newcommand{\tcdr}{\mathrm{cdr}}
+\newcommand{\tcons}{\mathrm{cons}}
+
+\newcommand{\tread}{\mathrm{read}}
+\newcommand{\twrite}{\mathrm{write}}
+

@@ -1,0 +1,305 @@
+
+\begin{remark}
+    To summarize:
+    \begin{align*}
+        \equiso &&  \mathrm{NP} && -\\
+        \equbis && O(m log n) && \HML\\
+        \equsim && O(m \cdot n) && \HML^{\exists}\\
+         \equlin && \mathrm{PSPACE} && \HMLlin^{\exists}\\
+    \end{align*}
+\end{remark}
+% \begin{itemize}
+% 	\item $\approx_{iso} \to NP \to HML$.
+% 	\item $\approx_{bis} \to O(m log n) \to HML^\exists$. (gfp)
+% 	\item $\approx_{sim} \to O(m n) \to HML_{lin}^\exists$. (gfp)
+% 	\item $\approx_{lin} \to pspace$.
+% 	\item $[a](\varphi \land \psi) = [a]\varphi \land [a]\psi$
+% 	\item $<a>(\varphi \lor \psi) = <a>\varphi \lor <a>\psi$
+% 	\item $[\{a, b\}] \varphi = [a] \varphi \land [b] \varphi$
+% 	\item $<\{a, b\}> \varphi = <a> \varphi \lor <b> \varphi$
+% \end{itemize}
+
+\section{Modal $\lmu$-calculus}
+
+\begin{definition}[Modal $\lmu$-calculus Syntax]
+    The syntax of the modal $\lmu$-calculus is defined by the following grammar. Let $X$ be a set of variables
+    \begin{align*}
+        \varphi \Coloneqq \HML \; \mid \;  x \in X \; \mid \; \underbrace{ \lmu x. \varphi}_{\lfp} \; \mid \;  \underbrace{\lnu x. \varphi}_{\gfp}
+    \end{align*}
+\end{definition}
+
+\begin{definition}[Modal $\lmu$-calculus Semantics]
+    The semantics of the modal $\lmu$-calculus is defined as follows.
+    Let $T\coloneqq (S,\to)$ be a LTS over a finite action set (alphabet) $A$.
+    The we define: (i) $ \eval{\varphi}_T^\interp \subseteq S$ where $\interp \colon X \to 2^S$; 
+    (ii) $\eval{x}_T^\interp  = \interp(x)$; 
+    (iii)  $\eval{\lmu x. \varphi}_T^\interp  = \bigcup_{\sigma \subseteq S} \eval{\varphi}_T^{\interp[x \to \sigma]}$; (iv) $\eval{\lnu x. \varphi}_T^\interp  = \bigcap_{\sigma \subseteq S} \eval{\varphi}_T^{\interp[x \to \sigma]}$.
+\end{definition}
+
+\begin{remark}
+        Let $F\coloneqq \lambda \sigma \subseteq S.\eval{\varphi}_T^{\interp[x \to \sigma]}$ then
+    $\eval{\lmu x. \varphi}_T^\interp = \lfp F$ and $\eval{\lnu x. \varphi}_T^\interp = \gfp F$.
+    That is, $\lfp F$ is the limit (infinite union) of 
+    \begin{align*}
+        \sigma_0 = \emptyset 
+        \subseteq \sigma_1 = \eval{\varphi}_T^{\interp[x \to \sigma_0]}
+        \subseteq  \sigma_2 = \eval{\varphi}_T^{\interp[x \to \sigma_1]} 
+        \subseteq \cdots
+    \end{align*}
+    and $\lfp F$ is the limit (infinite intersection) of 
+    \begin{align*}
+        \sigma_0 = S
+        \supseteq \sigma_1 = \eval{\varphi}_T^{\interp[x \to \sigma_0]}
+        \supseteq  \sigma_2 = \eval{\varphi}_T^{\interp[x \to \sigma_1]} 
+        \supseteq \cdots
+    \end{align*}
+\end{remark}
+
+\begin{example}
+    Consider the expression $(\lmu x)(\bev{a} \true \lor \bev{\bar{a}}x)$ where $\bar{a}\coloneqq A\setminus \{a\}$. By evaluating the expression we obtain
+    \begin{align*}
+        \sigma_0 &= \false \\
+        \sigma_1 &= \bev{a}\true \\
+        \sigma_2 &= \bev{a}\true  \lor \bev{\bar{a}}\bev{a}\true \\
+        \sigma_3 &= \bev{a}\true  \lor \bev{\bar{a}} (\bev{a}\true  \lor \bev{\bar{a}}\bev{a}\true)\\
+        &= \bev{a}\true  \lor \bev{\bar{a}}\bev{a}\true \lor \bev{\bar{a}}\bev{\bar{a}}\bev{a}\true\\
+        \sigma_4 &= \cdots
+    \end{align*}
+    It expresses that 
+    there exists a path somewhere along the path there exists an $a$-transition, i.e., $\exists \lev a$. 
+\end{example}
+
+\begin{example}
+    Consider the expression $(\lnu x)(\bal{\bar{a}} \false \land \bev{a}x)$. By evaluating the expression we obtain
+    \begin{align*}
+        \sigma_0 &= \true \\
+        \sigma_1 &= \bal{\bar{a}}\false \\
+        \sigma_2 &= \bal{\bar{a}}\false \land \bal{a}\bal{\bar{a}}\false \\
+        \sigma_3 &= \cdots
+    \end{align*}
+    It expresses that 
+    on all paths there are only $a$-transition, i.e., $\forall \lal a$. 
+\end{example}
+
+\begin{remark}
+ The the equivalence $\neg \lmu x. \varphi(x) = \lnu x . \neg \varphi (\neg x)$ where left has even number of negations.
+\end{remark}
+
+
+
+\begin{definition}[$\lmu$-calculus]
+We can add propositions $p\in P$ as atomic formulas. Syntactically we can define the grammar
+ \begin{align*}
+        \varphi \Coloneqq p \; \mid \; \varphi \lor \varphi\; \mid \;  \varphi \land \varphi \; \mid \;  \bev{a}\varphi  \; \mid \; \bal{a}\varphi  \; \mid \;  \lmu x. \varphi \; \mid \; \lnu x. \varphi x
+\end{align*}
+    Semantically we evaluate over Kripke structures, i.e., $K=(S, \to, \eval{\cdot}\colon S\to 2^P)$, e.g., $\eval{p}_K\subseteq S$
+\end{definition}
+
+\begin{remark}
+    We can formulate the following abbreviations:
+    \begin{align*}
+        \exists \lev \varphi &= \lmu x. (\varphi \lor \exists \lne x) \\
+        \exists \lev p &= \lmu x. (p \lor \exists \lne x) & \quad \text{($p$ is reachable)} \\
+         \forall \lal \varphi &= \lnu x. (\varphi \land \forall \lne x) \\
+         \forall \lal p &= \lnu x. (p \land \forall \lne x)  & \quad \text{($p$ is an invariant)}  \\
+         \forall \lev \varphi &= \lmu x. (\varphi \lor \forall \lne x) & \quad \text{(on all paths $\varphi$ is eventually true)} \\
+          \exists \lev \varphi &= \lnu x. (\varphi \land \exists \lne x) & \quad \text{(there exists an inf.\ path where $\varphi$ is always true)} 
+    \end{align*}
+\end{remark}
+
+
+% 	\item
+% 	\item $\lmu$-calculus add propositions as atomic formulas i.e. $\varphi := p | \varphi \lor \varphi | \varphi \land \varphi | <a> \varphi | [a] \varphi | \lmu x.\varphi | \lnu x.\varphi | X$
+% 	\item $\llbracket p\rrbracket_T \subset S$
+% 	\item LTS $T = (S, \to) $ Kripke structure $K = (S, \to, \llbracket\rrbracket:S \to 2^P)$
+% \end{itemize}
+
+% Abbreviations:
+% \begin{itemize}
+% 	\item $\exists \lev \varphi = \lmu x. (\varphi \lor \exists \lne x)$
+% 	\item $\exists \lev p = \lmu x. (p \lor \exists \lne x)$ i.e. p is reachable.
+% 	\item $\forall \lal \varphi = \lnu x. (\varphi \land \forall \lne x)$
+% 	\item $\forall \lal p = \lnu x. (p \land \forall \lne x)$ i.e. p is an invariant.
+% 	\item $\forall \lev \varphi = \lmu x. (\varphi \lor \forall \lne x)$
+% 	\item $\exists \lal \varphi = \lnu x. (\varphi \land \exists \lne x)$ i.e. there exists an infinite path along which $\varphi$ is always true.
+% \end{itemize}
+% equivalant to
+% $$\llbracket \lmu x \varphi \rrbracket_T^I = \text{lfp}(F)$$
+% for 
+% $$F = \lambda \sigma \subset S. \llbracket\varphi \rrbracket_T^{I[x \to \sigma]}$$
+% $\text{lfp}(F)$ is the limit (inf union) of:
+% $$\sigma_0 = \varnothing$$
+% $$\subseteq \sigma_1 = \llbracket\varphi \rrbracket_T^{I[x \to \sigma_0]}$$
+% $$\subseteq \sigma_2 = \llbracket\varphi \rrbracket_T^{I[x \to \sigma_1]}$$
+% $$\dots$$
+% $$\subseteq S$$
+
+% And same for $\lnu$:
+% $$\llbracket \lnu x \varphi \rrbracket_T^I = \cap_{\sigma \subset S} \llbracket\varphi \rrbracket_T^{I[x \to \sigma]}$$
+% equivalant to
+% $$\llbracket \lnu x \varphi \rrbracket_T^I = \text{gfp}(F)$$
+% for 
+% $$F = \lambda \sigma \subset S. \llbracket\varphi \rrbracket_T^{I[x \to \sigma]}$$
+% $\text{gfp}(F)$ is the limit (inf intersection) of:
+% $$\sigma_0 = S$$
+% $$\supseteq \sigma_1 = \llbracket\varphi \rrbracket_T^{I[x \to \sigma_0]}$$
+% $$\supseteq \sigma_2 = \llbracket\varphi \rrbracket_T^{I[x \to \sigma_1]}$$
+% $$\dots$$
+
+
+% \begin{example}
+% $$\lmu x . (<a> true \lor <\bar{a}> x)$$
+% solution:
+% $$\sigma_0 = false$$
+% $$\sigma_1 = <a> true$$
+% $$\sigma_2 = <a> true \lor <\bar{ a}><a>true$$
+% $$\sigma_3 = <a> true \lor <\bar{ a}>(<a>true \lor <\bar{ a}><a>true)$$
+% $$= <a> true \lor <\bar{ a}><a>true \lor <\bar{ a}><\bar{ a}><a>true$$
+% $$\sigma_4 = \dots$$
+
+% means "$\exists \lev a$"
+% there exists a path somewhere along the path there exists an a transition.
+
+% \end{example}
+
+% \begin{example}
+% $$(\lnu x)([\bar{ a}] flase \land [a] x)$$
+% solution:
+% $$\sigma_0 = true$$
+% $$\sigma_1 = [\bar{ a}]false \land [a]true$$
+% $$\sigma_2 = [\bar{ a}]false \land [a][\bar{ a}]false$$
+% $$\sigma_3 = \dots$$
+
+% means  "$\forall \lal a$" 
+% on all paths only a transitions.
+% \end{example}
+
+% Some notes:
+% \begin{itemize}
+% 	\item $\neg \lmu x. \varphi(x) = \lnu x . \neg \varphi (\neg x)$ where left has even number of negations.
+% 	\item $\lmu$-calculus add propositions as atomic formulas i.e. $\varphi := p | \varphi \lor \varphi | \varphi \land \varphi | <a> \varphi | [a] \varphi | \lmu x.\varphi | \lnu x.\varphi | X$
+% 	\item $\llbracket p\rrbracket_T \subset S$
+% 	\item LTS $T = (S, \to) $ Kripke structure $K = (S, \to, \llbracket\rrbracket:S \to 2^P)$
+% \end{itemize}
+
+% Abbreviations:
+% \begin{itemize}
+% 	\item $\exists \lev \varphi = \lmu x. (\varphi \lor \exists \lne x)$
+% 	\item $\exists \lev p = \lmu x. (p \lor \exists \lne x)$ i.e. p is reachable.
+% 	\item $\forall \lal \varphi = \lnu x. (\varphi \land \forall \lne x)$
+% 	\item $\forall \lal p = \lnu x. (p \land \forall \lne x)$ i.e. p is an invariant.
+% 	\item $\forall \lev \varphi = \lmu x. (\varphi \lor \forall \lne x)$
+% 	\item $\exists \lal \varphi = \lnu x. (\varphi \land \exists \lne x)$ i.e. there exists an infinite path along which $\varphi$ is always true.
+% \end{itemize}
+
+\subsection{Computational Tree Logic (CTL)}
+
+\begin{definition}[CTL Syntax]
+    The syntax of the Computation Tree Logic (CTL) is given by the following grammar
+    \begin{align*}
+        \varphi \Coloneqq p \;\mid\; 
+        \varphi \lor \varphi \;\mid\; 
+        \varphi \land \varphi \;\mid\; 
+        \overbrace{\exists \lne \varphi}^{EX} \;\mid\; 
+        \overbrace{\forall \lne \varphi}^{AX} \;\mid\;
+        \overbrace{\exists \lev \varphi}^{EF} \;\mid\;
+        \overbrace{\forall \lev \varphi}^{AF} \;\mid\; 
+        \overbrace{\exists \lal \varphi}^{EG} \;\mid\;
+        \overbrace{\forall \lal \varphi}^{AG}
+    \end{align*}
+\end{definition}
+
+\begin{remark}
+    The following equivalences hold: $\exists \lne \varphi = \neg \forall \lne \neg \varphi$ and $\exists \lev \varphi = \neg \forall \lal \neg \varphi$.
+\end{remark}
+
+\begin{remark}
+    The full $\lmu$-calculus is strictly more expressive than CTL, in two ways: (i) $\lmu x.\exists \lne \exists \lne x$ means $p$ is reachable in even number of steps. (ii) $\lnu x. \exists \lev (p \land \exists \lne x) = \lnu x .\, \lmu y ((p \land \exists \lne x) \lor \exists \lne y)$ means there exists a path with infinitely many $p$ clauses. It is not expressible in CTL.
+\end{remark}
+
+\begin{exercise}
+    Proof that $\lmu x.\exists \lne \exists \lne x$ is not expressible in CTL.
+\end{exercise}
+
+
+\begin{remark}
+    We have that $\forall \lal \forall \lev p = \forall \lal \lev p$ expresses that on all infinite paths, we have $p$ infinitely often. 
+     By contrast, while
+     $\exists \lal \exists \lev p \Leftarrow  \exists \lal \lev p$ the reverse does not hold, e.g.,
+     \begin{center}
+		\begin{tikzpicture}
+			\node (S) at (10,11) {};
+			\node[circle,draw, minimum size= 0.7cm, inner sep=1.5pt] (A) at (10,10) {\small$\neg p$};
+			\node[circle,draw, minimum size= 0.7cm, inner sep=1.5pt] (B) at (12,10) {\small$p$};
+			\path[->]
+			(S) edge (A)
+			(A) edge (B)
+			(A) edge [out=135, in=225, loop] (A);
+			%\draw[->] (w0) -- (w1);
+		\end{tikzpicture}
+	\end{center}
+ Moreover, $CTL$ characterizes $\equbis$ and  $CTL^\exists$ characterizes $\equsim$.
+ Next we define a logic that characterizes $\equlin$.
+\end{remark}
+
+
+
+\subsection{Linear Temporal Logic (LTL)}
+
+\begin{remark}
+    LTL characterizes $\equlin$.
+\end{remark}
+
+
+\begin{definition}[LTL Snytax]
+    The syntax of Linear Temporal Logic (LTL) is given by the following grammar
+    \begin{align*}
+        phi \Coloneqq p \;\mid\;  
+        \varphi \lor \varphi \;\mid\; 
+        \varphi \land \varphi \;\mid\; 
+        \lne \varphi \;\mid\;  
+        \lev \varphi 
+        \;\mid\; \lal \varphi
+    \end{align*}
+\end{definition}
+
+\begin{definition}[LTL Semantics]
+LTL is interpreted over inf traces $t = s_0s_1s_2s_3\dots$ s.t $s_i \to s_{i+1}$ for all $i \geq 0$ the we define 
+\begin{align*} 
+&t \models p &\iff \quad&p \in \eval{s_0} & \\
+&t \models \lne \varphi &\iff \quad&s_0s_1s_2s_3\dots \models \varphi & \quad \text{next $\varphi$}\\
+&t \models \lev \varphi &\iff \quad&\exists i\geq0 s_is_{i+1}s_{i+2}s_{i+3}\dots \models \varphi & \quad \text{eventually $\varphi$}\\
+&t \models \lal \varphi &\iff \quad&\forall i\geq0 s_is_{i+1}s_{i+2}s_{i+3}\dots \models \varphi & \quad \text{always $\varphi$}\\
+\end{align*}
+We say $s \models \varphi$ iff there exists trace $t$ from $s$ s.t. $t \models \varphi$.
+\end{definition}
+
+\begin{remark}
+    Now you can compare LTL to CLT etc. For example $\lal \lev p$ is infinitely often $p$. It is incomparable to CTL (fragment of of $\lmu$-calculus).
+% This logic was defined as a first order logic, but we should also add until operator to it to be complete with respect to first order logic.
+\end{remark}
+
+\begin{definition}[Until]
+We define the until operator $\lun$ as 
+\begin{align*}
+    \varphi\lun\psi \iff \exists s_is_{i+1}\dots \models \psi \land \forall j<i. s_js_{j+1}\dots\models \varphi
+\end{align*}
+\end{definition}
+
+% \begin{itemize}
+% 	\item $t \models p$ iff $p \in \llbracket s_0\rrbracket$
+% 	\item $t \models \lne \varphi$ iff $s_1s_2s_3\dots \models \varphi$. next
+% 	\item $t \models \lev \varphi$ iff $\exists i\geq0 s_is_{i+1}s_{i+2}s_{i+3}\dots \models \varphi$. eventually
+% 	\item $t \models \lal \varphi$ iff $\forall i\geq0 s_is_{i+1}s_{i+2}s_{i+3}\dots \models \varphi$ always
+% \end{itemize}
+% We say $s \models \varphi$ iff there exists trace $t$ from $s$ s.t. $t \models \varphi$.
+
+
+% Now you can compare LTL to CLT etc. For example $\lal \lev p$ is inf often p. It is not comparable to CTL, fragment of of $\lmu$-calculus.
+
+% This logic was defined as a first order logic, but we should also add until operator to it to be complete with respect to first order logic.
+
+
+
+
+

@@ -1,39 +1,90 @@
-\subsection{First Order Resolution: Classical Automated Theorem Proving} We want to prove $\models \phi$ for a closed $\phi$.
+\subsection{First Order Resolution: Classical Automated Theorem Proving} 
+
+
+
+\begin{definition}[First Order Resolution]
+    To proof $\models \varphi $ for a closed $\varphi $:
 \begin{enumerate}
-    \item Negate. Show $\neg \phi$ is unsat.
-    \item Bring $\neg \phi$ into "prenex" form (all quantifiers are in front). (Ex. $\exists x. \phi(x) \land \gamma \iff \exists x (\phi(x) \land \gamma)$).
+    \item Negate. Show $\neg \varphi $ is unsat.
+    \item Bring $\neg \varphi $ into "prenex" form (see Remark \ref{cl10:rem:prenex}).
     \item Bring $\gamma$ into CNF.
-    \item "Skolemization" gets rid of $\exists$. 
-    \begin{itemize}
-        \item Consider that  while for $\exists x.\phi(x)$ is sat iff $\phi(\hat{x})$ is sat, we have that $\forall y \exists x \phi(x)$  is sat iff $\phi(f(y))$ is sat where $f(y)$ is a new function symbol. Thus,for each $\exists x$ within the scope of a universally quantified variables $y_1, \cdots,y_n$, drop $\exists x$ and replace each bound occurrence of x by $f(y_1,\cdots,y_n)$ where f is a new n-ary function symbol. E.g. 
-        \begin{equation}
-            \forall x, \exists y \forall z_1,z_2 \exists y . \phi (x,y,z_1,z_2, u) \rightarrow \forall x \forall z_1, z_2. \phi (x, f(x), z_1, z_2, g(x, z_1,z_2)).
-        \end{equation}
-    \end{itemize}
+    \item "Skolemization" gets rid of $\exists$ (see Remark \ref{cl10:rem:skolem}). 
     \item Drop $\forall$.
-    \item \textit{Theorem.} For an interpretation $I$, clauses $C_1$ and $C_2$, and literals $l$ and $l'$. If $I \models C_1[l]$ and $I \models C_2[\neg l']$ and $l, l'$ are "unifiable" (i.e, there is a substitution, which is a function from variables to terms, that when applied to $l$ and $l'$, makes them equal), then $I \models X_1\theta [\bot] \lor C_2\theta [\bot]$ where $\theta$ is the most general unifier of $l$  and $l'$.
-    
-    For example for a variable x and a constant $S$, we have that $m(x)$ and $\neg m(S)$ are unifiable by replacing $x $ by $s$. The purpose is to make literals the same.
+    \item See Theorem \ref{cl10:thrm:unifier}
 \end{enumerate}
+\end{definition}
 
-\subsection{First order theories} Theories defined by 1) signature (set of functions + predicate symbols) and 2) either by a r.e. set of closed formulas called axioms A (set of all A-valid closed formulas) or by a specific "intended" interpretation $I$ (true formulas in $I$).
 
-Formally, a theory $T$ is a r.e. set of closed formulas (there are no free variables) that are closed under $\models$, i.e 
+\begin{remark}[Prenex]
+\label{cl10:rem:prenex}
+A formula is in prenex normal all quantifiers are in the front, e.g., $\exists x. \varphi (x) \land \gamma \siff \exists x (\varphi (x) \land \gamma)$.
+\end{remark}
 
-\textit{Def.} $T \models \phi$  iff $\forall I ((\forall \psi \in T. I \models \psi) \Rightarrow I \models \phi)$. 
 
-We say that 
+\begin{remark}[Skolemization]
+\label{cl10:rem:skolem}
+    Consider that  while for $\exists x.\varphi (x)$ is sat iff $\varphi (\hat{x})$ is sat, we have that $\forall y \exists x \varphi (x)$  is sat iff $\varphi (f(y))$ is sat where $f(y)$ is a new function symbol. Thus,for each $\exists x$ within the scope of a universally quantified variables $y_1, \cdots,y_n$, drop $\exists x$ and replace each bound occurrence of x by $f(y_1,\cdots,y_n)$ where f is a new n-ary function symbol. E.g. 
+        \begin{align*}
+            \forall x, \exists y \forall z_1,z_2 \exists y . \varphi  (x,y,z_1,z_2, u) \rightarrow \forall x \forall z_1, z_2. \varphi  (x, f(x), z_1, z_2, g(x, z_1,z_2)).
+        \end{align*}
+\end{remark}
+
+\begin{theorem}[Unifier]
+    \label{cl10:thrm:unifier}
+    For an interpretation $\interp$, clauses $C_1$ and $C_2$, and literals $\ell $ and $\ell '$. If $\interp \models C_1[\ell]$ and $\interp \models C_2[\neg \ell']$ and $\ell , \ell'$ are "unifiable" (i.e, there is a substitution, which is a function from variables to terms, that when applied to $\ell $ and $\ell '$, makes them equal), then $\interp \models X_1\theta [\bot] \lor C_2\theta [\bot]$ where $\theta$ is the most general unifier of $\ell $ and $\ell '$.
+\end{theorem}
+
+
+\begin{example}
+        For example for a variable $x$ and a constant $S$, we have that $m(x)$ and $\neg m(S)$ are unifiable by replacing $x $ by $s$. The purpose is to make literals the same.
+\end{example}
+
+\subsection{First order theories} 
+
+
+\begin{remark}
+    Theories defined by (i) signature (set of functions + predicate symbols) and (ii) either by a r.e. set of closed formulas called axioms $A$ (set of all $A$-valid closed formulas) or by a specific "intended" interpretation $\interp$ (true formulas in $\interp$).
+\end{remark}
+
+\begin{definition}
+    A theory $T$ is a r.e. set of closed formulas (there are no free variables) that are closed under $\models$, i.e 
+     $T \models \varphi $  iff $\forall \interp ((\forall \psi \in T.  \interp \models \psi) \simplies  \interp \models \varphi )$. 
+\end{definition}
+Formally, 
+
+\begin{definition}
+    We say that 
 \begin{itemize}
-    \item $\phi$ is $T-$valid iff $T \models \phi$
-    \item $\phi$ is $T-$satisfiable iff $\exists I. I$ T-model $\phi$.
-    \item $I$ is a $T-$model iff $\forall \psi \in T. I \models \psi$.
-    \item $\phi, \psi$ are $T-$equivalent iff $\phi,\psi$ have truth value in all $T-$models.
+    \item $\varphi $ is $T$-valid iff $T \models \varphi $
+    \item $\varphi $ is $T$-satisfiable iff $\exists  \interp.  \interp$ T-model $\varphi $.
+    \item $ \interp$ is a $T$-model iff $\forall \psi \in T.  \interp \models \psi$.
+    \item $\varphi , \psi$ are $T$-equivalent iff $\varphi ,\psi$ have truth value in all $T$-models.
 \end{itemize}
-Therefore, $T$ is either (1) the set of all $A-$valid closed formulas or (2) $T$ is the set of all formulas true in I.
+\end{definition}
 
-$T$ is \underline{consistent} iff $\exists I. \forall \psi \in T$, $I\models \psi$ (always the case for (2)).
+\begin{remark}
+    \label{cl10:rem:theory}
+    Therefore, $T$ is either (i) the set of all $A$-valid closed formulas or (ii) $T$ is the set of all formulas true in $\interp$.
+\end{remark}
 
-$T$ is \underline{complete} iff for all closed formulas $\psi$ of the signature, either $T \models \psi$ or $T \models \neg \psi$ (always the case for (2)).
 
-$T$ is \underline{decidable} iff the problem "given $\psi$, is $T \models \psi$" is decidable.
+\begin{definition}
+    The theory $T$ is: 
+    \begin{itemize}
+        \item   \emph{consistent} iff $\exists \interp. \forall \psi \in T$, $\interp\models \psi$ (always the case for (ii) in Remark 
+        \ref{cl10:rem:theory}); 
+        \item \emph{complete} iff for all closed formulas $\psi$ of the signature, either $T \models \psi$ or $T \models \neg \psi$ (always the case for (ii) in Remark \ref{cl10:rem:theory});
+        \item  $T$ is \emph{decidable} iff the problem "given $\psi$, is $T \models \psi$" is decidable.
+    \end{itemize}
+\end{definition}
 
+
+\begin{remark}
+    Common theories are the theory of:
+    (i)  propositional logic with quantifiers (QBF);
+    (ii) equality with uninterpreted functions and predicates;
+    (iii) the integers, either Peano- or Pressburger arithmetic;
+    (iv) the reals over real closed fields; 
+    (v) the rational numbers with linear arithmatic;
+    (vi) lists and arrays.
+\end{remark}

@@ -1,14 +1,16 @@
-\title{Formalisms Every Computer Scientist Should Know}
-\author{Students in the class}
+\usepackage[utf8]{inputenc}
 
-\newcommand{\booklicense}{
-    This work is marked with CC0 1.0. 
-    To view a copy of this license, visit http://creativecommons.org/publicdomain/zero/1.0
-}
+\title{Formalisms\\
+Every Computer Scientist Should Know}
+\date{}
+% \newcommand{\booklicense}{
+%     This work is marked with CC0 1.0. 
+%     To view a copy of this license, visit http://creativecommons.org/publicdomain/zero/1.0
+% }
 
 % Author subtitle
 % For example, university or geographical location
-\newcommand{\authorsubtitle}{ISTA}
+% \newcommand{\authorsubtitle}{ISTA}
 
 
 \synctex=1
@@ -21,10 +23,11 @@
 \usepackage{tikz}    
 % Used by equations
 \usepackage{amsmath} 
-\usepackage{amssymb,amsfonts,amsthm,mathptmx,mathtools}
-\usepackage{enumitem}
+\usepackage{amssymb,amsfonts,amsthm,mathtools}
+\usepackage[shortlabels]{enumitem}
+
 % Paper dimensions
-\usepackage[a4paper, total={6in, 8in}]{geometry}
+% \usepackage[a4paper, total={6in, 8in}]{geometry}
 % Inserting images
 \usepackage{graphicx}
 % Index creation
@@ -45,16 +48,27 @@
 % algorithms
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-% MACROS
+% proof systems
+\usepackage{bussproofs}
+
+\usetikzlibrary {petri}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{shapes,snakes}
+\usetikzlibrary{fit}
 
 
-\newtheorem{theorem}{Theorem}
-\newtheorem{lemma}{Lemma}
-\newtheorem{remark}{Remark}
-\newtheorem{definition}{Definition}
-\newtheorem{example}{Example}
-\newtheorem{homework}{Homework}
-\newtheorem{metatheorem}{Metatheorem}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem{example}{Example}[section]
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\newtheorem{metatheorem}{Metatheorem}[section]
 \newtheorem{axiom}{Axiom}[section]
-
 

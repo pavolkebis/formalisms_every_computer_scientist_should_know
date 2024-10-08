@@ -1,0 +1,362 @@
+% \documentclass{article}
+% \usepackage{graphicx} % Required for inserting images
+% \usepackage{pbox}
+% \usepackage{amsmath,amssymb,amsfonts,amsthm,mathptmx}
+% \usepackage{stmaryrd}
+% \input{macros}
+% \title{Formalisms Every Computer Scientist Should Know}
+% \author{Lecture 19}
+% \date{\today}
+
+% \begin{document}
+
+% \maketitle
+% \section{}
+
+
+\begin{example}
+\label{cl19:ex:equ}
+When are two processes equal? For example consider the following syntactic CCS expressions
+\begin{align*}
+    P=a(bP + c), \quad P'=bP+c, \text{and} \quad P''=c+bP
+\end{align*}
+To answer this we look at their semantics, which is given by LTS, e.g., 
+   \begin{center}
+ \begin{tikzpicture}[->, >=Stealth, node distance=2cm, thick, 
+    main/.style = {draw, ellipse}, 
+    dot/.style = {circle, fill, inner sep=1.5pt}]
+    % Nodes
+  
+    \node[main] (1) at (0, 0) {\small$P$};
+    \node[main] (2) at (2, 0) {\small$P'$};
+    \node[main] (3) at (4, 0) {\small$0$};
+
+    \node[dot] (4) at (7, 0) {};
+    \node[dot] (5) at (9, 0) {};
+    \node[dot] (6) at (11, 0) {};
+
+    \node (0) at (5.5, 0) {$\implies$};
+    % Edges
+    \draw[bend left] (1) to node[midway, above] {\small$a$} (2) ;
+     \draw  (2) to node[midway, above] {\small$c$} (3) ;
+    \draw[bend left]  (2) to node[midway, above] {\small$b$} (1) ;
+
+    \draw[bend left]  (4) to node[midway, above] {\small$a$} (5) ;
+    \draw  (5) to node[midway, above] {\small$c$} (6) ;
+    \draw[bend left]  (5) to node[midway, above] {\small$b$} (4) ;
+
+\end{tikzpicture}
+ \end{center}
+ Hence, the question can be reduced to defining equivalences between LTS.
+\end{example}
+
+
+
+ 
+\begin{definition}[Equivalences]
+    the four common equivalence relations on LTS are: 
+    (i) $\equiso$ isomorphism between LTS; 
+    (ii) $\equbis$ bisimilarity;
+    (iii) $\equsim$ similarity;
+    (iv) $\equlin$ language equivalence.
+\end{definition}
+
+\begin{theorem}
+    We know that:
+    \begin{align*}
+        \equiso &\implies  \equbis \implies  \equsim \implies  \equlin \\
+        \equlin &\notimplies  \equsim \notimplies  \equbis \notimplies  \equiso
+    \end{align*}
+\end{theorem}
+
+
+\begin{definition}[Isomorphism]
+Let $T_1 = (S_1,\mapsto)$ and $T_2 = (S_2,\mapsto)$. Let $s_1 \in S_1$ and $s_2 \in S_2$. Then $s_1 \equiso s_2$ iff there exists $h: S_1 \mapsto S_2$ such that:
+\setlist{nolistsep}
+\begin{enumerate}[(i), noitemsep]
+    \item $h$ is a bijection (onto and 1-1);
+    \item for all $s,s' \in S_1$ and all actions $a \in A$, we have $s \xrightarrow{a} s'$ iff $h(s) \xrightarrow{a} h(s')$;
+    \item $h(s_1) = s_2$.
+\end{enumerate}
+% (i) $h$ is a bijection (onto and 1-1); (ii) for all $s,s' \in S_1$ and all actions $a \in A$, we have $s \xrightarrow{a} s'$ iff $h(s) \xrightarrow{a} h(s')$; $h(s_1) = s_2$.
+\end{definition}
+
+\begin{remark}
+    Isomorphism can be seen as a structural equivalence. 
+\end{remark}
+
+
+\begin{example}[Ex.~\ref{cl19:ex:equ} cont.]
+    It is easy to see that  $P' \equiso P''$ due to the commutativity of $+$, i.e., $P+Q=Q+P$. 
+    However, this notion of equivalence is too strong to capture $P=P+P$, i.e., semantically $P$ and $P+P$ can be represented  as
+    
+    \begin{center}
+    \begin{tikzpicture}[->, >=Stealth, node distance=2cm, thick, 
+    main/.style = {draw, ellipse}, 
+    dot/.style = {circle, fill, inner sep=1.5pt}]
+    % Nodes
+
+    \node[dot, label=right:{\small$s_1$}] (1) at (0, 0) {};
+    \node[dot, label=right:{\small$s_1'$}] (2) at (0, -1.5) {};
+
+    
+    \node[dot, label=right:{\small$s_2$}] (4) at (5, 0) {};
+    \node[dot, label=right:{\small$s_2'$}] (5) at (4, -1.5) {};
+    \node[dot, label=right:{\small$s_2''$}] (6) at (6, -1.5) {};
+
+    % Edges
+  
+    \draw  (1) to node[midway, right] {\small$a$} (2) ;
+    \draw  (4) to node[midway, left] {\small$a$} (5) ;
+    \draw  (4) to node[midway, right] {\small$a$} (6) ;
+    
+
+\end{tikzpicture}
+ \end{center}
+ As there is no bijection to be found the two LTS are not isomorphic. Hence, we are interested in weaker notions of similarity. 
+\end{example}
+
+
+\begin{definition}[Bisimilarity]
+    Let $T_1 = (S,\mapsto)$. Let $s_1 \in S$ and $s_2 \in S$. Then $s_1 \equbis s_2$ iff there exists $r \subseteq S \times S$ such that:
+    \setlist{nolistsep}
+    \begin{enumerate}[(i),noitemsep]
+        \item $ \forall s_1,s_2\in S$ if  $(s_1,s_2) \in r$, then $\forall s_1' \in S, \forall a\in A$ if $s_1 \xrightarrow{a} s_1'$ then $\exists s_2'$ such that $s_2 \xrightarrow{a} s_2'$ and $(s_1',s_2') \in r$;
+        \item $\forall s_1,s_2$ if $(s_1,s_2) \in r$, then $\forall s_2'\in S, \forall a \in A$ if $s_2 \xrightarrow{a} s_2'$, then $\exists$ $s_1'$ such that $s_1 \xrightarrow{a} s_1'$ and $(s_1',s_2') \in r$; 
+        \item $(s_1,s_2) \in r$.
+    \end{enumerate}
+\end{definition}
+
+\begin{example}[Ex.~\ref{cl19:ex:equ} cont.]
+    Continuing. While $P$ and $P+P$ are not isomorphic, they are bisimilar, i.e., we define $r\coloneqq \{(s_1, s_2), (s_1',s_2'), (s_1',s_2'')\}$
+    \begin{center}
+\begin{tikzpicture}[->, >=Stealth, node distance=2cm, thick, 
+    main/.style = {draw, ellipse}, 
+    dot/.style = {circle, fill, inner sep=1.5pt}]
+    % Nodes
+
+    \node[dot, label=right:{\small$s_1$}] (1) at (0, 0) {};
+    \node[dot, label=right:{\small$s_1'$}] (2) at (0, -1.5) {};
+
+    \node[dot, label=right:{\small$s_2$}] (4) at (5, 0) {};
+    \node[dot, label=right:{\small$s_2'$}] (5) at (4, -1.5) {};
+    \node[dot, label=right:{\small$s_2''$}] (6) at (6, -1.5) {};
+
+    % Edges
+    \draw  (1) to node[midway, right] {\small$a$} (2) ;
+    \draw  (4) to node[midway, left] {\small$a$} (5) ;
+    \draw  (4) to node[midway, right] {\small$a$} (6) ;
+
+    % Boxes around top and bottom nodes
+    \node[draw, dashed, fit=(1)(4), label=above:{\small$(s_1, s_2)$}, inner xsep=5mm, inner ysep=2mm] {};
+    \node[draw, dashed, fit=(2)(5)(6), label=below:{\small$(s_1', s_2'), (s_1', s_2'')$}, inner xsep=5mm, inner ysep=2mm] {};
+
+\end{tikzpicture}
+ \end{center}
+\end{example}
+
+\begin{remark}
+    Both the identity and all graph isomorphism are bisimulations. The converse does not hold. 
+    Computing isomorphisms is hard, i.e., it is somewhere between $\mathrm{P}$ and $\mathrm{NP}$. Whereas computing bisimulations is relatively easy, i.e., $\mathcal{O}(m\log n)$ where $n$ is the number of states and $m$ the number of edges. 
+\end{remark}
+
+% \begin{itemize}
+%     \item 
+%     \item the opposite of the above is not true
+%     \item computing isomorphisms is hard 
+%     \item computing bisimilarity is "easy" $O(m \log n)$ where $m$ is the number of edges and $n$ is number of states.
+% \end{itemize} 
+
+\begin{theorem}
+    \label{cl19:thrm:bis}
+    Let $r \subseteq S\times S$ and let 
+    \begin{align*}
+        C_{(i)}(r,s_1, s_2)&\coloneqq \forall s_1' \forall a.\;  s_1 \xrightarrow{a} s_1' \simplies \exists s_2'.\;  s_2 \xrightarrow{a} s_2' \wedge r(s_1',s_2') \\
+        C_{(ii)}(r,s_1, s_2)&\coloneqq \forall s_2' \forall a .\; s_2 \xrightarrow{a} s_2' \simplies \exists s_1'.\;  s_1 \xrightarrow{a} s_1' \wedge r(s_1',s_2') \}
+    \end{align*}
+    We define $F(r) = \{(s_1,s_2) | C_{(i)}(r,s_1, s_2) \land C_{(ii)}(r,s_1, s_2)\}$. 
+    Then $\equbis = \gfp F$.
+\end{theorem}
+
+\begin{remark}
+    From Theorem \ref{cl19:thrm:bis} we can derive a simple algorithm for computing $\equbis$ by starting from $S\times S$ and iteratively refining the relation. 
+    \begin{align*}
+        && \equbis^{0} &= S\times S \\
+       &\supseteq & \equbis^{1} &= F(\equbis^{0}) =  \{(s_1,s_2) | C_{(i)}(\equbis^{0},s_1, s_2) \land C_{(ii)}(\equbis^{0},s_1, s_2)\}\\ 
+       & \supseteq & \equbis^{2} &= F(\equbis^{1}) =  \{(s_1,s_2) | C_{(i)}(\equbis^{1},s_1, s_2) \land C_{(ii)}(\equbis^{1},s_1, s_2)\}\\ 
+        &\supseteq & \vdots \\
+        & \supseteq & \equbis &= \gfp F(S\times S)
+    \end{align*}
+    This is called the simple fixed-point approximation algorithm (aka. partition refinement): $O(m\cdot n)$
+\end{remark}
+
+
+\begin{example}
+    Consider the following LTS
+    \begin{center}
+ \begin{tikzpicture}[->, >=Stealth, node distance=2cm, thick, main/.style = {draw, circle},
+    dot/.style = {circle, fill, inner sep=1.5pt}]
+    % Nodes
+    \node[main] (s1) at (0, 0) {\small$s_1$};
+    \node[main] (s2) at (3, 0) {\small$s_2$};
+    \node[main] (t1) at (0, -1.5) {\small$t_1$};
+    \node[main] (t2) at (2, -1.5) {\small$t_2$};
+    \node[main] (t3) at (4, -1.5) {\small$t_3$};
+    \node[main] (v1) at (-1, -3) {\small$v_1$};
+    \node[main] (v2) at (1, -3) {\small$v_2$};
+    \node[main] (v3) at (4, -3) {\small$v_3$};
+
+    \draw (s1) to node[midway, right] {\small$ a $} (t1) ;
+    \draw (t1) to node[midway, right] {\small$ b $} (v1) ;
+    \draw (t1) to node[midway, right] {\small$ c $} (v2) ;
+    \draw[bend left] (v1) to node[midway, right] {\small$ d $} (s1) ;
+
+    \draw (s2) to node[midway, right] {\small$ a $} (t2) ;
+    \draw (s2) to node[midway, right] {\small$ b $} (t3) ;
+    \draw (t2) to node[midway, right] {\small$ c $} (v2) ;
+    \draw (t3) to node[midway, right] {\small$ b $} (v3) ;
+    \draw[bend right=90] (v3) to node[midway, right] {\small$ d $} (s2) ;
+   
+    % \node[main] (2) at (2, 0) {\small$V'$};
+    % \node[main] (3) at (5, 1) {\small$\distea!V$};
+    % \node[main] (4) at (5, -1) {\small$\discof!V$};
+
+    % % Edges
+    % \draw  (1) to node[midway, above] {\small$\coin?$} (2) ;
+    % \draw  (2) to node[midway, above] {\small$\reqtea?$} (3) ;
+    % \draw  (2) to node[midway, below] {\small$\reqcof?$} (4);
+    % \draw[bend right] (3) to node[midway, below] {\small$\distea!$} (1) ;
+    % \draw[bend left] (4) to node[midway, above] {\small$\discof!$} (1);
+\end{tikzpicture}
+ \end{center}
+ Then applying the fixed-point approximation algorithm we get 
+\begin{align*}
+       \equbis^{0} &= S\times S \\
+       \equbis^{1} &=   \mathrm{id} \cup \{ (v_1,v_2), (v_1, v_3), (v_2, v_1), (v_2, v_3), (v_3,v_1),(v_3, v_2)\}\\ 
+      & \vdots\\
+      \equbis &=   \mathrm{id} \cup \{(v_1, v_2), (v_2, v_1)\}
+\end{align*}
+where $\mathrm{id}\coloneqq \{(s_1,s_1), (s_2,s_2), (t_1,t_1), (t_2,t_2), (t_3,t_3), (v_1,v_1), (v_2,v_2), (v_3,v_3)
+\}$ is the identity relation.
+\end{example}
+% \textbf{Algorithm.} Let $r \in S\times S$ and define $F(r) = \{(s_1,s_2) | \textit{1. and 2. from definition of bisimilarity}\}$. 
+
+% It holds that $\sim_{bis} = \mathit{gfp}~ F$. 
+
+% \begin{align*}
+%     \sim_{bis}^0 &= S \times S \\
+%     \sim_{bis}^1 &= F(\sim_{bis}^0) = \{(s_1,s_2)| & \forall s_1', s_1 \xrightarrow{a} s_1' \Rightarrow \exists s_2'; s_2 \xrightarrow{a} s_2' \wedge \sim_{bis}^0(s_1',s_2') \\ 
+%     & & \wedge  \forall s_2', s_2 \xrightarrow{a} s_2' \Rightarrow \exists s_1'; s_1 \xrightarrow{a} s_1' \wedge \sim_{bis}^0(s_1',s_2') \}
+% \end{align*}
+% This is called the simple fixed-point approximation algorithm (aka. partition refinement): $O(m.n)$
+
+\begin{definition}[Simulation]
+    \label{cl19:def:sim}
+    For $s_1,s_2 \in S$, $s_2$ simulates $s_1$, i.e., $s_1 \lequsim s_2$, iff $\exists r \in S \times S$ such that:
+    \setlist{nolistsep}
+    \begin{enumerate}[(i),noitemsep]
+        \item $\forall s_1,s_2$ if $s_1 \lequsim  s_2$ then, $\forall s_1' \forall a$  if $s_1 \xrightarrow{a} s_1'$ then $\exists s_2'$ such that $s_2 \xrightarrow{a} s_2'$ and $s_1' \lequsim  s_2'$;
+        \item $(s_1,s_2) \in r$
+    \end{enumerate}
+\end{definition}
+
+\begin{remark}
+    Note that in Definition \ref{cl19:def:sim} the second condition in bisimilarity is not present in the definition of simulation. (Example on difference on blackboard)
+    Hence, it is not symmetric.
+\end{remark}
+
+\begin{example}
+    The asymmetry of $\lequsim$ can be observed in the following example. The right structure simulates the left, but the inverse does not hold.
+    \begin{center}
+    \begin{tikzpicture}[->, >=Stealth, node distance=2cm, thick, 
+    main/.style = {draw, ellipse}, 
+    dot/.style = {circle, fill, inner sep=1.5pt}]
+    % Nodes
+
+    \node[dot, label=right:{\small$s_1$}] (1) at (0, 0) {};
+    \node[dot, label=right:{\small$s_1'$}] (2) at (0, -1.5) {};
+
+
+    \node (b) at (2,-0.25) {\large$\lequsim$};
+    \node (a) at (2, -1.25) {\large$\not\gequsim$};
+    
+    \node[dot, label=right:{\small$s_2$}] (4) at (5, 0) {};
+    \node[dot, label=right:{\small$s_2'$}] (5) at (4, -1.5) {};
+    \node[dot, label=right:{\small$s_2''$}] (6) at (6, -1.5) {};
+
+    % Edges
+  
+    \draw  (1) to node[midway, right] {\small$a$} (2) ;
+    \draw  (4) to node[midway, left] {\small$a$} (5) ;
+    \draw  (4) to node[midway, right] {\small$a$} (6) ;
+    
+
+\end{tikzpicture}
+ \end{center}
+\end{example}
+
+
+\begin{definition}[Similarity]
+    Two states $s_1,s_2$ are called similar or $s_1 \equsim s_2$ iff (i) $s_1 \lequsim  s_2$ and (ii) $s_2 \lequsim  s_1$.
+\end{definition}
+
+\begin{remark}
+    Bisimilarity implies similarity, but the opposite direction is not generally true.
+    Similarity is a greatest fixed-point and can be computed via approximation sequence $\equsim^0, \equsim^1, \dots$ in $\mathcal{O}(m\cdot n)$.
+\end{remark}
+
+\begin{example}
+    The following demonstrates that similartiy is a weaker form of equivalence than bisimulation. 
+        \begin{center}
+\begin{tikzpicture}[->, >=Stealth, node distance=2cm, thick, 
+    main/.style = {draw, circle}, dot/.style = {circle, fill, inner sep=1.5pt}]
+    
+    % Nodes with labels to the right
+    \node[dot, label=right:{\small$s_1$}] (s1) at (0, 0) {};
+    \node[dot, label=left:{\small$s_2$}] (s2) at (5, 0) {};
+    \node[dot, label=right:{\small$t_1$}] (t1) at (0, -1.5) {};
+    \node[dot, label=right:{\small$t_1$}] (t2) at (4, -1.5) {};
+    \node[dot, label=right:{\small$t_2$}] (t3) at (6, -1.5) {};
+    \node[dot, label=right:{\small$u$}] (v1) at (-1, -3) {};
+    \node[dot, label=right:{\small$u$}] (v2) at (1, -3) {};
+    \node[dot, label=left:{\small$u$}] (v3) at (3, -3) {};
+    \node[dot, label=left:{\small$u$}] (v4) at (5, -3) {};
+    \node[dot, label=left:{\small$u$}] (v5) at (6, -3) {};
+
+    \node (b) at (2,-0.5) {\large$\not\equbis$};
+    \node (b) at (2,-1.5) {\large$\lequsim$};
+    \node (b) at (2,-2.5) {\large$\equsim$};
+
+    % Edges
+    \draw (s1) to node[midway, right] {\small$ a $} (t1) ;
+    \draw (t1) to node[midway, right] {\small$ b $} (v1) ;
+    \draw (t1) to node[midway, right] {\small$ c $} (v2) ;
+
+
+    \draw (s2) to node[midway, right] {\small$ a $} (t2) ;
+    \draw (s2) to node[midway, right] {\small$ b $} (t3) ;
+    \draw (t2) to node[midway, right] {\small$ b $} (v3) ;
+    \draw (t2) to node[midway, right] {\small$ c $} (v4) ;
+    \draw (t3) to node[midway, right] {\small$ b $} (v5) ;
+
+
+\end{tikzpicture}
+ \end{center}
+ in this transition system we have 
+ \begin{align*}
+     \equbis &= \{(s,s) \mid s\in S\} = \mathrm{id}\\
+     \lequsim &= \mathrm{id} \cup \{ (t_2,t_1), (s_1,s_2), (s_2, s_1)\}   \\
+      \equsim &=  \mathrm{id} \cup \{ (s_1,s_2), (s_2, s_1)\} \\
+ \end{align*}
+\end{example}
+
+
+\begin{theorem}
+    \label{cl19:thrm:CCS}
+    Bisimilarity is a congruence for CCS, i.e., (i) bisimilarity is an equivalence and (ii) for all CCS processes $P,Q,R$, if $P \equbis Q$ then $R[P] \equbis R[Q]$, e.g., $R+P \equbis R+Q$ or  $R \parallel P \equbis R \parallel Q$
+\end{theorem}
+
+\begin{exercise}
+    Proof (ii) in Theorem~\ref{cl19:thrm:CCS}.
+\end{exercise}
+% \end{document} 
