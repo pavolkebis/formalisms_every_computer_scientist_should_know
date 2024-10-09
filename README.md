@@ -31,6 +31,6 @@ By default, `just` uses the **Windows version** of [`nushell`](https://www.nushe
 launching `just` with the `--shell` flag, e.g.
 
 ```shell
-$ just --shell zsh serve`.
+$ just --shell zsh serve
 ```
 
