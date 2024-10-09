@@ -52,12 +52,9 @@
 
 % *: Operational.
 
-\section{Math}
+\section{Lecture 1: How to write an informal proof}
 
-
-
-\subsection{Function and Sets}
-We introduce basic properties of functions and how they are used to evaluate the sizes of sets. 
+\subsection{Example 1: Sum of two bounded functions}
 
 \begin{definition}
   A real number $b \in \RN$ is a \emph{bound} of a 
@@ -77,25 +74,32 @@ We introduce basic properties of functions and how they are used to evaluate the
   $g$ are bounded, then $f+g$ is bounded. 
 \end{theorem}
 \begin{proof}
-This prove is explicitly presented step by step.
-  \begin{enumerate}
-    \item Consider arbitrary functions $\hat{f}$ and $\hat{g}$ from 
-    $\RN$ to $\RN$.
-    \item Assume $\hat{f}$ and $\hat{g}$ are bounded. 
-    \item Show that $\hat{f} + \hat{g}$ is bounded.
-    \item (2 $\rightarrow$) Let $\hat{a}$ be a bound for $\hat{f}$, 
-    and $\hat{b}$ be a bound for $\hat{g}$.
-    \item We show that $\hat{a} + \hat{b}$ is a bound for 
-    $\hat{f} + \hat{g}$.
-    \item Consider an arbitrary real $\hat{x}$.
-    \item Show $(\hat{f}+\hat{g})(x) \leq \hat{a} + \hat{b}$.
-    \item (Definition of sum) $(\hat{f}+\hat{g})(\hat{x}) 
-    = \hat{f}(\hat{x}) + \hat{g}(\hat{x})$.
-    \item (Definition of bound) $\hat{f}(\hat{x}) \leq \hat{a}$ and 
-    $\hat{g}(\hat{x}) \leq \hat{b}$.
-    \item The rest follows from ``arithmetic''. 
-  \end{enumerate}
+Consider arbitrary functions $\hat{f}$ and $\hat{g}$ from $\RN$ to $\RN$.
+We assume that $\hat{f}$ and $\hat{g}$ are bounded, and want to 
+show that $\hat{f} + \hat{g}$ is bounded.
+
+By the definition of boundedness, we show that there exists a $b \in \RN$ such
+that for all $x \in \RN$, $(\hat{f} + \hat{g})(x) \leq b$.
+
+For this, let $\hat{b_1}$ be such that for all $x \in \RN$, $\hat{f}(x) \leq \hat{b_1}$.
+Similarly, let $\hat{b_2}$ be a bound for $\hat{g}$.
+We show that $\hat{b_1} + \hat{b_2}$ is a bound for $\hat{f} + \hat{g}$, i.e.
+for all $x \in \RN$, we have $(\hat{f} + \hat{g})(x) \leq \hat{b_1} + \hat{b_2}$.
+
+Consider an arbitrary $\hat{x} \in \RN$. We show that $(\hat{f} + \hat{g})(\hat{x}) \leq \hat{b_1} + \hat{b_2}$.
+By the definition of + for functions, we have to show $\hat{f}(\hat{x}) + \hat{g}(\hat{x}) \leq \hat{b_1} + \hat{b_2}$.
+
+For all $x_1, x_2, y_1, y_2 \in \RN$, if $x_1 \leq y_1$ and $x_2 \leq y_2$, then $x_1 + x_2 \leq y_1 + y_2$. 
+This can be broken down even further:
+
+\begin{enumerate}
+  \item[(i)] for all $x,y,z \in \RN$, if $x \leq y$ and $y \geq z$, then $x \leq z$
+  \item[(ii)] for all $x,y \in \RN$, $x + y = y + x$
+  \item[(iii)] for all $x,y,z \in \RN$, if $x \leq y$, then $x + z \geq y + z$, then $x \leq z$
+\end{enumerate}
 \end{proof}
+
+\subsection{Example 2: Schröder-Bernstein Theorem}
 
 \begin{definition}
   Two sets $A$ and $B$ are \emph{equipollent} (``have the same 
@@ -110,30 +114,6 @@ This prove is explicitly presented step by step.
 (iii) \emph{bijective} if $f$ is one-to-one and onto.
 \end{definition}
 
-\subsection{Style Guide}
-We provide an informal style guide for writing mathematical proofs. 
-
-\begin{center}
-    \begin{tabular}{l|l|c}
-     Goal & Knowledge & Outermost symbol \\
-    \hline 
-     \pbox{20cm}{Show for all $x$, $G(x)$. \\ Consider arbitrary $\hat{x}$.\\ Show $G(\hat{x})$} & \pbox{20cm}{We know for all $x$, $K(x)$ \\ In particular we know $K(\hat{t})$ for constant $\hat{t}$} & $\forall$ \\ 
-    \hline 
-     \pbox{20cm}{Show: exists $x$ s.t. $G(x)$. \\ We show $G(\hat{t})$} & \pbox{20cm}{We know exists $x$ s.t. $K(x)$ \\ Let $\hat{x}$ be s.t. $K(x)$} & $\exists$ \\ 
-     \hline 
-     \pbox{20cm}{Show $G_1$ iff $G_2$ \\ 1. Show if $G_1$ then $G_2$\\ 2. Show if $G_2$ then $G_1$} & \pbox{20cm}{We know $K_1$ iff $K_2$\\ In particular we know if $K_1$ then $K_2$\\ and if $K_2$ then $K_1$} & $\iff$ \\ 
-     \hline 
-     \pbox{20cm}{Show if $G_1$ then $G_2$ \\ Assume $G_1$\\ Show $G_2$} & \pbox{20cm}{We know if $K_1$ then $K_2$\\ 1. To show $K_2$ it suffices to show $K_2$\\ 2. Know $K_1$, Also know $K_2$} & $\rightarrow$ \\ 
-     \hline 
-     \pbox{20cm}{Show $G_1$ and $G_2$\\ 1. Show $G_1$\\ 2. Show $G_2$} & \pbox{20cm}{Know $K_1$ and $K_2$\\ 1. Also Know $K_1$ \\ 2. Also Know $K_2$} & $\wedge$ \\ 
-     \hline 
-     \pbox{20cm}{Show $G_1$ or $G_2$\\ 1. Assume $\neg G_1$, show $G_2$\\ 2. Assume $\neg G_2$, show $G_1$} & \pbox{20cm}{We know $K_1$ or $K_2$. Show $G$.\\
-     1. Assume $K_1$, Show $G$\\ 2. Assume $K_2$, Show $G$ \\ Case split $\uparrow$} & $\vee$ \\ 
-     \hline 
-     \multicolumn{2}{c|}{\pbox{20cm}{Move Negation Inside, as far as possible}} &  $\neg$ \\ 
-     \hline 
-\end{tabular}
-\end{center}
 
 
 
@@ -169,9 +149,9 @@ We provide an informal style guide for writing mathematical proofs.
 
 \begin{theorem}[Schr\"{o}der-Bernstein theorem]
     \label{thrm:class1:bernstein}
-    If there is a one-to-one function on a set $A$ to a sub-
-    set of a set $B$ and there is also a one-to-one function on $B$ to a sub-
-    set of $A$, then $A$ and $B$ are equipollent.
+    If there is a one-to-one function on a set $A$ to a subset of a set $B$ and
+    there is also a one-to-one function on $B$ to a subset of $A$, then $A$ and
+    $B$ are equipollent.
 \end{theorem}
 
 \begin{exercise}
@@ -183,3 +163,5 @@ let $A_e$ consist of all points of $A$ which have an even number of ancestors, l
 $B_o$ and $A_{\infty}$ onto  $B_{\infty}$, and $g^{-1}$ maps $A_o$ onto $B_e$. Hence the function which agrees with $f$ on $A_e\cup A_{\infty}$, and agrees with $g^{-1}$ on $A_o$ is a one-to-one map of $A$ onto $B$.
     \end{quote}
 \end{exercise}
+
+\newpage
