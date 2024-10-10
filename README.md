@@ -15,3 +15,22 @@ See `class_3.tex` for examples of macros.
 
 Compilation of the pdf is automatic through GitHub Actions.
 
+## Building the PDF
+
+This repository contains a `justfile` that can be used to build the PDF using
+[`tectonic`](https://tectonic-typesetting.github.io/en-US/) and [`watchexec`](https://github.com/watchexec/watchexec).
+With these dependencies installed, you can run 
+
+```shell
+$ just serve
+```
+in the root of the repository to
+build the PDF and watch for changes.
+
+By default, `just` uses the **Windows version** of [`nushell`](https://www.nushell.sh/) (`nu.exe`) to run the commands, this behavior can be overwritten by
+launching `just` with the `--shell` flag, e.g.
+
+```shell
+$ just --shell zsh serve
+```
+

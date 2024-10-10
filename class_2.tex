@@ -1,5 +1,29 @@
+\section{Lecture 2}
 
+\subsection{Style Guide}
+We provide an informal style guide for writing mathematical proofs. 
 
+\begin{center}
+    \begin{tabular}{l|l|c}
+     Goal & Knowledge & Outermost symbol \\
+    \hline 
+     \pbox{20cm}{Show for all $x$, $G(x)$. \\ Consider arbitrary $\hat{x}$.\\ Show $G(\hat{x})$} & \pbox{20cm}{We know for all $x$, $K(x)$ \\ In particular we know $K(\hat{t})$ for constant $\hat{t}$} & $\forall$ \\ 
+    \hline 
+     \pbox{20cm}{Show: exists $x$ s.t. $G(x)$. \\ We show $G(\hat{t})$} & \pbox{20cm}{We know exists $x$ s.t. $K(x)$ \\ Let $\hat{x}$ be s.t. $K(x)$} & $\exists$ \\ 
+     \hline 
+     \pbox{20cm}{Show $G_1$ iff $G_2$ \\ 1. Show if $G_1$ then $G_2$\\ 2. Show if $G_2$ then $G_1$} & \pbox{20cm}{We know $K_1$ iff $K_2$\\ In particular we know if $K_1$ then $K_2$\\ and if $K_2$ then $K_1$} & $\iff$ \\ 
+     \hline 
+     \pbox{20cm}{Show if $G_1$ then $G_2$ \\ Assume $G_1$\\ Show $G_2$} & \pbox{20cm}{We know if $K_1$ then $K_2$\\ 1. To show $K_2$ it suffices to show $K_2$\\ 2. Know $K_1$, Also know $K_2$} & $\rightarrow$ \\ 
+     \hline 
+     \pbox{20cm}{Show $G_1$ and $G_2$\\ 1. Show $G_1$\\ 2. Show $G_2$} & \pbox{20cm}{Know $K_1$ and $K_2$\\ 1. Also Know $K_1$ \\ 2. Also Know $K_2$} & $\wedge$ \\ 
+     \hline 
+     \pbox{20cm}{Show $G_1$ or $G_2$\\ 1. Assume $\neg G_1$, show $G_2$\\ 2. Assume $\neg G_2$, show $G_1$} & \pbox{20cm}{We know $K_1$ or $K_2$. Show $G$.\\
+     1. Assume $K_1$, Show $G$\\ 2. Assume $K_2$, Show $G$ \\ Case split $\uparrow$} & $\vee$ \\ 
+     \hline 
+     \multicolumn{2}{c|}{\pbox{20cm}{Move Negation Inside, as far as possible}} &  $\neg$ \\ 
+     \hline 
+\end{tabular}
+\end{center}
 
 \subsection{Lattices and Fixpoints}
 We define relations and their properties. 
