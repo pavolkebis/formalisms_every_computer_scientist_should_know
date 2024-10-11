@@ -7,21 +7,32 @@ We provide an informal style guide for writing mathematical proofs.
     \begin{tabular}{l|l|c}
      Goal & Knowledge & \shortstack[c]{Outermost\\symbol} \\
     \hline 
-     \pbox{20cm}{Show for all $x$, $G(x)$. \\ Consider arbitrary $\hat{x}{}^1$.\\ Show $G(\hat{x})$} & \pbox{20cm}{We know for all $x$, $K(x)$ \\ In particular we know $K(\hat{t}){}^2$} & $\forall$ \\
+        \pbox{20cm}{Show for all $x$, $G(x)$. \\ Consider arbitrary $\hat{x}{}^1$.\\ Show $G(\hat{x})$}
+      & \pbox{20cm}{We know for all $x$, $K(x)$ \\ In particular we know $K(\hat{t}){}^2$}
+      & $\forall$ \\
     \hline 
-     \pbox{20cm}{Show: exists $x$ s.t. $G(x)$. \\ We show $G(\hat{t}){}^2$} & \pbox{20cm}{We know exists $x$ s.t. $K(x)$ \\ Let $\hat{x}{}^1$ be s.t. $K(\hat{x})$} & $\exists$ \\
-     \hline 
-     \pbox{20cm}{Show $G_1$ iff $G_2$ \\ 1. Show if $G_1$ then $G_2$\\ 2. Show if $G_2$ then $G_1$} & \pbox{20cm}{We know $K_1$ iff $K_2$\\ In particular we know if $K_1$ then $K_2$\\ and if $K_2$ then $K_1$} & $\iff$ \\ 
-     \hline 
-     \pbox{20cm}{Show if $G_1$ then $G_2$ \\ Assume $G_1$\\ Show $G_2$} & \pbox{20cm}{We know if $K_1$ then $K_2$\\ To show $K_2$ it suffices to show $K_1$\\ Know $K_1$, Also know $K_2$} & $\Rightarrow$ \\
-     \hline 
-     \pbox{20cm}{Show $G_1$ and $G_2$\\ 1. Show $G_1$, \textbf{and}\\ 2. Show $G_2$} & \pbox{20cm}{Know $K_1$ and $K_2$\\ Also Know $K_1$ \\ Also Know $K_2$} & $\wedge$ \\
-     \hline 
-     \pbox{20cm}{Show $G_1$ or $G_2$\\ Either, assume $\neg G_1$, show $G_2$, \textbf{or}\\ Assume $\neg G_2$, show $G_1$} & \pbox{20cm}{We know $K_1$ or $K_2$. Show $G$.\\
-     case 1: Assume $K_1$, Show $G$\\ case 2: Assume $K_2$, Show $G$ \\ Case split $\uparrow$} & $\vee$ \\
-     \hline 
+        \pbox{20cm}{Show: exists $x$ s.t. $G(x)$. \\ We show $G(\hat{t}){}^2$}
+      & \pbox{20cm}{We know exists $x$ s.t. $K(x)$ \\ Let $\hat{x}{}^1$ be s.t. $K(\hat{x})$}
+      & $\exists$ \\
+    \hline
+        \pbox{20cm}{Show if $G_1$ then $G_2$ \\ Assume $G_1$\\ Show $G_2$}
+      & \pbox{20cm}{We know if $K_1$ then $K_2$\\ To show $K_2$ it suffices to show $K_1$\\ Know $K_1$, Also know $K_2$}
+      & $\Rightarrow$ \\
+    \hline
+        \pbox{20cm}{Show $G_1$ iff $G_2$ \\ 1. Show if $G_1$ then $G_2$\\ 2. Show if $G_2$ then $G_1$}
+      & \pbox{20cm}{We know $K_1$ iff $K_2$\\ In particular we know if $K_1$ then $K_2$\\ and if $K_2$ then $K_1$}
+      & $\iff$ \\
+    \hline
+        \pbox{20cm}{Show $G_1$ and $G_2$\\ 1. Show $G_1$, \textbf{and}\\ 2. Show $G_2$}
+      & \pbox{20cm}{Know $K_1$ and $K_2$\\ Also Know $K_1$ \\ Also Know $K_2$}
+      & $\wedge$ \\
+    \hline
+        \pbox{20cm}{Show $G_1$ or $G_2$\\ Either, assume $\neg G_1$, show $G_2$, \textbf{or}\\ Assume $\neg G_2$, show $G_1$}
+      & \pbox{20cm}{We know $K_1$ or $K_2$. Show $G$.\\ case 1: Assume $K_1$, Show $G$\\ case 2: Assume $K_2$, Show $G$ \\ Case split $\uparrow$}
+      & $\vee$ \\
+    \hline
      \multicolumn{2}{c|}{\pbox{20cm}{Move Negation Inside, as far as possible}} &  $\neg$ \\ 
-     \hline
+    \hline
      \multicolumn{3}{c}{$\rule{0pt}{1.5em} {}^1$ where $\hat{x}$ is a new constant.\hspace{2em} ${}^2$ where $\hat{t}$ is any constant expression}
 \end{tabular}
 \end{center}
@@ -114,7 +125,7 @@ The relations $R$ is:
 \end{definition}
 
 \begin{definition}[Lower Bound]
-    Let $(A,\sqsubseteq)$ be a poset. Then (i) $x$ in $A$ is an \emph{lower bound} of a subset $B$ of $A$ if for all $y$ in $B$, it holds that $y \sqsubseteq x$; $x$ is the \emph{greatest lower bound} (glb) of $B$ if $x$ is a lower bound of $B$ and for all lower bounds $y$ of $B$, we have $y \sqsubseteq x$. %We denote such $x$ by $\bigsqcap B$.
+    Let $(A,\sqsubseteq)$ be a poset. Then (i) $x$ in $A$ is a \emph{lower bound} of a subset $B$ of $A$ if for all $y$ in $B$, it holds that $x \sqsubseteq y$; $x$ is the \emph{greatest lower bound} (glb) of $B$ if $x$ is a lower bound of $B$ and for all lower bounds $y$ of $B$, we have $y \sqsubseteq x$. %We denote such $x$ by $\bigsqcap B$.
 \end{definition}
 
 \begin{example}
@@ -130,8 +141,22 @@ The relations $R$ is:
 \end{example}
 
 \begin{lemma}
-  Let $(A,\sqsubseteq)$ be a poset. For all $x$, $y$ in $A$, and any subset $B$ of $A$, if $x$ and $y$ are lubs of $B$, then $x = y$.
+  Let $(A,\sqsubseteq)$ be a poset. For all $x$, $y$ in $A$, and any subset $B$ of $A$, if $x$ and $y$ are lubs (glbs) of $B$, then $x = y$.
 \end{lemma}
+
+\begin{proof}
+    Consider arbitrary $\hat{x}, \hat{y} \in A$ and $\hat B \subseteq A$. Assume $\hat x$ is a lub of $\hat B$
+    and $\hat y$ is a lub of $\hat B$. We know:
+    \begin{enumerate}
+        \item[(i)] for all $z \in B$, $z \sqsubseteq \hat{x}$,
+        \item[(ii)] for all $z \in B$, $z \sqsubseteq \hat{y}$,
+        \item[(iii)] for all $z \in A$, if $z$ is an upper bound of $B$ then
+        $\hat x \sqsubseteq z$ and
+        \item[(iv)]for all $z \in A$, if $z$ is an upper bound of $B$ then $\hat
+        y \sqsubseteq z$.
+    \end{enumerate}
+    From (ii) we know that $\hat{y}$ is an upper bound, and therefore, by (iii), $\hat{x} \sqsubseteq \hat{y}$. Symmetrically, by (i) and (iv) we get $\hat{y} \sqsubseteq \hat{x}$. By antisymmetry, $x = y$.
+\end{proof}
 
 Given that the \emph{least upper bound} and the \emph{greatest lower bound} are unique (if they exist), for any set $A$ and $B \subseteq A$, we write $\bigsqcup B$ to denote $\lub(B)$ and $\bigsqcap B$ to denote $\glb(B)$.
 
@@ -144,7 +169,7 @@ Given that the \emph{least upper bound} and the \emph{greatest lower bound} are 
 \end{definition}
 
 \begin{example}
-    Let $(A,\sqsubseteq)$ be a complete-lattice. Then: $\bigsqcup A = \top$, $\bigsqcap A = \bot$, $\bigsqcup \varnothing = \bot$, and $\bigsqcap \varnothing = \top$
+    Let $(A,\sqsubseteq)$ be a complete-lattice. Then: $\bigsqcup A = \top$, $\bigsqcap A = \bot$, $\bigsqcup \varnothing = \bot$, and $\bigsqcap \varnothing = \top$. $\top$ and $\bot$ are called top and bottom, respectively.
 \end{example}
 
 \begin{definition}[Monotone Function]
@@ -154,7 +179,7 @@ Let $(A, \sqsubseteq)$ be a poset. A function $F: A \to A$ is \emph{monotone} if
 \begin{definition}
 Let $(A, \sqsubseteq)$ be a poset and $F: A \to A$. An element $x$ in $A$ is,
 \begin{enumerate}
-  \item a \emph{prefixpoint} of $F$ if $x \sqsubseteq F(x)$.
+  \item a \emph{prefixpoint} of $F$ if $x \sqsubseteq F(x)$,
   \item a \emph{postfixpoint} of $F$ if $F(x) \sqsubseteq x$.
 \end{enumerate}
 \end{definition}
@@ -174,7 +199,8 @@ Let $(A, \sqsubseteq)$ be a poset and $F: A \to A$. An element $x$ in $A$ is a \
       \item for all fixpoints $x$ of $F$, $\hat{y} \sqsubseteq x \sqsubseteq \hat{z}$
     \end{enumerate}
 \end{theorem}
-We write $\lfp(F) = \{x \mid x \sqsubseteq F(x)\}$ and $\gfp(F) = \{x \mid F(x)\sqsubseteq x\}$.
+
+{\flushleft We write $\lfp(F) = \{x \mid x \sqsubseteq F(x)\}$ and $\gfp(F) = \{x \mid F(x)\sqsubseteq x\}$, to denote the least fixpoint and the greatest fixpoint, respectively.}
 
 \begin{exercise}
         Prove the Knaster Tarski Theorem (Theorem \ref{thrm:knaster}).
