@@ -125,11 +125,12 @@ The relations $R$ is:
 \end{definition}
 
 \begin{definition}[Lower Bound]
-    Let $(A,\sqsubseteq)$ be a poset. Then (i) $x$ in $A$ is a \emph{lower bound} of a subset $B$ of $A$ if for all $y$ in $B$, it holds that $x \sqsubseteq y$; $x$ is the \emph{greatest lower bound} (glb) of $B$ if $x$ is a lower bound of $B$ and for all lower bounds $y$ of $B$, we have $y \sqsubseteq x$. %We denote such $x$ by $\bigsqcap B$.
+    Let $(A,\sqsubseteq)$ be a poset. Then (i) $x$ in $A$ is a \emph{lower bound} of a subset $B$ of $A$ if for all $y$ in $B$, it holds that $x \sqsubseteq y$;
+    (ii) $x$ is the \emph{greatest lower bound} (glb) of $B$ if $x$ is a lower bound of $B$ and for all lower bounds $y$ of $B$, we have $y \sqsubseteq x$. %We denote such $x$ by $\bigsqcap B$.
 \end{definition}
 
 \begin{example}
-    Consider the poset $(\NN,\leq)$. Then for any $B \subseteq \NN$, if $B$ is finite, $\lub(B)$ is well-defined and equal to $\max B$. If $B$ is infinite, then $\lub(B)$ does not exist.
+    Consider the poset $(\NN,\leq)$. Then for any $B \subseteq \NN$, if $B$ is finite, $\lub(B)$ is well-defined and equal to $\max(B)$. If $B$ is infinite, then $\lub(B)$ does not exist.
 \end{example}
 
 \begin{example}
@@ -161,11 +162,11 @@ The relations $R$ is:
 Given that the \emph{least upper bound} and the \emph{greatest lower bound} are unique (if they exist), for any set $A$ and $B \subseteq A$, we write $\bigsqcup B$ to denote $\lub(B)$ and $\bigsqcap B$ to denote $\glb(B)$.
 
 \begin{definition}[Lattice]
-    A poset $(A,\sqsubseteq)$ is a \emph{lattice} if for all $x$, $y$ in $A$, $\bigsqcup \{x,y\}$ ($x \sqcup y$, join) and $\bigsqcap \{x,y\}$ ($x \sqcap y$, meet) exist.
+    A poset $(A,\sqsubseteq)$ is a \emph{lattice} if for all $x$, $y$ in $A$, the lub $\bigsqcup \{x,y\}$ ($x \sqcup y$, join) and the glb $\bigsqcap \{x,y\}$ ($x \sqcap y$, meet) exist.
 \end{definition}
 
 \begin{definition}[Complete Lattice]
-    A poset $(A,\sqsubseteq)$ is a \emph{complete lattice} if for all $B \subseteq A$, $\bigsqcap B$ and $\bigsqcup B$ exist.
+    A poset $(A,\sqsubseteq)$ is a \emph{complete lattice} if for all $B \subseteq A$, the lub $\bigsqcup B$ and glb $\bigsqcap B$ exist.
 \end{definition}
 
 \begin{example}
@@ -200,7 +201,7 @@ Let $(A, \sqsubseteq)$ be a poset and $F: A \to A$. An element $x$ in $A$ is a \
     \end{enumerate}
 \end{theorem}
 
-{\flushleft We write $\lfp(F) = \{x \mid x \sqsubseteq F(x)\}$ and $\gfp(F) = \{x \mid F(x)\sqsubseteq x\}$, to denote the least fixpoint and the greatest fixpoint, respectively.}
+{\flushleft We write $\lfp(F) = \bigsqcap\{x \mid F(x)\sqsubseteq x\}$ and $\gfp(F) = \bigsqcup\{x \mid x \sqsubseteq F(x)\}$, to denote the least fixpoint and the greatest fixpoint, respectively.}
 
 \begin{exercise}
         Prove the Knaster Tarski Theorem (Theorem \ref{thrm:knaster}).
