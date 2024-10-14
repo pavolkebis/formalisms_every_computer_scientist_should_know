@@ -192,12 +192,12 @@ Let $(A, \sqsubseteq)$ be a poset and $F: A \to A$. An element $x$ in $A$ is a \
 
 \begin{theorem}[Knaster-Tarski]
 \label{thrm:knaster}
-    Let $(A,\sqsubseteq)$ be a complete lattice and let $F$ a monotone function on $A$.
-    Further, let $\hat{y} = \{x \mid x \sqsubseteq F(x)\}$ and $\hat{z} = \{x \mid F(x) \sqsubseteq x\}$.
+    Let $(A,\sqsubseteq)$ be a complete lattice and let $F$ be a monotone function on $A$.
+    Further, let $\hat{y} = \bigsqcup \{x \mid x \sqsubseteq F(x)\}$ and $\hat{z} = \bigsqcap\{x \mid F(x) \sqsubseteq x\}$.
     It holds, that:
     \begin{enumerate}
       \item $\hat{y}$ and $\hat{z}$ are fixpoints of $F$,
-      \item for all fixpoints $x$ of $F$, $\hat{y} \sqsubseteq x \sqsubseteq \hat{z}$
+      \item for all fixpoints $x$ of $F$, $\hat{z} \sqsubseteq x \sqsubseteq \hat{y}$
     \end{enumerate}
 \end{theorem}
 
