@@ -22,6 +22,22 @@
 \end{lemma}
 
 
+\begin{exercise}
+    Let $f \colon A \to A$ be a monotone function. Is one of the two following statements true?
+    \begin{enumerate}
+        \item For every sequence $x_0 \sqsubseteq x_1 \sqsubseteq x_2 \sqsubseteq x_3 \sqsubseteq \ldots$, we have
+        \[
+        f \left( \bigsqcup \{ x_n : n \in \NN \} \right) \sqsubseteq \bigsqcup \{ f(x_n) : n \in \NN \}.
+        \]
+
+        \item For every sequence $x_0 \sqsubseteq x_1 \sqsubseteq x_2 \sqsubseteq x_3 \sqsubseteq \ldots$, we have
+        \[
+        f \left( \bigsqcap \{ x_n : n \in \NN \} \right) \sqsupseteq \bigsqcap \{ f(x_n) : n \in \NN \}.
+        \]
+    \end{enumerate}
+\end{exercise}
+
+
 
 \begin{theorem}[Constructive Fixed-Point, Kleene's Fixed-Point]
     \label{thrm:constructive-fixedpoints}
@@ -49,9 +65,22 @@
 \end{definition}
 
 \begin{remark}
-    In Definition \ref{def:natural-numbers}, we consider a universal set $U$ sufficiently big, the complete lattice $(2^U, \subseteq)$ and the function on sets given by $f(Y) \coloneqq \{0\} \cup \{ S n : n \in Y \}$. 
-Then, $\lfp f = \NN$.	
+    In Definition \ref{def:natural-numbers}, we consider a universal set $U$ that is sufficiently large, the complete lattice $(2^U, \subseteq)$, and the function on sets given by 
+    \[
+    f(Y) \coloneqq \{0\} \cup \{ S n : n \in Y \}.
+    \]
+    Then, the least fixed point of $f$, $\lfp f$, corresponds to the set of natural numbers, $\NN$.
+
+    Performing Kleene Fixed-Point iteration with $f(\cdot)$ on $\bottom$ yields the following initial elements:
+    \begin{align*}
+        \bottom &= \emptyset, \\
+        f^1(\bottom) &= \{0\}, \\
+        f^2(\bottom) &= \{0, S0\}, \\
+        f^3(\bottom) &= \{0, S0, SS0\}, \\
+        &\ \vdots
+    \end{align*}
 \end{remark}
+
 
 
 
