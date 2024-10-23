@@ -1,49 +1,5 @@
-
-
-% \begin{definition}[Prefixpoint]
-%     Consider a lattice $(A, \sqsubseteq)$ and a function $f \colon A \to A$. 
-% 	The set of prefixes is
-% 	\begin{align*}
-% 	    	\{ x \in A : x \sqsubseteq f(x) \} \,.
-% 	\end{align*}
-% \end{definition}
-
-
-% \begin{definition}[Postfixpoint]
-%     Consider a lattice $(A, \sqsubseteq)$ and a function $f \colon A \to A$. 
-% 	The set of postfixes is
-%  \begin{align*}
-% \{ x \in A : f(x) \sqsubseteq x \} \,.
-% 	\end{align*}
-% \end{definition}
-
-% \begin{definition}[$\gfp$ and $\lfp$]
-%     Consider a complete lattice $(A, \sqsubseteq)$ and a function $f \colon A \to A$. 
-% 	Then, 
-% 	\begin{align*}
-% 		\gfp f &\coloneqq \bigsqcup \{ x \in A : x \sqsubseteq f(x) \} \\
-% 		\lfp f &\coloneqq \bigsqcap \{ x \in A : f(x) \sqsubseteq x \} \,.
-% 	\end{align*}
-% \end{definition}
-
-%% \begin{definition}[Pre- and Post-fixpoint]
-%%     Consider a lattice $(A, \sqsubseteq)$ and a function $f \colon A \to A$.
-%% 	The set of pre-fixpoint is $\{ x \in A : x \sqsubseteq f(x) \} \,$ and the set of post-fixpoint is $\{ x \in A : f(x) \sqsubseteq x \} \,$  where $x$ is a pre-fixpoint and post-fixpoint respectively.
-%% \end{definition}
-
-
-%% \begin{definition}[$\gfp$ and $\lfp$]
-%%     Consider a complete lattice $(A, \sqsubseteq)$ and a function $f \colon A \to A$.
-%% 	Then, $\gfp f \coloneqq \bigsqcup \{ x \in A : x \sqsubseteq f(x) \}$ and $\lfp f \coloneqq \bigsqcap \{ x \in A : f(x) \sqsubseteq x \}$
-%% \end{definition}
-
-
-
-%% \begin{theorem}[Knaster Tarski (Version 2)]
-%%     Consider a complete lattice $(A, \sqsubseteq)$ and a monotonic function $f \colon A \to A$.
-%% 	Then, $\gfp f$ and $\lfp f$ are fixpoints of $f$ and, for all fixpoints $x$ of $f$, we have $\lfp f \sqsubseteq x \sqsubseteq \gfp f$.
-%% \end{theorem}
-
+\section{Lecture 3}
+\subsection{Kleene Fixed-Point Theorem}
 \begin{definition}[$\bigsqcup$-continuous]
     Consider a complete lattice $(A, \sqsubseteq)$.
 	A function $f \colon A \to A$ is $\bigsqcup$-continuous if, for all increasing sequences $x_0 \sqsubseteq x_1 \sqsubseteq x_2 \sqsubseteq x_2 \sqsubseteq \ldots$, we have
@@ -67,21 +23,21 @@
 
 
 
-\begin{theorem}[Constructive Fixpoints]
-\label{thrm:constructive-fixedpoints}
-    Consider a complete lattice $(A, \sqsubseteq)$ and a monotonic function $f \colon A \to A$.
-	Then, 
-	\begin{align*}
-		\lfp f 
-			= \bigsqcup \{ f^n(\bottom) : n \in \NN \}  \quad \text{and} \quad 
-		\gfp f 
-			= \bigsqcap \{ f^n(\top) : n \in \NN \} \,.
-	\end{align*}
-\end{theorem}
+\begin{theorem}[Constructive Fixed-Point, Kleene's Fixed-Point]
+    \label{thrm:constructive-fixedpoints}
+    Consider a complete lattice $(A, \sqsubseteq)$. Then, for every $\bigsqcup$-continuous function $f \colon A \to A$, we have
+    \[
+    \lfp f = \bigsqcup \{ f^n(\bot) : n \in \mathbb{N} \},
+    \]
+    and for every $\bigsqcap$-continuous function $f \colon A \to A$, we have
+    \[
+    \gfp f = \bigsqcap \{ f^n(\top) : n \in \mathbb{N} \}.
+    \]
+\end{theorem}    
 
 
 \begin{exercise}
-    Prove the Constructive Fixedpoints Theorem (Theorem \ref{thrm:constructive-fixedpoints})
+    Prove the Constructive Fixed-Point Theorem (Theorem \ref{thrm:constructive-fixedpoints})
 \end{exercise}
 	
 
@@ -113,7 +69,7 @@ Then, $\lfp f = \NN$.
 \end{prooftree}
     expressing that if $x \in X$, then $f(x) \in X$. Moreover, they allow proof by induction. 
     \begin{quote}
-         Consider proving that for all $x \in X$ we have $G(x)$. This can be proven by showing (i) $G(\bottom)$ and (ii) for all $x \in X$, if $G(x)$, then $G(f(x))$.
+         Consider proving that for all $x \in X$ we have $K(x)$. This can be proven by showing (i) $K(\bottom)$ and (ii) for all $x \in X$, if $K(x)$, then $K(f(x))$.
     \end{quote}
 \end{remark}
 
@@ -121,8 +77,17 @@ Then, $\lfp f = \NN$.
     Define the set $S$ as the largest set $X$ such that $X \subseteq 01X \cup 10X$.
 \end{definition}
 
+
 \begin{remark}
-    In the definition of balanced binary sequences, we consider the complete lattice $(\Sigma^\omega, \subseteq)$ and the function on sets given by $f(X) \coloneqq 01X \cup 10X$. Then, balanced binary sequences correspond to $\gfp f$.	
+    In the definition of balanced binary sequences, we consider the complete lattice $(\mathcal{P}(\Sigma^\omega), \subseteq)$ and the function on sets given by $f(X) \coloneqq 01X \cup 10X$. Then, balanced binary sequences correspond to $\gfp f$.	
+    
+    Performing Kleene Fixed-Point iteration with $f(\cdot)$ on $\top$ yields the following initial elements:
+    \begin{align*}
+        \top &= \mathcal{U}, \\
+        f^1(\top) &= f(\top) = 01\mathcal{U} \cup 10\mathcal{U}, \\
+        f^2(\top) &= f(f(\top)) = 0101\mathcal{U} \cup 0110\mathcal{U} \cup 1001\mathcal{U} \cup 1010\mathcal{U}, \\
+        &\ \vdots
+    \end{align*}
 \end{remark}
 
 
@@ -140,17 +105,11 @@ Then, $\lfp f = \NN$.
 \end{prooftree}
    expressing that for all $y \in X$, there exists $x$ such that $y = f(x)$ and $x \in X$. Moreover, they allow proof by co-induction.
     \begin{quote}
-        Consider proving that for all $x$, if $G(x)$, then $x \in X$.
-		This can be proven by showing (i) for all $x$ and $i$, if $G(f_i(x))$, then $G(x)$ \,, where $\{f_1, \ldots, f_n\}$ is the set of rules that define the set $X$.
+        Consider proving that for all $x$, if $K(x)$, then $x \in X$.
+		This can be proven by showing (i) for all $x$ and $i$, if $K(f_i(x))$, then $K(x)$ \,, where $\{f_1, \ldots, f_n\}$ is the set of rules that define the set $X$.
     \end{quote}
 \end{remark}
 
 
-
-\begin{exercise}[Prove balanced binary sequences]
-    Consider $S$ generated by the rules $X \simplied 01X$ and $X \simplied 10X$. 
-	Prove that, for all binary words $x$, we have that $x\ in S$ if and only if every finite prefix of even length of $x$ has the same number of $0$s and $1$s.  
-(Hints: The direction $\simplied$ can be proven by co-induction. The direction $\simplies$ can be proven by induction on the length of the prefix.)
-\end{exercise}
 
 
