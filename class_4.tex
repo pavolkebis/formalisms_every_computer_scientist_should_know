@@ -112,7 +112,7 @@ Show $G(\hat{x})$.
 \begin{definition}[$\merges$] Let $\Sigma^*$ be an alphabet with linear operator $\leq$. Then for all $x,y \in \Sigma^*$ and $a,b \in \Sigma$ we have that: (i) $\merges(\epsilon, x) = x$, (ii) $\merges(y, \epsilon) = y$, and (iii) $\merges(a\cdot x, b\cdot y) = a\cdot \merges(x, b\cdot y)$ if $a \leq b$, otherwise $b\cdot \merges(a\cdot x, y)$.
 \end{definition}
 
-\begin{definition}[$\mergesort$] For all $x \in \Sigma^*$, we have that $\mergesort = \merges(\mergesort(\odd(x))$ and  $\mergesort(\even(x)))$
+\begin{definition}[$\mergesort$] For all $x \in \Sigma^*$, we have that $\mergesort = \merges(\mergesort(\odd(x)), \mergesort(\even(x)))$
 \end{definition}
 
 \begin{definition}[$\sorted$] We define a predicate $\sorted$ such that for all $a \in \Sigma$, we have that $\sorted(\epsilon)$, $\sorted(a\cdot\epsilon)$ and for all $x\in \Sigma^*$, we have that $\sorted(a\cdot b\cdot x)$ iff $a\leq b$ and $\sorted(b\cdot x)$.
