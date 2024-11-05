@@ -15,7 +15,7 @@ jobs:
       - name: Run Tectonic
         run: tectonic main.tex
       - name: Run Tectonic on solutions/main.tex
-        run: tectonic solutions/main.tex -o solutions.pdf
+        run: tectonic solutions/main.tex
       - name: Upload pdfs
         uses: actions/upload-artifact@v3
         with:
