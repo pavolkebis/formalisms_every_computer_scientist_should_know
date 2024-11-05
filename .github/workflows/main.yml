@@ -20,4 +20,6 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: pdfs
-          path: out/*/*.pdf
+          path: |
+            main.pdf
+            solutions/main.pdf
