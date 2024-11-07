@@ -1,0 +1,31 @@
+\section{Homework 2}
+
+\begin{theorem}[Knaster-Tarski]
+\label{thrm:knaster}
+    Let $(A,\sqsubseteq)$ be a complete lattice and let $F$ be a monotone function on $A$.
+    Further, let $\hat{y} = \bigsqcup \{x \mid x \sqsubseteq F(x)\}$ and $\hat{z} = \bigsqcap\{x \mid F(x) \sqsubseteq x\}$.
+    It holds, that:
+    \begin{enumerate}
+      \item $\hat{y}$ and $\hat{z}$ are fixpoints of $F$,
+      \item for all fixpoints $x$ of $F$, $\hat{z} \sqsubseteq x \sqsubseteq \hat{y}$
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    Suppose $(A,\sqsubseteq)$ is a complete lattice and let $F$ be a monotone function on $A.$ Let $U$ be the set of elements $x\in A$ for which $x\sqsubseteq F(x)$ and let $D$ be the set of elements $x\in A$ for which $x\sqsupseteq F(x).$ Then as described in the lecture let us denote the join and meet of these two sets respectively as $\hat{y}= \bigsqcup U$ and $\hat{z}=\bigsqcap D.$ We shall prove:
+    \begin{enumerate}
+        \item $\hat{y}$ and $\hat{z}$ are fixpoints of $F$.
+        \item For all fixpoints $x$ of $F$ the following holds $\hat{z}\sqsubseteq x\sqsubseteq \hat{y}$.
+    \end{enumerate}
+
+    \bigskip\noindent
+    {\bf 1.}
+    Let us first prove that $\hat{y}$ is a fixpoint of $F.$ Let us pick an arbitrary element $u\in U$, then by definition of $\hat{y}$ we have $u\sqsubseteq \hat{y}.$ Because $F$ is monotone this implies $F(u)\sqsubseteq F(\hat{y}).$ And because $u$ was picked arbitrarily from $U$ this means that $F(\hat{y})$ is an upper bound on $U.$ But $\hat{y}$ is the least upper bound of $U$ and thus $\hat{y}\sqsubseteq f(\hat{y}).$ Again by applying the monotonicity of $F$ we get $F(\hat{y})\sqsubseteq F(F(\hat{y}))$ and we can conclude $F(\hat{y})\in U.$ But because $\hat{y}$ is the join of $U$ and $F(\hat{y})$ is an element of $U$ it follows $F(\hat{y})\sqsubseteq \hat{y}.$ Together with the inequality $\hat{y}\sqsubseteq F(\hat{y})$ this gives us $F(\hat{y})=\hat{y}$, hence $\hat{y}$ is a fixpoint of~$F$. The proof that $\hat{z}$ is a fixpoint of $F$ can be done along the same lines by considering $\sqsupseteq$ instead of $\sqsubseteq$ and the set $D$ instead of $U.$
+
+    \bigskip\noindent
+    {\bf 2.}
+    Suppose $\hat{x}$ is a fixpoint of $F$. Then clearly $\hat{x}\in U$ and hence $\hat{x}\sqsubseteq \hat{y}$ as $\hat{y}$ is the join of $U.$ Similarly $\hat{x}\in D$ and hence $\hat{x}\sqsupseteq \hat{z}$ as $\hat{z}$ is the meet of $D.$ So it follows that $\hat{z}\sqsubseteq\hat{x}\sqsubseteq\hat{y}$ and the proof is done.
+\end{proof}
+
+
+
