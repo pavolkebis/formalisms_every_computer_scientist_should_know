@@ -6,11 +6,11 @@
 \begin{proof}
     We need to show that there exists a bijection between $A$ and $B$.
 
-    Assume such two functions exist. Fix the two functions $\widehat{f} : A \to B$ and $g : B \to A$ be one-to-one functions.
+    Assume such two functions exist. Fix the two functions $\widehat{f} : A \to B$ and $\widehat{g} : B \to A$ be one-to-one functions.
 
-    Then there exist bijections $\widehat{f}^{-1} : \widehat{f}(A) \to A$ and $\widehat{g}^{-1} : g(A) \to B$.
+    Then there exist bijections $\widehat{f}^{-1} : \widehat{f}(A) \to A$ and $\widehat{g}^{-1} : g(B) \to B$.
 
-    Define $A_C \subset A$ as the set of such elements $a \in A$ that $(\widehat{g} \circ \widehat{f})^n a = a$ for some integer $n \in \mathbb{N}$ (zero is not in $\mathbb{N}$). 
+    Define $A_C \subseteq A$ as the set of such elements $a \in A$ that $(\widehat{g} \circ \widehat{f})^n a = a$ for some integer $n \in \mathbb{N}$ (zero is not in $\mathbb{N}$). 
     
     In the same way, define $B_C = \{b \in B \; | \; \exists n \in \mathbb{N} : (\widehat{f} \circ \widehat{g})^n b = b\}$.
 
@@ -18,7 +18,7 @@
 
     Define $A_I = \{a \in A \; | \; X(a) \text{ is infinite}\}$, $A_E = \{a \in A \; | \; |X(a)| \text{ is even}\}$, $A_O = \{a \in A \; | \; |X(a)| \text{ is odd}\}$. Observe that $A_I, A_E, A_O$ are disjoint and cover $A$. Similarly, define $B_I, B_E, B_O$.
 
-    Notice that $A_C \subset A_I$, since for any $a \in A_C$, $X(a)$ is periodic and infinite.
+    Notice that $A_C \subseteq A_I$, since for any $a \in A_C$, $X(a)$ is periodic and infinite.
 
     I claim that $\widehat{f}$ maps $A_I$ bijectively onto $B_I$. To see this, we need to show that for any $b \in B_I$, there exists a preimage $a \in A_I$ such that $\widehat{f}(a) = b$. Such $a$ is the second element of $X(b)$, $a = \widehat{f}^{-1}(b)$. Then $\widehat{f}(a) = b$. $a$ is indeed in $A_I$, because $X(a) = (a = \widehat{f}^{-1}(b), \widehat{g}^{-1}(\widehat{f}^{-1}(b)), \ldots)$ is also infinite.
 
