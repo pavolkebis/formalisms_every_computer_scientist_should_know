@@ -1,0 +1,39 @@
+\section{Homework 1}
+
+\begin{theorem}
+    If there is a one-to-one function on a set $A$ to a subset of a set $B$ and there is also a one-to-one function on $B$ to a subset of $A$, then $A$ and $B$ are equipollent.
+\end{theorem}
+\begin{proof}
+    We need to show that there exists a bijection between $A$ and $B$.
+
+    Assume such two functions exist. Fix the two functions $\widehat{f} : A \to B$ and $\widehat{g} : B \to A$ be one-to-one functions.
+
+    Then there exist bijections $\widehat{f}^{-1} : \widehat{f}(A) \to A$ and $\widehat{g}^{-1} : g(B) \to B$.
+
+    Define $A_C \subseteq A$ as the set of such elements $a \in A$ that $(\widehat{g} \circ \widehat{f})^n a = a$ for some integer $n \in \mathbb{N}$ (zero is not in $\mathbb{N}$). 
+    
+    In the same way, define $B_C = \{b \in B \; | \; \exists n \in \mathbb{N} : (\widehat{f} \circ \widehat{g})^n b = b\}$.
+
+    For a given element $a \in A$, define a sequence of ancestors $X(a) = (a, \widehat{g}^{-1}(a), \widehat{f}^{-1}(\widehat{g}^{-1}(a)), \ldots)$. The sequence is finite if the last element is in $A \setminus \widehat{g}(B)$ or in $B \setminus \widehat{f}(A)$, and infinite otherwise. In the same way, for $b \in B$, define $X(b) = (b, \widehat{f}^{-1}(b), g^{-1}(\widehat{f}^{-1}(b)), \ldots)$.
+
+    Define $A_I = \{a \in A \; | \; X(a) \text{ is infinite}\}$, $A_E = \{a \in A \; | \; |X(a)| \text{ is even}\}$, $A_O = \{a \in A \; | \; |X(a)| \text{ is odd}\}$. Observe that $A_I, A_E, A_O$ are disjoint and cover $A$. Similarly, define $B_I, B_E, B_O$.
+
+    Notice that $A_C \subseteq A_I$, since for any $a \in A_C$, $X(a)$ is periodic and infinite.
+
+    I claim that $\widehat{f}$ maps $A_I$ bijectively onto $B_I$. To see this, we need to show that for any $b \in B_I$, there exists a preimage $a \in A_I$ such that $\widehat{f}(a) = b$. Such $a$ is the second element of $X(b)$, $a = \widehat{f}^{-1}(b)$. Then $\widehat{f}(a) = b$. $a$ is indeed in $A_I$, because $X(a) = (a = \widehat{f}^{-1}(b), \widehat{g}^{-1}(\widehat{f}^{-1}(b)), \ldots)$ is also infinite.
+
+    Next, show that $f$ maps $A_E$ bijectively onto $B_O$. To see this, we need to show that for any $b \in B_O$, there exists a preimage $a \in A_E$ such that $\widehat{f}(a) = b$. Such $a$ is the second element of $X(b)$, $a = \widehat{f}^{-1}(b)$. Then $\widehat{f}(a) = b$. $a$ is indeed in $A_E$, because $X(a) = (a = \widehat{f}^{-1}(b), \widehat{g}^{-1}(\widehat{f}^{-1}(b)), \ldots)$. Then $|X(a)| = |X(b)| - 1$ is even.
+
+    In the same way, $g$ maps $B_E$ bijectively onto $A_O$. Therefore, $g^{-1}$ maps $A_O$ bijectively onto $B_E$.
+
+    Define a map $h : A \to B$:
+    \begin{equation}
+        h(a) = 
+        \begin{cases}
+            \widehat{f}(a), & a \in A_I \\
+            \widehat{f}(a), & a \in A_E \\
+            \widehat{g}^{-1}(a), & a \in A_O \\
+        \end{cases},
+    \end{equation}
+    which is the desired bijection between $A$ and $B$.
+\end{proof}
