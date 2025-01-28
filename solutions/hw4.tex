@@ -1,0 +1,46 @@
+\section{Homework 4}
+
+\subsection{Sorting}
+
+\begin{definition}[{\tt ordered}]
+    A function ${\tt ordered} : \Sigma^* \to \{true, false\}$ is defined as follows. ${\tt ordered}(\varepsilon) = true$, ${\tt ordered}(a) = true$, ${\tt ordered}(a b x) = (a \leq b) \wedge {\tt sorted}(b x)$, where $a \in \Sigma$, $x \in \Sigma^*$.
+\end{definition}
+
+\begin{lemma}
+    ${\tt sorted}({\tt ms}(x)) = true$.
+\end{lemma}
+\begin{proof}
+    We will use induction on the length of $x$. Obviously, ${\tt sorted}({\tt ms}(\varepsilon)) = {\tt sorted}({\tt ms}(a)) = true$.
+
+    Recall that ${\tt ms}(x) = {\tt merge}({\tt ms}({\tt odd}(x)), {\tt ms}({\tt even}(x)))$. By the induction assumption, we know that ${\tt ms}({\tt odd}(x)), {\tt ms}({\tt even}(x))$ are sorted, since their length is less than the length of $x$. Now it is enough to show that ${\tt sorted}({\tt merge}(y, z)) = true$ if $y$ and $z$ are sorted. Consider ${\tt sorted}({\tt merge}(ay, bz))$. Without loss of generality, let $a \leq b$, so ${\tt sorted}({\tt merge}(ay, bz)) = {\tt sorted}(a {\tt merge}(y, bz)) = true$, since $a$ is less or equal to both $b$ and the next element of $y$, and ${\tt sorted}({\tt merge}(y, bz)) = true$ holds by induction.
+\end{proof}
+
+\begin{definition}[{\tt permutation}]
+    For all natural $n$, the function ${\tt permutation} : \Sigma^n \times \Sigma^n \to \{true, false\}$ is defined as follows. ${\tt permutation}(\varepsilon, \varepsilon) = true$, ${\tt permutation}(a, b) = (a == b)$, ${\tt permutation}(ax, yaz) = {\tt permutation}(x, yz)$, and if $a \notin y$ then ${\tt permutation}(ax, y) = false$, where $a, b \in \Sigma$, $x, y, z \in \Sigma^*$.
+\end{definition}
+
+\begin{lemma}
+    ${\tt permutation}(x, {\tt ms}(x)) = true$.
+\end{lemma}
+\begin{proof}
+    We will use induction on the length of $x$. Obviously, ${\tt permutation}(\varepsilon, {\tt ms}(\varepsilon)) = {\tt permutation}(a, {\tt ms}(a)) = true$.
+
+    First, let's show that ${\tt merge(x, y)}$ is a permutation of $xy$. Indeed, if, for instance, $a \leq b$, then ${\tt permutation}({\tt merge}(ax, by), axby) = {\tt permutation}(a {\tt merge}(x, by), axby) = {\tt permutation}({\tt merge}(x, by), xby) = true$ by induction.
+
+    Finally, ${\tt ms}(x) = {\tt merge}({\tt ms}({\tt odd}(x)), {\tt ms}({\tt even}(x)))$. By the induction assumption, we know that ${\tt ms}({\tt odd}(x)), {\tt ms}({\tt even}(x))$ are permutations of ${\tt odd}(x), {\tt even}(x)$ respectively, since their length is less than the length of $x$. Moreover, as we have already shown above, ${\tt merge}({\tt ms}({\tt odd}(x)), {\tt ms}({\tt even}(x)))$ is a permutation of ${\tt ms}({\tt odd}(x)) {\tt ms}({\tt even}(x))$, which is a permutation of ${\tt odd}(x) {\tt even}(x)$. Finally, it is sufficient to prove that ${\tt odd}(x) {\tt even}(x)$ is a permutation of $x$. Using induction, ${\tt permutation}({\tt odd}(ax) {\tt even}(ax), ax) = {\tt permutation}(a {\tt even}(x) {\tt odd}(x), ax) = $\\ ${\tt permutation}({\tt even}(x) {\tt odd}(x), x) = {\tt permutation}({\tt odd}(x) {\tt even}(x), x) = true$. Here, we used the induction hypothesis and the fact that $xy$ is a permutation of $yx$ (also straightforwardly proved with induction, if needed).
+\end{proof}
+
+\subsection{The human and monkeys theorem}
+
+Let's have a relation $<$, defined as follows: $x < y$ if ${\tt parent}(x, y)$ or there exists $z$ such that $x < z$ and ${\tt parent}(z, y)$. We will assume that this relation is well-founded. Also, for all $x$, either ${\tt human}(x)$ or ${\tt monkey}(x)$.
+
+\begin{theorem}
+    If $x < y$, and ${\tt human}(y)$, and ${\tt monkey}(x)$, then there exist $z_1, z_2$ such that ${\tt parent}(z_1, z_2)$, and ${\tt human}(z_2)$, and ${\tt monkey}(z_1)$.
+\end{theorem}
+\begin{proof}
+    Define a sequence $w_1, w_2, \ldots$ inductively like this: $w_1 = y$, $w_{n+1}$ is such that ${\tt parent}(w_{n+1}, w_n)$, and $x < w_{n+1}$. If $w_n = x$, then terminate the sequence. Obviously, $w_1 > w_2 > \ldots$. Since $<$ is well-founded, the sequence has to be finite: $y = w_1 > w_2 > \ldots > w_k = x$.
+
+    For the sake of contradiction, suppose, there is no such $i$, that ${\tt parent}(w_{i+1}, w_i)$, and ${\tt human}(w_{i})$, and ${\tt monkey}(w_{i+1})$. Then, by induction, all $w_i$ are humans. This contradicts the fact that $w_k$ is a monkey. Therefore, the desired $z_1, z_2$ exist among some $w_{i+1}, w_i$, as requested.
+\end{proof}
+
+\end{document}
