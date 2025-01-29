@@ -1,0 +1,49 @@
+\section{Homework 6: Soundness of FOL Resolution}
+In the following we use sets for both representing formulas in CNF and individual clauses. Hence, a formula in CNF is a set containing sets of literals.
+
+We prove the soundness of the following FOL resolution rule:
+\[
+  \inference{
+    {C_1[l_1]}
+     & {C_2[\neg l_2]}}
+    {C_1\theta[\bot] \lor C_2\theta[\bot]}[$l_1\theta = l_2\theta$]
+\]
+
+\begin{lemma}\label{lem:1}
+  For any $C_1[l]$, $C_2[\neg l]$ first-order clauses and $\I$ interpretation, we get
+  \[\I \models \{C_1[l], C_2[\neg l]\} \impl \I \models C_1[\bot] \vee C_2[\bot].\]
+\end{lemma}
+\begin{proof}
+  Let $\I$, $C_1[l]$, $C_2[\neg l]$ be arbitrary and $\I \models C_1[l]$ and $\I \models C_2[\neg l]$. We show $C_1[\bot] \lor C_2[\bot]$. Consider the two cases for $\llbracket l \rrbracket_\I$:
+   \paragraph{Case 1. $\llbracket l \rrbracket_\I = true$ :}
+   Consider the clause $C_2' = C_2 \setminus \{\neg l\}$, corresponding to the clause $C_2$ with $\neg l$ removed. Since  $\llbracket \neg l \rrbracket_\I = false$, and $\I \models C_2[\neg l]$, $\I \models C_2'$. Moreover, since $\I \models C_2'$, $\I \models C_2' \cup \{\bot\}$ and therefore $\I \models C_2[\bot]$. Finally, since $\I \models C_2[\bot]$, $\I \models C_1[\bot] \lor C_2[\bot]$.
+   \paragraph{Case 2. $\llbracket l \rrbracket_\I = false$ :} symmetric to Case 1.
+\end{proof}
+
+\begin{lemma}\label{lem:2}
+Let $\I$, $C$ be an arbitrary interpretation and clause, and $\sigma$ a substitution.
+\[\I \models \forall x_1...x_n, C \impl \I \models \forall x_1...x_n, C\sigma\]
+\end{lemma}
+\begin{proof}
+  Let $\I, C, \sigma$ be arbitrary with $\I \models \forall x_1...x_n C$, and assume towards a contradiction that $\I \not\models \forall x_1...x_n, C\sigma$. By the definition of $\llbracket \forall x. \phi\rrbracket$, there must be a mapping $\kappa = [y_1 \to d_1,...,y_n\to d_n]$ from free variables in $C\sigma$ to $d_1...d_n \in D_\I$ s.t. $\llbracket C\sigma\rrbracket_{\I[\kappa]}$ = false.\\
+  We now construct a mapping $\kappa' = x_1 \to d_1', ..., x_n \to d_n'$ s.t. $\llbracket C \rrbracket_{\I[\kappa']}= false$.
+  Consider the syntactic substitution $\sigma = x_1 \to t_1,...,x_n \to t_n$, we simply define $\kappa' = [x_1 \to t_1\kappa, ..., x_n \to t_n\kappa]$. Hence, $\kappa'$ is a map from free variables in $C$ to elements in the domain $D_\I$ and is a valid mapping to close the formula $C$. Moreover, $\llbracket C\rrbracket_{\I[\kappa']} = \llbracket C\sigma\rrbracket_{\I[\kappa]} = false$.
+  Hence, $\I \not \models \forall x_1,...,x_n C$, a contradiction.
+\end{proof}
+
+\begin{theorem}[Soundness of FOL resolution]$ $\\
+  For any clause set $S$, clauses $C_1[l_1] \in S$, $C_2[\neg l_2] \in S$, and substitution $\theta$ s.t. $l_1\theta = \l_2\theta$:
+  $S$ is satisfiable iff $S \cup \{C_1\theta[\bot] \lor C_2\theta[\bot]\}$ is satisfiable.
+\end{theorem}
+
+\begin{proof}$ $
+  \paragraph{$\impl$}
+  Let $S$, $C_1[l_1] \in S$, $C_2[\neg l_2] \in S$ s.t. $l_1\theta = \l_2\theta$, be arbitrary and $S$ satisfiable.
+  By definition of satisfiable, let $\I$ s.t. $\I \models S$ and therefore $\I \models C_1$, and $\I \models C_2$.
+  Note, that both clauses $C_1$ and $C_2$ are implicitely universally quantified, and since $\forall$ distributes over $\land$, we get $\I \models \forall x_1...x_n, C_1$ and $\I \models \forall x_1...x_n, C_2$ where $x_1...x_n$ are the free variables in $S$.\\
+  By Lemma~\ref{lem:2}, $\I \models \forall x_1...x_n, C_1\theta$ and $\I \models \forall x_1...x_n, C_2\theta$. In the following we drop the implicitely quantified variables again. Let $l = l_1\theta = l_2\theta$ and since the order of substitution is irrelevant, $\I \models C_1[l]\theta$ and $\I \models C_2[l]\theta$. By Lemma~\ref{lem:1}, $\I \models C_1\theta[\bot] \vee C_2\theta[\bot]$, and therefore, by definition of satisfiable, $S \cup \{C_1\theta[\bot] \lor C_2\theta[\bot]\}$ is satisfiable.
+  \paragraph{$\Leftarrow$}
+  Let $S$, $C_1[l_1] \in S$, $C_2[\neg l_2] \in S$ s.t. $l_1\theta = \l_2\theta$, be arbitrary and $S \cup \{C_1\theta[\bot] \lor C_2\theta[\bot]\}$ satisifable.
+  By definition of satisfiable, let $\I$ s.t. $\I \models S \cup \{C_1\theta[\bot] \lor C_2\theta[\bot]\}$. By definition of $\land$, $\I \models S$ and therefore $S$ is satisfiable.
+\end{proof}
+
