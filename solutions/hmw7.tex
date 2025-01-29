@@ -1,0 +1,164 @@
+\documentclass{article}
+
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{aligned-overset}
+\usepackage{graphicx}
+\usepackage{stmaryrd}
+\usepackage{emptypage}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage[hidelinks,breaklinks]{hyperref}
+\usepackage{mathrsfs}
+\theoremstyle{definition}
+\newtheorem{definition}{\scshape Definition}
+\newtheorem{theorem}[definition]{\scshape Theorem}
+\newtheorem{lemma}[definition]{\scshape Lemma}
+\newtheorem{observation}[definition]{\scshape Observation}
+\newtheorem{corollary}[definition]{\scshape Corollary}
+\newtheorem{proposition}[definition]{\scshape Proposition}
+\newtheorem{remark}[definition]{\scshape Remark}
+
+\usepackage{bussproofs}
+
+% \input{structure_copy.tex} % Include the file specifying the document structure and custom commands
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+% \title{Formalisms for CS: Assignment \#7} % Title of the assignment
+
+% \author{Pavol Kebis\\ \texttt{pavol.kebis@ist.ac.at}} % Author name and email address
+
+% \date{Institute of Science and Technology Austria --- \today} % University, school and/or department name(s) and a date
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+% \maketitle
+
+\section*{Homework 7}
+
+An instance of PCP is a finite set of two-part tiles $\frac {s_1} {t_1}, \frac {s_2} {t_2}, \ldots, \frac {s_k} {t_k}$ where each tile is from $\frac {\{0, 1\}^*}{\{0, 1\}^*}$. There exists a solution to a PCP instance if there is a finite indexing $i_1, i_2, \ldots, i_l \in 1, \ldots, k$ such that $s_{i_1}s_{i_2}\ldots s_{i_l} = t_{i_1}t_{i_2}\ldots t_{i_l} $.
+
+\begin{theorem}
+    Solving PCP is undecidable.
+\end{theorem}
+
+By reducing the problem of PCP to a statement of first order logic, we prove its undecidability. For a PCP instance, let us define a signature:
+\begin{itemize}
+    \item Constant symbol $e$.
+    \item Unary function symbols $f_0$ and $f_1$.
+    \item Binary predicate symbol $p$.
+\end{itemize}
+
+We will use unary function symbols $s_1, \ldots, s_k, t_1, \ldots, t_k$ as abbreviations for appending a tile to a string (e.g., if $s_i = 010$, then $s_i = f_0(f_1(f_0))$).
+Let us define the following axioms:
+
+$$\varphi_1 := \bigwedge_{i \in 1, \ldots, k} p(s_i(e), t_i(e))$$
+
+$$\varphi_2 := \forall u, v \left(p(u, v) \Rightarrow \bigwedge_{i \in 1, \ldots, k} p(s_i(u), t_i(v))\right)$$
+
+$$\varphi_3 := \exists z \; p(z, z)$$
+
+\begin{theorem}
+    Deciding validity of a first order formula is undecidable.
+\end{theorem}
+\begin{proof}
+    We reduce a PCP instance to deciding validity of the statement $(\varphi_1 \land \varphi_2) \Rightarrow \varphi_3$. We need to prove that the formula is valid iff there is a solution to the PCP instance.
+
+    $\Leftarrow$
+    Let $i_1, i_2, \ldots, i_l \in 1, \ldots, k$ be indices of the solution of a PCP instance. Hence, $s_{i_1}s_{i_2}\ldots s_{i_l} = t_{i_1}t_{i_2}\ldots t_{i_l}$. We need to show the validity of the formula, i.e., that it holds in any interpretation. The above fact implies that
+    $$u_s = s_{k}(s_{i_{k-1}}(\cdots(s_{i_1}(e))\cdots)) = t_{i_k}(t_{i_{k-1}}(\cdots(t_{i_1}(e))\cdots)) = u_t$$
+    (note that this holds syntactically because these functions are just abbreviations for $f_0, f_1$).
+    
+    Inductively, on the length of $k$, we prove that $p(u_s, u_t)$ assuming $\varphi_1$ and $\varphi_2$.
+
+    Base case: If $k = 1$. Using the statement $\varphi_1$, we know that $p(s_{i_1}(e), t_{i_1}(e))$ which is what we want.
+    
+    Inductive case: We know that $p(s_{k-1}(\cdots(s_{i_1}(e))\cdots), t_{k-1}(\cdots(t_{i_1}(e))\cdots))$. Then, using $\varphi_2$, we know that this implies $p(s_{k}(s_{i_{k-1}}(\cdots(s_{i_1}(e))\cdots)), t_{i_k}(t_{i_{k-1}}(\cdots(t_{i_1}(e))\cdots)))$.
+    
+    Hence, we proved $p(u_s, u_t)$ and since $u_s = u_t$ we get that $\varphi_3$. Therefore, the formula is valid.
+
+    $\Rightarrow$
+    We assume validity of the formula and find a solution for the PCP instance. Therefore, we may choose any interpretation.
+    
+    Let us choose the following: Domain is the set of finite strings over $\{0, 1\}^*$. Symbol $e$ is the empty string. Unary functions $f_0$ and $f_1$ represent appending 0 or 1 to a string, respectively. Finally, the subset of $\{0, 1\}^* \times \{0, 1\}^*$ for which the predicate $p$ is valid is chosen to be minimal in terms of inclusion while preserving validity of $\varphi_1$ and $\varphi_2$, i.e., we interpret $p(u, v)$ as there is a sequence of tiles such that $u$ is made up of the upper parts of the tiles and $v$ is made up of the bottom parts of the tiles.
+    
+    Such intepretation exists. Therefore, the statement $\varphi_3$ is true which means there is a finite string $z$ such that $p(z, z)$. By well-founded induction on the length of $z$, we find the solution to the PCP instance.
+
+    Since $p$ is minimal up to inclusion closed under $\varphi_1$ and $\varphi_2$, then there are $u, v$ for each $p(u, v)$ such that $u, v$ either match the formula $\varphi_1$ or right-hand side of the formula $\varphi_2$.
+
+    Let us assume that $z$ matches the first axiom, i.e., there is $i \in 1, \ldots, k$ such that $z = s_i(e) = t_i(e)$. Then, we found a solution to the problem which is using the tile $i$.
+
+    Let us now assume that $z$ matches the second axiom, i.e., there is $u, v \in \{0, 1\}^*$ and $i \in 1, \ldots, k$ such that $z = s_i(u) = t_i(v)$ and $p(u, v)$. This means the last tile used was $i$ and the rest of the tiling is obtained using the induction hypothesis from $u, v$.
+
+    Therefore, we obtained a finite solution to the PCP instance.
+
+
+\end{proof}
+
+\begin{theorem}
+   A theory $T$ is consistent iff $T$ does not contain all wffs over the $T$-signature.
+\end{theorem}
+
+\begin{proof}
+    If $T$ does contain all wffs over the $T$-signature, then there is no model of $T$ since for every model $\mathcal{I}$, either $\varphi$ or $\neg \varphi$ is not true (where $\varphi$ is any wff), i.e., either $\mathcal{I} \not\vDash \varphi$ or $\mathcal{I} \not\vDash \neg\varphi$ which means $\mathcal{I} \not\vDash T$. Non-existence of a model implies inconsistency directly from the definition.
+
+    Let us assume $T$ is inconsistent and let $\psi$ be any wff. Let $\mathcal{I}$ be a model. Since $T$ is inconsistent, then $\mathcal{I} \not\vDash T$ which means there is a formula $\varphi \in T$ such that $\mathcal{I} \not\vDash \varphi$. Therefore, the statement $\forall \mathcal{I} ((\forall \xi \in T, \mathcal{I} \vDash \xi) \Rightarrow \mathcal{I} \vDash \psi)$ is true since the implication is vacuously true. Hence, directly from the definition, $\psi$ is in $T$ which means any wff is in $T$.
+\end{proof}
+
+
+\end{document}
+
+% \begin{info} % Information block
+% 	This is an interesting piece of information, to which the reader should pay special attention. Fusce varius orci ac magna dapibus porttitor. In tempor leo a neque bibendum sollicitudin. Nulla pretium fermentum nisi, eget sodales magna facilisis eu. Praesent aliquet nulla ut bibendum lacinia. Donec vel mauris vulputate, commodo ligula ut, egestas orci. Suspendisse commodo odio sed hendrerit lobortis. Donec finibus eros erat, vel ornare enim mattis et.
+% \end{info}
+
+
+% \begin{center}
+% 	\begin{minipage}{0.5\linewidth} % Adjust the minipage width to accomodate for the length of algorithm lines
+% 		\begin{algorithm}[H]
+% 			\KwIn{$(a, b)$, two floating-point numbers}  % Algorithm inputs
+% 			\KwResult{$(c, d)$, such that $a+b = c + d$} % Algorithm outputs/results
+% 			\medskip
+% 			\If{$\vert b\vert > \vert a\vert$}{
+% 				exchange $a$ and $b$ \;
+% 			}
+% 			$c \leftarrow a + b$ \;
+% 			$z \leftarrow c - a$ \;
+% 			$d \leftarrow b - z$ \;
+% 			{\bf return} $(c,d)$ \;
+% 			\caption{\texttt{FastTwoSum}} % Algorithm name
+% 			\label{alg:fastTwoSum}   % optional label to refer to
+% 		\end{algorithm}
+% 	\end{minipage}
+% \end{center}
+
+% File contents
+% \begin{file}[hello.py]
+% \begin{lstlisting}[language=Python]
+% #! /usr/bin/python
+
+% import sys
+% sys.stdout.write("Hello World!\n")
+% \end{lstlisting}
+% \end{file}
+
+% Command-line "screenshot"
+% \begin{commandline}
+% 	\begin{verbatim}
+% 		$ chmod +x hello.py
+% 		$ ./hello.py
+
+% 		Hello World!
+% 	\end{verbatim}
+% \end{commandline}
+
+% Warning text, with a custom title
+% \begin{warn}[Notice:]
+%   In congue risus leo, in gravida enim viverra id. Donec eros mauris, bibendum vel dui at, tempor commodo augue. In vel lobortis lacus. Nam ornare ullamcorper mauris vel molestie. Maecenas vehicula ornare turpis, vitae fringilla orci consectetur vel. Nam pulvinar justo nec neque egestas tristique. Donec ac dolor at libero congue varius sed vitae lectus. Donec et tristique nulla, sit amet scelerisque orci. Maecenas a vestibulum lectus, vitae gravida nulla. Proin eget volutpat orci. Morbi eu aliquet turpis. Vivamus molestie urna quis tempor tristique. Proin hendrerit sem nec tempor sollicitudin.
+% \end{warn}

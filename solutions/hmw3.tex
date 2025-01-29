@@ -1,0 +1,58 @@
+\documentclass{article}
+
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{aligned-overset}
+\usepackage{graphicx}
+\usepackage{stmaryrd}
+\usepackage{emptypage}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage[hidelinks,breaklinks]{hyperref}
+\usepackage{mathrsfs}
+\theoremstyle{definition}
+\newtheorem{definition}{\scshape Definition}
+\newtheorem{theorem}[definition]{\scshape Theorem}
+\newtheorem{lemma}[definition]{\scshape Lemma}
+\newtheorem{observation}[definition]{\scshape Observation}
+\newtheorem{corollary}[definition]{\scshape Corollary}
+\newtheorem{proposition}[definition]{\scshape Proposition}
+\newtheorem{remark}[definition]{\scshape Remark}
+
+\usepackage{bussproofs}
+% \input{structure.tex} % Include the file specifying the document structure and custom commands
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+% \title{Formalisms for CS: Assignment \#3} % Title of the assignment
+
+% \author{Pavol Kebis\\ \texttt{pavol.kebis@ist.ac.at}} % Author name and email address
+
+% \date{Institute of Science and Technology Austria} % University, school and/or department name(s) and a date
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\section*{Homework 3}
+
+\begin{theorem}
+    Let $F$ be a monotone function over a complete lattice $(A, \sqsubseteq)$. Then for every non-decreasing sequence of elements $x_0, x_1, \ldots$, we have that $F(\bigsqcup\{x_0, x_1, \ldots\}) \sqsupseteq \bigsqcup\{F(x_i) ~|~ i \in \mathbb{N}\}$.
+\end{theorem}
+\begin{proof}
+    We write $X = F(\bigsqcup\{x_0, x_1, \ldots\})$ and $Y = \bigsqcup\{F(x_i) ~|~ i \in \mathbb{N}\}$. Let us assume the contrary, i.e., that $X \sqsubset Y$. Therefore, there has to be $i \in \mathbb{N}$ such that $F(x_i) \not\sqsubseteq X$. Otherwise $X$ would be an upper bound of $\{F(x_i) ~|~ i \in \mathbb{N}\}$ which would violate the definition of a least upper bound of $Y$. From the definition of an upper bound, we know that $x_i \sqsubseteq \bigsqcup\{x_0, x_1, \ldots\}$. If we apply monotonicity to the last inequality, we get $F(x_i) \sqsubseteq F(\bigsqcup\{x_0, x_1, \ldots\}) = X$ which is a contradiction.
+\end{proof}
+
+\begin{remark}
+    It is not true that for any monotone function $F$ over a complete lattice $(A, \sqsubseteq)$ and every non-decreasing sequence of elements $x_0, x_1, \ldots$, we have $F(\bigsqcup\{x_0, x_1, \ldots\}) \sqsubseteq \bigsqcup\{F(x_i) ~|~ i \in \mathbb{N}\}$.
+\end{remark}
+\begin{proof}
+    Let us take the set $A = \mathbb{N} \cup \infty_1 \cup \infty_2$ and $\sqsubseteq$ defined naturally for $\mathbb{N}$ and $\mathbb{N} \sqsubset \infty_1 \sqsubset \infty_2$. This is a complete lattice. We define a monotone function $F$ as: $F(x) = \infty_1$ for every $x \in \mathbb{N}$, $F(\infty_1) = F(\infty_2) = \infty_2$.
+
+    If we define a nondecreasing sequence $x_0, x_1, \ldots = \mathbb{N}$, then $$F\left(\bigsqcup\{x_0, x_1, \ldots\}\right) = F(\infty_1) = \infty_2 \not\sqsubseteq \infty_1 = \bigsqcup \{\infty_1\} = \bigsqcup\{F(x_i) ~|~ i \in \mathbb{N}\}.$$
+\end{proof}
+
+\end{document}
